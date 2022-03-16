@@ -39,7 +39,7 @@ namespace CCompiler {
         MergePopPushToTop();
         MergeTopPopEmptyToPop();
         MergeBinary();
-        DereferenceToIndex();
+        ConstantDereference();
         OptimizeRelation();
         OptimizeCommutative();
         SematicOptimization();
@@ -333,45 +333,39 @@ namespace CCompiler {
       }
     }
 
-    private void DereferenceToIndex() {
+    /*
+       s = a + 3; t = *s
+       t = a->(3)              
+    */
+    private void ConstantDereference() {
       for (int index = 0; index < (m_middleCodeList.Count - 1); ++index) {
         MiddleCode thisCode = m_middleCodeList[index],
                    nextCode = m_middleCodeList[index + 1];
 
-        // *(a + 3) <=> a[3] <=> *(3 + a) <=> 3[a]
-        if ((thisCode.Operator == MiddleOperator.Add) &&
+        if (((thisCode.Operator == MiddleOperator.Add) ||
+             (thisCode.Operator == MiddleOperator.Subtract)) &&
             (nextCode.Operator == MiddleOperator.Dereference) &&
             (thisCode[0] == nextCode[1])) {
-          Symbol leftSymbol = (Symbol)thisCode[1],
-                 rightSymbol = (Symbol)thisCode[2];
+          Symbol leftSymbol = (Symbol) thisCode[1],
+                 rightSymbol = (Symbol) thisCode[2];
 
-          if (leftSymbol.Value is BigInteger) {
-            Symbol resultSymbol = (Symbol)nextCode[0];
+          if (leftSymbol.Value is BigInteger leftBigInteger) {
+            Symbol resultSymbol = (Symbol) nextCode[0];
             resultSymbol.AddressSymbol = rightSymbol;
-            resultSymbol.AddressOffset =
-              ((int) ((BigInteger) leftSymbol.Value));
+            resultSymbol.AddressOffset = (int) leftBigInteger;
             thisCode.Clear();
           }
-          else if (rightSymbol.Value is BigInteger) {
-            Symbol resultSymbol = (Symbol)nextCode[0];
+          else if (rightSymbol.Value is BigInteger rightBigInteger) {
+            Symbol resultSymbol = (Symbol) nextCode[0];
             resultSymbol.AddressSymbol = leftSymbol;
-            resultSymbol.AddressOffset = 
-              ((int) ((BigInteger) rightSymbol.Value));
-            thisCode.Clear();
-          }
-        }
-        // *(a - 3) <=> a[-3]
-        else if ((thisCode.Operator == MiddleOperator.Subtract) &&
-                 (nextCode.Operator == MiddleOperator.Dereference) &&
-                 (thisCode[0] == nextCode[1])) {
-          Symbol leftSymbol = (Symbol)thisCode[1],
-                 rightSymbol = (Symbol)thisCode[2];
 
-          if (rightSymbol.Value is BigInteger) {
-            Symbol resultSymbol = (Symbol)nextCode[0];
-            resultSymbol.AddressSymbol = leftSymbol;
-            resultSymbol.AddressOffset =
-               -((int) ((BigInteger) rightSymbol.Value));
+            if (thisCode.Operator == MiddleOperator.Add) {
+              resultSymbol.AddressOffset = (int) rightBigInteger;
+            }
+            else {
+              resultSymbol.AddressOffset = -(int) rightBigInteger;
+            }
+
             thisCode.Clear();
           }
         }
