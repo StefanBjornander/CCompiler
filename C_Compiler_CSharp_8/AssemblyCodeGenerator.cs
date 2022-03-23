@@ -1667,7 +1667,7 @@ namespace CCompiler {
     }
 
     public static Dictionary<(bool Floating, int Size), AssemblyOperator>
-      m_floatPopMap = new () {
+      m_floatPopMap = new() {
         {(Floating: false, Size: 2), AssemblyOperator.fistp_word},
         {(Floating: false, Size: 4), AssemblyOperator.fistp_dword},
         {(Floating: false, Size: 8), AssemblyOperator.fistp_qword},
@@ -1676,12 +1676,12 @@ namespace CCompiler {
       };
 
     public static Dictionary<(bool Floating, int Size), AssemblyOperator>
-      m_floatTopMap = new () {
-        {(Floating:false, Size: 2), AssemblyOperator.fist_word},
-        {(Floating:false, Size: 4), AssemblyOperator.fist_dword},
-        {(Floating:false, Size: 8), AssemblyOperator.fist_qword},
-        {(Floating:true, Size: 4), AssemblyOperator.fst_dword},
-        {(Floating:true, Size: 8), AssemblyOperator.fst_qword}
+      m_floatTopMap = new() {
+        {(Floating: false, Size: 2), AssemblyOperator.fist_word},
+        {(Floating: false, Size: 4), AssemblyOperator.fist_dword},
+        {(Floating: false, Size: 8), AssemblyOperator.fist_qword},
+        {(Floating: true, Size: 4), AssemblyOperator.fst_dword},
+        {(Floating: true, Size: 8), AssemblyOperator.fst_qword}
       };
 
     /*    public static IDictionary<PairX<bool,int>,AssemblyOperator>
