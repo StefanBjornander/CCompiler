@@ -1263,6 +1263,8 @@ namespace CCompiler {
 
       ObjectCodeInfo info =
         new ObjectCodeInfo(objectOp, operand0, operand1, operand2);
+      //(AssemblyOperator, Object, Object, Object) info =
+      //  (objectOp, operand0, operand1, operand2);
       byte[] byteArray = ObjectCodeTable.MainArrayMap[info];
       Error.ErrorXXX(byteArray != null);
       List<byte> byteList = new List<byte>();
