@@ -1,10 +1,10 @@
-//using System;
-//using System.IO;
-//using System.Text;
-//using System.Numerics;
-//using System.Diagnostics;
-//using System.Globalization;
-//using System.Collections.Generic;
+using System;
+using System.IO;
+using System.Text;
+using System.Numerics;
+using System.Diagnostics;
+using System.Globalization;
+using System.Collections.Generic;
 
 namespace CCompiler {
   public class Symbol {
@@ -128,7 +128,7 @@ namespace CCompiler {
 
     public Type Type {
       get { return m_type; }
-      set { m_type = value; }
+      //set { m_type = value; }
     }
 
     public int Offset {
@@ -170,7 +170,7 @@ namespace CCompiler {
 
     public object Value {
       get { return m_value; }
-      set { m_value = value; }
+      //set { m_value = value; }
     }
   
     public Symbol AddressSymbol {

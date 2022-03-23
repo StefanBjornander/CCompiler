@@ -1,9 +1,9 @@
 // -rebuild -print Main Malloc CType ErrNo Locale Math SetJmp Signal File Temp Scanf Printf StdLib Time String PrintTest CharacterTest FloatTest LimitsTest AssertTest StringTest LocaleTest SetJmpTest MathTest FileTest StdIOTest SignalTest StackTest MallocTest StdLibTest TimeTest
 
-//using System.IO;
-//using System.Text;
-//using System.Globalization;
-//using System.Collections.Generic;
+using System.IO;
+using System.Text;
+using System.Globalization;
+using System.Collections.Generic;
 
 namespace CCompiler {
   public class Start {
@@ -299,7 +299,7 @@ namespace CCompiler {
 
 /*
 C#
-•	global //using
+•	global using
 •	dynamic object generics
 •	M decimal
 •	Target typed new

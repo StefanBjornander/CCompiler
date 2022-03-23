@@ -1,4 +1,4 @@
-//using System;
+using System;
 
 namespace CCompiler {
   public class Error {

@@ -1,7 +1,23 @@
+
+// ==========================================================================
+//  GPPG error listing for yacc source file <ExpressionParser.gppg - 2022-03-15 23:12:47>
+// ==========================================================================
+//  Version:  1.5.2
+//  Machine:  LAPTOP-7Q575VHS
+//  DateTime: 2022-03-23 10:33:19
+//  UserName: stefa
+// ==========================================================================
+
+
 %namespace CCompiler_Exp
 %partial
 
-%using CCompiler;
+%//using CCompiler;
+//^^^^^^
+// Error: Unknown %keyword in this context
+// Error: This character is invalid in this context
+// Error: Syntax error, unexpected ident
+// ------------------------------------------------
 
 %{
   // Empty.
@@ -180,3 +196,5 @@ primary_expression:
   | LEFT_PARENTHESIS expression RIGHT_PARENTHESIS {
       $$ = $2; 
     };
+// ==========================================================================
+

@@ -1,8 +1,8 @@
-//using System;
-//using System.Text;
-//using System.Numerics;
-//using System.Diagnostics;
-//using System.Collections.Generic;
+using System;
+using System.Text;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
 
 namespace CCompiler {
   public class AssemblyCode {
@@ -354,87 +354,87 @@ namespace CCompiler {
       return default(Register);
     }
 
-    /*private static IDictionary<Pair<Register,int>,Register> m_registerToSizeMap =
-      new Dictionary<Pair<Register,int>,Register>() {
-       {new Pair<Register,int>(Register.al, 2), Register.ax},
-       {new Pair<Register,int>(Register.al, 4), Register.eax},
-       {new Pair<Register,int>(Register.al, 8), Register.rax},
-       {new Pair<Register,int>(Register.ax, 1), Register.al},
-       {new Pair<Register,int>(Register.ax, 4), Register.eax},
-       {new Pair<Register,int>(Register.ax, 8), Register.rax},
-       {new Pair<Register,int>(Register.eax, 1), Register.al},
-       {new Pair<Register,int>(Register.eax, 2), Register.ax},
-       {new Pair<Register,int>(Register.eax, 8), Register.rax},
-       {new Pair<Register,int>(Register.rax, 1), Register.al},
-       {new Pair<Register,int>(Register.rax, 2), Register.ax},
-       {new Pair<Register,int>(Register.rax, 4), Register.eax},
+    /*private static IDictionary<PairX<Register,int>,Register> m_registerToSizeMap =
+      new Dictionary<PairX<Register,int>,Register>() {
+       {new PairX<Register,int>(Register.al, 2), Register.ax},
+       {new PairX<Register,int>(Register.al, 4), Register.eax},
+       {new PairX<Register,int>(Register.al, 8), Register.rax},
+       {new PairX<Register,int>(Register.ax, 1), Register.al},
+       {new PairX<Register,int>(Register.ax, 4), Register.eax},
+       {new PairX<Register,int>(Register.ax, 8), Register.rax},
+       {new PairX<Register,int>(Register.eax, 1), Register.al},
+       {new PairX<Register,int>(Register.eax, 2), Register.ax},
+       {new PairX<Register,int>(Register.eax, 8), Register.rax},
+       {new PairX<Register,int>(Register.rax, 1), Register.al},
+       {new PairX<Register,int>(Register.rax, 2), Register.ax},
+       {new PairX<Register,int>(Register.rax, 4), Register.eax},
 
-       {new Pair<Register,int>(Register.bl, 2), Register.bx},
-       {new Pair<Register,int>(Register.bl, 4), Register.ebx},
-       {new Pair<Register,int>(Register.bl, 8), Register.rbx},
-       {new Pair<Register,int>(Register.bx, 1), Register.bl},
-       {new Pair<Register,int>(Register.bx, 4), Register.ebx},
-       {new Pair<Register,int>(Register.bx, 8), Register.rbx},
-       {new Pair<Register,int>(Register.ebx, 1), Register.bl},
-       {new Pair<Register,int>(Register.ebx, 2), Register.bx},
-       {new Pair<Register,int>(Register.ebx, 8), Register.rbx},
-       {new Pair<Register,int>(Register.rbx, 1), Register.bl},
-       {new Pair<Register,int>(Register.rbx, 2), Register.bx},
-       {new Pair<Register,int>(Register.rbx, 4), Register.ebx},
+       {new PairX<Register,int>(Register.bl, 2), Register.bx},
+       {new PairX<Register,int>(Register.bl, 4), Register.ebx},
+       {new PairX<Register,int>(Register.bl, 8), Register.rbx},
+       {new PairX<Register,int>(Register.bx, 1), Register.bl},
+       {new PairX<Register,int>(Register.bx, 4), Register.ebx},
+       {new PairX<Register,int>(Register.bx, 8), Register.rbx},
+       {new PairX<Register,int>(Register.ebx, 1), Register.bl},
+       {new PairX<Register,int>(Register.ebx, 2), Register.bx},
+       {new PairX<Register,int>(Register.ebx, 8), Register.rbx},
+       {new PairX<Register,int>(Register.rbx, 1), Register.bl},
+       {new PairX<Register,int>(Register.rbx, 2), Register.bx},
+       {new PairX<Register,int>(Register.rbx, 4), Register.ebx},
 
-       {new Pair<Register,int>(Register.cl, 2), Register.cx},
-       {new Pair<Register,int>(Register.cl, 4), Register.ecx},
-       {new Pair<Register,int>(Register.cl, 8), Register.rcx},
-       {new Pair<Register,int>(Register.cx, 1), Register.cl},
-       {new Pair<Register,int>(Register.cx, 4), Register.ecx},
-       {new Pair<Register,int>(Register.cx, 8), Register.rcx},
-       {new Pair<Register,int>(Register.ecx, 1), Register.cl},
-       {new Pair<Register,int>(Register.ecx, 2), Register.cx},
-       {new Pair<Register,int>(Register.ecx, 8), Register.rcx},
-       {new Pair<Register,int>(Register.rcx, 1), Register.cl},
-       {new Pair<Register,int>(Register.rcx, 2), Register.cx},
-       {new Pair<Register,int>(Register.rcx, 4), Register.ecx},
+       {new PairX<Register,int>(Register.cl, 2), Register.cx},
+       {new PairX<Register,int>(Register.cl, 4), Register.ecx},
+       {new PairX<Register,int>(Register.cl, 8), Register.rcx},
+       {new PairX<Register,int>(Register.cx, 1), Register.cl},
+       {new PairX<Register,int>(Register.cx, 4), Register.ecx},
+       {new PairX<Register,int>(Register.cx, 8), Register.rcx},
+       {new PairX<Register,int>(Register.ecx, 1), Register.cl},
+       {new PairX<Register,int>(Register.ecx, 2), Register.cx},
+       {new PairX<Register,int>(Register.ecx, 8), Register.rcx},
+       {new PairX<Register,int>(Register.rcx, 1), Register.cl},
+       {new PairX<Register,int>(Register.rcx, 2), Register.cx},
+       {new PairX<Register,int>(Register.rcx, 4), Register.ecx},
 
-       {new Pair<Register,int>(Register.dl, 2), Register.dx},
-       {new Pair<Register,int>(Register.dl, 4), Register.edx},
-       {new Pair<Register,int>(Register.dl, 8), Register.rdx},
-       {new Pair<Register,int>(Register.dx, 1), Register.dl},
-       {new Pair<Register,int>(Register.dx, 4), Register.edx},
-       {new Pair<Register,int>(Register.dx, 8), Register.rdx},
-       {new Pair<Register,int>(Register.edx, 1), Register.dl},
-       {new Pair<Register,int>(Register.edx, 2), Register.dx},
-       {new Pair<Register,int>(Register.edx, 8), Register.rdx},
-       {new Pair<Register,int>(Register.rdx, 1), Register.dl},
-       {new Pair<Register,int>(Register.rdx, 2), Register.dx},
-       {new Pair<Register,int>(Register.rdx, 4), Register.edx},
+       {new PairX<Register,int>(Register.dl, 2), Register.dx},
+       {new PairX<Register,int>(Register.dl, 4), Register.edx},
+       {new PairX<Register,int>(Register.dl, 8), Register.rdx},
+       {new PairX<Register,int>(Register.dx, 1), Register.dl},
+       {new PairX<Register,int>(Register.dx, 4), Register.edx},
+       {new PairX<Register,int>(Register.dx, 8), Register.rdx},
+       {new PairX<Register,int>(Register.edx, 1), Register.dl},
+       {new PairX<Register,int>(Register.edx, 2), Register.dx},
+       {new PairX<Register,int>(Register.edx, 8), Register.rdx},
+       {new PairX<Register,int>(Register.rdx, 1), Register.dl},
+       {new PairX<Register,int>(Register.rdx, 2), Register.dx},
+       {new PairX<Register,int>(Register.rdx, 4), Register.edx},
 
-       {new Pair<Register,int>(Register.si, 4), Register.esi},
-       {new Pair<Register,int>(Register.si, 8), Register.rsi},
-       {new Pair<Register,int>(Register.esi, 2), Register.si},
-       {new Pair<Register,int>(Register.esi, 8), Register.rsi},
-       {new Pair<Register,int>(Register.rsi, 2), Register.si},
-       {new Pair<Register,int>(Register.rsi, 4), Register.esi},
+       {new PairX<Register,int>(Register.si, 4), Register.esi},
+       {new PairX<Register,int>(Register.si, 8), Register.rsi},
+       {new PairX<Register,int>(Register.esi, 2), Register.si},
+       {new PairX<Register,int>(Register.esi, 8), Register.rsi},
+       {new PairX<Register,int>(Register.rsi, 2), Register.si},
+       {new PairX<Register,int>(Register.rsi, 4), Register.esi},
 
-       {new Pair<Register,int>(Register.di, 4), Register.edi},
-       {new Pair<Register,int>(Register.di, 8), Register.rdi},
-       {new Pair<Register,int>(Register.edi, 2), Register.di},
-       {new Pair<Register,int>(Register.edi, 8), Register.rdi},
-       {new Pair<Register,int>(Register.rdi, 2), Register.di},
-       {new Pair<Register,int>(Register.rdi, 4), Register.edi},
+       {new PairX<Register,int>(Register.di, 4), Register.edi},
+       {new PairX<Register,int>(Register.di, 8), Register.rdi},
+       {new PairX<Register,int>(Register.edi, 2), Register.di},
+       {new PairX<Register,int>(Register.edi, 8), Register.rdi},
+       {new PairX<Register,int>(Register.rdi, 2), Register.di},
+       {new PairX<Register,int>(Register.rdi, 4), Register.edi},
 
-       {new Pair<Register,int>(Register.bp, 4), Register.ebp},
-       {new Pair<Register,int>(Register.bp, 8), Register.rbp},
-       {new Pair<Register,int>(Register.ebp, 2), Register.bp},
-       {new Pair<Register,int>(Register.ebp, 8), Register.rbp},
-       {new Pair<Register,int>(Register.rbp, 2), Register.bp},
-       {new Pair<Register,int>(Register.rbp, 4), Register.ebp},
+       {new PairX<Register,int>(Register.bp, 4), Register.ebp},
+       {new PairX<Register,int>(Register.bp, 8), Register.rbp},
+       {new PairX<Register,int>(Register.ebp, 2), Register.bp},
+       {new PairX<Register,int>(Register.ebp, 8), Register.rbp},
+       {new PairX<Register,int>(Register.rbp, 2), Register.bp},
+       {new PairX<Register,int>(Register.rbp, 4), Register.ebp},
 
-       {new Pair<Register,int>(Register.sp, 4), Register.esp},
-       {new Pair<Register,int>(Register.sp, 8), Register.rsp},
-       {new Pair<Register,int>(Register.esp, 2), Register.sp},
-       {new Pair<Register,int>(Register.esp, 8), Register.rsp},
-       {new Pair<Register,int>(Register.rsp, 2), Register.sp},
-       {new Pair<Register,int>(Register.rsp, 4), Register.esp},
+       {new PairX<Register,int>(Register.sp, 4), Register.esp},
+       {new PairX<Register,int>(Register.sp, 8), Register.rsp},
+       {new PairX<Register,int>(Register.esp, 2), Register.sp},
+       {new PairX<Register,int>(Register.esp, 8), Register.rsp},
+       {new PairX<Register,int>(Register.rsp, 2), Register.sp},
+       {new PairX<Register,int>(Register.rsp, 4), Register.esp},
       };
 
     public static Register RegisterToSize(Register register, int size) {
@@ -444,7 +444,7 @@ namespace CCompiler {
         return register;
       }
       else {
-        Pair<Register,int> pair = new Pair<Register,int>(register, size);
+        PairX<Register,int> pair = new PairX<Register,int>(register, size);
         Error.ErrorXXX(m_registerToSizeMap.ContainsKey(pair));
         return m_registerToSizeMap[pair];
       }

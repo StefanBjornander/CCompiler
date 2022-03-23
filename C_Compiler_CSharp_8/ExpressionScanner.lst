@@ -1,6 +1,19 @@
+
+// ==========================================================================
+//  GPLEX error listing for lex source file <ExpressionScanner.gplex>
+// ==========================================================================
+//  Version:  1.2.2
+//  Machine:  LAPTOP-7Q575VHS
+//  DateTime: 23/03/2022 10:33:20
+//  UserName: stefa
+// ==========================================================================
+
+
 %namespace CCompiler_Exp
 
-%using CCompiler;
+%//using CCompiler;
+// Error: Illegal character in this context
+// ----------------------------------------
 
 %{
   // Empty.
@@ -87,3 +100,5 @@ WHITE_SPACE [ \t\r\n\f]
 }
 
 . { Error.Report(yytext, Message.Unknown_character); }
+// ==========================================================================
+

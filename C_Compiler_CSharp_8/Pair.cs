@@ -23,12 +23,12 @@ namespace CCompiler {
 
     public FirstType First {
       get { return m_first; }
-      set { m_first = value; }
+      //set { m_first = value; }
     }
 
     public SecondType Second {
       get { return m_second; }
-      set { m_second = value; }
+      //set { m_second = value; }
     }
 
     public override int GetHashCode() {

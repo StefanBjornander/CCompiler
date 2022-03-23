@@ -1,7 +1,7 @@
-//using System;
-//using System.Text;
-//using System.Numerics;
-//using System.Collections.Generic;
+using System;
+using System.Text;
+using System.Numerics;
+using System.Collections.Generic;
 
 namespace CCompiler {
   public class MiddleCode {

@@ -1,7 +1,22 @@
+
+// ==========================================================================
+//  GPLEX error listing for lex source file <MainScanner.gplex>
+// ==========================================================================
+//  Version:  1.2.2
+//  Machine:  LAPTOP-7Q575VHS
+//  DateTime: 23/03/2022 10:33:15
+//  UserName: stefa
+// ==========================================================================
+
+
 %namespace CCompiler_Main
 
-%using CCompiler;
-%using System.Numerics;
+%//using CCompiler;
+// Error: Illegal character in this context
+// ----------------------------------------
+%//using System.Numerics;
+// Error: Illegal character in this context
+// ----------------------------------------
 
 %{
   public static FileInfo Path = null;
@@ -315,3 +330,5 @@ WHITE_SPACE [ \t\r\n\f]
 }
 
 . { Error.Report(yytext, Message.Unknown_character); }
+// ==========================================================================
+

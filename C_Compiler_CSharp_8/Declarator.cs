@@ -9,7 +9,7 @@ namespace CCompiler {
   
     public string Name {
       get { return m_name; }
-      set { m_name = value; }
+      //set { m_name = value; }
     }
 
     public Type Type {

@@ -1,8 +1,8 @@
 %namespace CCompiler_Main
 %partial
 
-%//using CCompiler;
-%//using System.Numerics;
+%using CCompiler;
+%using System.Numerics;
 
 %{
   public static Stack<Specifier> SpecifierStack = new Stack<Specifier>();

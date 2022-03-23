@@ -2,11 +2,11 @@
 // {{1,2],{3,4},{5,6},{7,8}}
 // {{{1,2],{3,4}},{{5,6},{7,8}}}
 
-//using System;
-//using System.IO;
-//using System.Text; // XXX
-//using System.Diagnostics;
-//using System.Collections.Generic;
+using System;
+using System.IO;
+using System.Text; // XXX
+using System.Diagnostics;
+using System.Collections.Generic;
 
 namespace CCompiler {
   class ModifyInitializer {

@@ -1,7 +1,7 @@
-//using System.Linq;
-//using System.Numerics;
-//using System.Diagnostics;
-//using System.Collections.Generic;
+using System.Linq;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
 
 namespace CCompiler {
   public class AssemblyCodeGenerator {
@@ -1582,24 +1582,23 @@ namespace CCompiler {
 
     // Floating Push and Pop
 
-    public static IDictionary<(bool, int), AssemblyOperator>
+    /*public static IDictionary<(bool, int), AssemblyOperator>
       m_floatPushMapX = new Dictionary<(bool, int), AssemblyOperator>() {
         {(false, 2), AssemblyOperator.fild_word},
         {(false, 4), AssemblyOperator.fild_dword},
         {(false, 8), AssemblyOperator.fild_qword},
         {(true, 4), AssemblyOperator.fld_dword},
         {(true, 8), AssemblyOperator.fld_qword}
-      };
+      };*/
 
-    public static IDictionary<Pair<bool,int>, AssemblyOperator>
-      m_floatPushMap = new Dictionary<Pair<bool,int>, AssemblyOperator>() {
-        {new Pair<bool,int>(false, 2), AssemblyOperator.fild_word},
-        {new Pair<bool,int>(false, 4), AssemblyOperator.fild_dword},
-        {new Pair<bool,int>(false, 8), AssemblyOperator.fild_qword},
-        {new Pair<bool,int>(true, 4), AssemblyOperator.fld_dword},
-        {new Pair<bool,int>(true, 8), AssemblyOperator.fld_qword}
+    public static IDictionary<(bool floating, int size), AssemblyOperator>
+      m_floatPushMap = new Dictionary<(bool, int), AssemblyOperator>() {
+        {(false, 2), AssemblyOperator.fild_word},
+        {(false, 4), AssemblyOperator.fild_dword},
+        {(false, 8), AssemblyOperator.fild_qword},
+        {(true, 4), AssemblyOperator.fld_dword},
+        {(true, 8), AssemblyOperator.fld_qword}
       };
-
     public void PushSymbol(Symbol symbol) {
       ++m_floatStackSize;
       Error.Check(m_floatStackSize <= FloatingStackMaxSize,
@@ -1617,8 +1616,10 @@ namespace CCompiler {
         AddAssemblyCode(AssemblyOperator.fld1);
       }
       else {
-        Pair<bool,int> pair =
-          new Pair<bool, int>(symbol.Type.IsFloating(), symbol.Type.Size()); 
+//        Pair<bool, int> pair =
+//          new Pair<bool, int>(symbol.Type.IsFloating(), symbol.Type.Size());
+        (bool floating, int size) pair =
+          (symbol.Type.IsFloating(), symbol.Type.Size());
         AssemblyOperator objectOperator = m_floatPushMap[pair];
 
         if ((symbol.Value is BigInteger) || (symbol.Value is decimal)) {
@@ -1665,28 +1666,48 @@ namespace CCompiler {
       AddAssemblyCode(AssemblyOperator.fistp_word, containerName, 0);
     }
 
-    public static IDictionary<Pair<bool,int>,AssemblyOperator>
-      m_floatPopMap = new Dictionary<Pair<bool,int>, AssemblyOperator>() {
-        {new Pair<bool,int>(false, 2), AssemblyOperator.fistp_word},
-        {new Pair<bool,int>(false, 4), AssemblyOperator.fistp_dword},
-        {new Pair<bool,int>(false, 8), AssemblyOperator.fistp_qword},
-        {new Pair<bool,int>(true, 4), AssemblyOperator.fstp_dword},
-        {new Pair<bool,int>(true, 8), AssemblyOperator.fstp_qword}
+    public static IDictionary<(bool floating, int size), AssemblyOperator>
+      m_floatPopMap = new Dictionary<(bool, int), AssemblyOperator>() {
+        {(false, 2), AssemblyOperator.fistp_word},
+        {(false, 4), AssemblyOperator.fistp_dword},
+        {(false, 8), AssemblyOperator.fistp_qword},
+        {(true, 4), AssemblyOperator.fstp_dword},
+        {(true, 8), AssemblyOperator.fstp_qword}
       };
 
-    public static IDictionary<Pair<bool,int>,AssemblyOperator>
-      m_floatTopMap = new Dictionary<Pair<bool,int>, AssemblyOperator>() {
-        {new Pair<bool,int>(false, 2), AssemblyOperator.fist_word},
-        {new Pair<bool,int>(false, 4), AssemblyOperator.fist_dword},
-        {new Pair<bool,int>(false, 8), AssemblyOperator.fist_qword},
-        {new Pair<bool,int>(true, 4), AssemblyOperator.fst_dword},
-        {new Pair<bool,int>(true, 8), AssemblyOperator.fst_qword}
+    public static IDictionary<(bool floating, int size), AssemblyOperator>
+      m_floatTopMap = new Dictionary<(bool, int), AssemblyOperator>() {
+        {(false, 2), AssemblyOperator.fist_word},
+        {(false, 4), AssemblyOperator.fist_dword},
+        {(false, 8), AssemblyOperator.fist_qword},
+        {(true, 4), AssemblyOperator.fst_dword},
+        {(true, 8), AssemblyOperator.fst_qword}
       };
+
+    /*    public static IDictionary<Pair<bool,int>,AssemblyOperator>
+          m_floatPopMap = new Dictionary<Pair<bool,int>, AssemblyOperator>() {
+            {new Pair<bool,int>(false, 2), AssemblyOperator.fistp_word},
+            {new Pair<bool,int>(false, 4), AssemblyOperator.fistp_dword},
+            {new Pair<bool,int>(false, 8), AssemblyOperator.fistp_qword},
+            {new Pair<bool,int>(true, 4), AssemblyOperator.fstp_dword},
+            {new Pair<bool,int>(true, 8), AssemblyOperator.fstp_qword}
+          };
+
+        public static IDictionary<Pair<bool,int>,AssemblyOperator>
+          m_floatTopMap = new Dictionary<Pair<bool,int>, AssemblyOperator>() {
+            {new Pair<bool,int>(false, 2), AssemblyOperator.fist_word},
+            {new Pair<bool,int>(false, 4), AssemblyOperator.fist_dword},
+            {new Pair<bool,int>(false, 8), AssemblyOperator.fist_qword},
+            {new Pair<bool,int>(true, 4), AssemblyOperator.fst_dword},
+            {new Pair<bool,int>(true, 8), AssemblyOperator.fst_qword}
+          };*/
 
     public void TopPopSymbol(Symbol symbol, TopOrPop topOrPop) {
       Error.ErrorXXX(symbol != null);
-      Pair<bool,int> pair =
-        new Pair<bool,int>(symbol.Type.IsFloating(), symbol.Type.Size());
+//      Pair<bool,int> pair =
+//        new Pair<bool,int>(symbol.Type.IsFloating(), symbol.Type.Size());
+      (bool floating, int size) pair =
+        (symbol.Type.IsFloating(), symbol.Type.Size());
       AssemblyOperator objectOperator;
 
       if (topOrPop == TopOrPop.Pop) {

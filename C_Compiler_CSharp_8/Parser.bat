@@ -1,6 +1,6 @@
 ﻿@echo
 @C:
-@cd "C:\Users\stefa\Documents\A A C_Compiler_CSharp_8\C_Compiler_CSharp_8"
+@cd "C:\Users\stefa\Documents\A A C_Compiler_CSharp_10\C_Compiler_CSharp_8"
 
 @"C:\gppg-distro-1_5_2\binaries\Gppg" /gplex MainParser.gppg > MainParser.cs
 @"C:\gppg-distro-1_5_2\binaries\Gplex" MainScanner.gplex
