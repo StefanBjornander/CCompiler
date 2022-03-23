@@ -4,7 +4,7 @@
 // ==========================================================================
 //  Version:  1.2.2
 //  Machine:  LAPTOP-7Q575VHS
-//  DateTime: 23/03/2022 10:33:15
+//  DateTime: 23/03/2022 12:13:33
 //  UserName: stefa
 // ==========================================================================
 
@@ -14,9 +14,7 @@
 %//using CCompiler;
 // Error: Illegal character in this context
 // ----------------------------------------
-%//using System.Numerics;
-// Error: Illegal character in this context
-// ----------------------------------------
+%using System.Numerics;
 
 %{
   public static FileInfo Path = null;
