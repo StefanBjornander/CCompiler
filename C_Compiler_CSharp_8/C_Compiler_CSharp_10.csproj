@@ -79,7 +79,7 @@
     <Compile Include="ObjectCodeComparer.cs" />
     <Compile Include="ObjectCodeInfo.cs" />
     <Compile Include="ObjectCodeTable.cs" />
-    <Compile Include="Pair.cs" />
+    <Compile Include="ZPair.cs" />
     <Compile Include="PartialExpressionParser.cs" />
     <Compile Include="PartialMainParser.cs" />
     <Compile Include="PartialPreprocessorParser.cs" />

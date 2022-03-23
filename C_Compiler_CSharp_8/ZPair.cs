@@ -1,9 +1,9 @@
 namespace CCompiler {
-  public class Pair<FirstType,SecondType> {
+  public class ZPair<FirstType,SecondType> {
     private FirstType m_first;
     private SecondType m_second;
 
-    public Pair(FirstType first, SecondType second) {
+    public ZPair(FirstType first, SecondType second) {
       m_first = first;
       m_second = second;
     }
@@ -36,7 +36,7 @@ namespace CCompiler {
     }
 
     public override bool Equals(object obj) {
-      if (obj is Pair<FirstType,SecondType> pair) {
+      if (obj is ZPair<FirstType,SecondType> pair) {
         return m_first.Equals(pair.m_first) && m_second.Equals(m_second);
       }
 

@@ -4,9 +4,9 @@
 
 // GPPG version 1.5.2
 // Machine:  LAPTOP-7Q575VHS
-// DateTime: 2022-03-23 12:13:54
+// DateTime: 2022-03-23 13:14:10
 // UserName: stefa
-// Input file <MainParser.gppg - 2022-03-23 12:12:59>
+// Input file <MainParser.gppg - 2022-03-23 13:14:07>
 
 // options: lines gplex
 
@@ -57,7 +57,7 @@ public partial struct ValueType
   public Expression expression;
   public List<Expression> expression_list;
   public Statement statement;
-  public Pair<List<Symbol>,Boolean> parameter_pair;
+  public System.ValueTuple<List<Symbol>,Boolean> parameter_pair;
   public List<MiddleCode> middle_code_list;
   public object obj;
   public List<object> object_list;
@@ -87,12 +87,12 @@ public class ScanObj {
 [GeneratedCodeAttribute( "Gardens Point Parser Generator", "1.5.2")]
 public partial class Parser: ShiftReduceParser<ValueType, LexLocation>
 {
-  // Verbatim content from MainParser.gppg - 2022-03-23 12:12:59
+  // Verbatim content from MainParser.gppg - 2022-03-23 13:14:07
 #line 8 "MainParser.gppg"
   public static Stack<Specifier> SpecifierStack = new Stack<Specifier>();
   public static Stack<Scope> ScopeStack = new Stack<Scope>();
 #line default
-  // End verbatim content from MainParser.gppg - 2022-03-23 12:12:59
+  // End verbatim content from MainParser.gppg - 2022-03-23 13:14:07
 
 #pragma warning disable 649
   private static Dictionary<int, string> aliases;
@@ -1236,7 +1236,7 @@ public partial class Parser: ShiftReduceParser<ValueType, LexLocation>
 #line 342 "MainParser.gppg"
                                                               {
       CurrentSemanticValue.declarator = MiddleCodeGenerator.
-           NewFunctionDeclaration(ValueStack[ValueStack.Depth-4].declarator, ValueStack[ValueStack.Depth-2].parameter_pair.First, ValueStack[ValueStack.Depth-2].parameter_pair.Second);
+           NewFunctionDeclaration(ValueStack[ValueStack.Depth-4].declarator, ValueStack[ValueStack.Depth-2].parameter_pair.Item1, ValueStack[ValueStack.Depth-2].parameter_pair.Item2);
     }
 #line default
         break;
@@ -1250,25 +1250,25 @@ public partial class Parser: ShiftReduceParser<ValueType, LexLocation>
         break;
       case 76: // optional_parameter_ellipse_list -> /* empty */
 #line 352 "MainParser.gppg"
-                           { CurrentSemanticValue.parameter_pair = null; }
+                           { CurrentSemanticValue.parameter_pair = (null, false); }
 #line default
         break;
       case 77: // optional_parameter_ellipse_list -> parameter_ellipse_list
 #line 353 "MainParser.gppg"
-                           { CurrentSemanticValue.parameter_pair = ValueStack[ValueStack.Depth-1].parameter_pair;   }
+                           { CurrentSemanticValue.parameter_pair = ValueStack[ValueStack.Depth-1].parameter_pair;            }
 #line default
         break;
       case 78: // parameter_ellipse_list -> parameter_list
 #line 356 "MainParser.gppg"
                    {
-      CurrentSemanticValue.parameter_pair = new Pair<List<Symbol>,Boolean>(ValueStack[ValueStack.Depth-1].symbol_list, false);
+      CurrentSemanticValue.parameter_pair = (ValueStack[ValueStack.Depth-1].symbol_list, false);
     }
 #line default
         break;
       case 79: // parameter_ellipse_list -> parameter_list, COMMA, ELLIPSE
 #line 359 "MainParser.gppg"
                                  {
-      CurrentSemanticValue.parameter_pair = new Pair<List<Symbol>,Boolean>(ValueStack[ValueStack.Depth-3].symbol_list, true);
+      CurrentSemanticValue.parameter_pair = (ValueStack[ValueStack.Depth-3].symbol_list, true);
     }
 #line default
         break;
@@ -1427,7 +1427,7 @@ public partial class Parser: ShiftReduceParser<ValueType, LexLocation>
 #line 448 "MainParser.gppg"
                                                                        {
       CurrentSemanticValue.declarator = MiddleCodeGenerator.
-           NewFunctionDeclaration(null, ValueStack[ValueStack.Depth-2].parameter_pair.First, ValueStack[ValueStack.Depth-2].parameter_pair.Second);
+           NewFunctionDeclaration(null, ValueStack[ValueStack.Depth-2].parameter_pair.Item1, ValueStack[ValueStack.Depth-2].parameter_pair.Item2);
     }
 #line default
         break;
@@ -1437,7 +1437,7 @@ public partial class Parser: ShiftReduceParser<ValueType, LexLocation>
 #line 453 "MainParser.gppg"
                                                                        {
       CurrentSemanticValue.declarator = MiddleCodeGenerator.
-           NewFunctionDeclaration(ValueStack[ValueStack.Depth-4].declarator, ValueStack[ValueStack.Depth-2].parameter_pair.First, ValueStack[ValueStack.Depth-2].parameter_pair.Second);
+           NewFunctionDeclaration(ValueStack[ValueStack.Depth-4].declarator, ValueStack[ValueStack.Depth-2].parameter_pair.Item1, ValueStack[ValueStack.Depth-2].parameter_pair.Item2);
     }
 #line default
         break;

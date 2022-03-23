@@ -1,10 +1,10 @@
 
 // ==========================================================================
-//  GPPG error listing for yacc source file <MainParser.gppg - 2022-03-23 12:12:19>
+//  GPPG error listing for yacc source file <MainParser.gppg - 2022-03-23 13:11:45>
 // ==========================================================================
 //  Version:  1.5.2
 //  Machine:  LAPTOP-7Q575VHS
-//  DateTime: 2022-03-23 12:12:24
+//  DateTime: 2022-03-23 13:11:48
 //  UserName: stefa
 // ==========================================================================
 
@@ -12,12 +12,7 @@
 %namespace CCompiler_Main
 %partial
 
-%//using CCompiler;
-//^^^^^^
-// Error: Unknown %keyword in this context
-// Error: This character is invalid in this context
-// Error: Syntax error, unexpected ident
-// ------------------------------------------------
+%using CCompiler;
 %using System.Numerics;
 
 %{
@@ -60,7 +55,11 @@
   public Expression expression;
   public List<Expression> expression_list;
   public Statement statement;
-  public Pair<List<Symbol>,Boolean> parameter_pair;
+//  public Pair<List<Symbol>,Boolean> parameter_pair;
+  public System.ValueTuple<List<Symbol> x,Boolean> parameter_pair;
+//-------------------------------------^^
+// Error: Syntax error, unexpected ident, expecting '>', or ','
+// ------------------------------------------------------------
   public List<MiddleCode> middle_code_list;
   public object obj;
   public List<object> object_list;
@@ -357,7 +356,7 @@ direct_declarator:
   | direct_declarator
     LEFT_PARENTHESIS parameter_ellipse_list RIGHT_PARENTHESIS {
       $$ = MiddleCodeGenerator.
-           NewFunctionDeclaration($1, $3.First, $3.Second);
+           NewFunctionDeclaration($1, $3.Item1, $3.Item2);
     }
   | direct_declarator LEFT_PARENTHESIS
     optional_name_list RIGHT_PARENTHESIS {
@@ -365,15 +364,15 @@ direct_declarator:
     };
 
 optional_parameter_ellipse_list:
-    /* Empty */            { $$ = null; }
-  | parameter_ellipse_list { $$ = $1;   };
+    /* Empty */            { $$ = (null, false); }
+  | parameter_ellipse_list { $$ = $1;            };
     
 parameter_ellipse_list:
     parameter_list {
-      $$ = new Pair<List<Symbol>,Boolean>($1, false);
+      $$ = ($1, false);
     }
   | parameter_list COMMA ELLIPSE {
-      $$ = new Pair<List<Symbol>,Boolean>($1, true);
+      $$ = ($1, true);
     };
 
 parameter_list:
@@ -463,12 +462,12 @@ direct_abstract_declarator:
     }
   | LEFT_PARENTHESIS optional_parameter_ellipse_list RIGHT_PARENTHESIS {
       $$ = MiddleCodeGenerator.
-           NewFunctionDeclaration(null, $2.First, $2.Second);
+           NewFunctionDeclaration(null, $2.Item1, $2.Item2);
     }
   | direct_abstract_declarator
     LEFT_PARENTHESIS optional_parameter_ellipse_list RIGHT_PARENTHESIS {
       $$ = MiddleCodeGenerator.
-           NewFunctionDeclaration($1, $3.First, $3.Second);
+           NewFunctionDeclaration($1, $3.Item1, $3.Item2);
     };
 
 // ---------------------------------------------------------------------
