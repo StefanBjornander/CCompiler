@@ -60,8 +60,8 @@ namespace CCompiler {
         targetSymbol = new Symbol(targetType);
       }
       else if (sourceType.IsStructOrUnion() && targetType.IsStructOrUnion()) {
-        Error.Check(sourceType.Equals(targetType), sourceType + " to " +
-                     targetType, Message.Invalid_type_cast);
+        Error.Check(sourceType.Equals(targetType), $"{sourceType} to " +
+                    targetType, Message.Invalid_type_cast);
         targetSymbol = new Symbol(targetType);
       }
       else if (sourceType.IsLogical() &&
@@ -177,9 +177,9 @@ namespace CCompiler {
                         targetSymbol, sourceSymbol);
       }
 
-      Error.Check(targetSymbol != null, sourceType + " to " +
+      Error.Check(targetSymbol != null, $"{sourceType} to " +
                    targetType, Message.Invalid_type_cast);
-      return (new Expression(targetSymbol, shortList, longList));    
+      return (new Expression(targetSymbol, shortList, longList));
     }
 
     public static Type MaxType(Type leftType, Type rightType) {

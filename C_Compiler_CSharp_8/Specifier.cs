@@ -146,8 +146,8 @@ namespace CCompiler {
 
             case Storage.Extern: {
                   Error.Check(!itemSymbol.InitializedEnum,
-                              itemSymbol + " = " + itemSymbol.Value,
-                  Message.Extern_enumeration_item_cannot_be_initialized);
+                              $"{itemSymbol} = {itemSymbol.Value}",
+                              Message.Extern_enumeration_item_cannot_be_initialized);
               }
               break;
           }

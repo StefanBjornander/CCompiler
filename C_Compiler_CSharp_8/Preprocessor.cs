@@ -407,9 +407,10 @@ namespace CCompiler {
           new FileInfo((string) tokenList[3].Value);
       }
 
-      m_outputBuffer.Append(Symbol.SeparatorId + CCompiler_Main.Scanner.Path +
-                            "," + CCompiler_Main.Scanner.Line +
-                            Symbol.SeparatorId + "\n");
+      m_outputBuffer.Append($"{Symbol.SeparatorId}" +
+                            $"{CCompiler_Main.Scanner.Path}," +
+                            $"{CCompiler_Main.Scanner.Line}" +
+                            $"{Symbol.SeparatorId}\n");
     }
 
     // ------------------------------------------------------------------------
@@ -450,14 +451,16 @@ namespace CCompiler {
       int oldLine = CCompiler_Main.Scanner.Line;
       CCompiler_Main.Scanner.Path = includeFile;
       CCompiler_Main.Scanner.Line = 1;
-      m_outputBuffer.Append(Symbol.SeparatorId + CCompiler_Main.Scanner.Path +
-                            ",0" + Symbol.SeparatorId + "\n");
+      m_outputBuffer.Append($"{Symbol.SeparatorId}" +
+                            $"{CCompiler_Main.Scanner.Path},0" +
+                            $"{Symbol.SeparatorId}\n");
       DoProcess(includeFile);
       CCompiler_Main.Scanner.Line = oldLine;
       CCompiler_Main.Scanner.Path = oldPath;
-      m_outputBuffer.Append(Symbol.SeparatorId + CCompiler_Main.Scanner.Path +
-                            "," + (CCompiler_Main.Scanner.Line - 1) +
-                            Symbol.SeparatorId + "\n");
+      m_outputBuffer.Append($"{Symbol.SeparatorId}" +
+                            $"{CCompiler_Main.Scanner.Path}," +
+                            $"{(CCompiler_Main.Scanner.Line - 1)}" +
+                            $"{Symbol.SeparatorId}\n");
       m_includeStack.Pop();
     }
 
@@ -691,16 +694,14 @@ namespace CCompiler {
                 break;
 
               case "__DATE__": {
-                  string text = "\"" + DateTime.Now.ToString("MMMM dd yyyy") +
-                                "\"";
+                  string text = $"\"{DateTime.Now.ToString("MMMM dd yyyy")}\"";
                   tokenList[index] = new Token(CCompiler_Pre.Tokens.TOKEN,
                                                text, beginNewlineCount);
                 }
                 break;
 
               case "__TIME__": {
-                  string text = "\"" + DateTime.Now.ToString("HH:mm:ss") +
-                                "\"";
+                  string text = $"\"{DateTime.Now.ToString("HH:mm:ss")}\"";
                   tokenList[index] = new Token(CCompiler_Pre.Tokens.TOKEN,
                                                text, beginNewlineCount);
                 }
@@ -783,7 +784,7 @@ namespace CCompiler {
 
                 if ((macroIndex > 0) && (cloneList[macroIndex - 1].Id ==
                                           CCompiler_Pre.Tokens.SHARP)) {
-                  string text = "\"" + TokenListToString(replaceList) + "\"";
+                  string text = $"\"{TokenListToString(replaceList)}\"";
                   cloneList.Insert(macroIndex,
                               new Token(CCompiler_Pre.Tokens.STRING, text));
                   cloneList.RemoveAt(--macroIndex);
