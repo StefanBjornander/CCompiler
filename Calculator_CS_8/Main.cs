@@ -31,7 +31,7 @@ namespace Calculator {
       //string text = Console.In.ReadLine();
 
       try {
-        FileStream file = new FileStream(args[0], FileMode.Open);
+        FileStream file = new(args[0], FileMode.Open);
         Scanner scanner = new Scanner(file);
         Parser parser = new Parser(scanner);
         parser.Parse();
