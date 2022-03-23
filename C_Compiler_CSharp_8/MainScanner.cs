@@ -6,9 +6,9 @@
 //
 //  GPLEX Version:  1.2.2
 //  Machine:  LAPTOP-7Q575VHS
-//  DateTime: 23/03/2022 13:14:13
+//  DateTime: 23/03/2022 16:07:25
 //  UserName: stefa
-//  GPLEX input file <MainScanner.gplex - 23/03/2022 12:13:47>
+//  GPLEX input file <MainScanner.gplex - 23/03/2022 16:07:20>
 //  GPLEX frame file <embedded resource>
 //
 //  Option settings: parser, minimize
@@ -2429,7 +2429,7 @@ return ((int) Tokens.MULTIPLY_ASSIGN);
             break;
         case 242:
         case 243:
-{ CCompiler.Type type = new CCompiler.Type(Sort.SignedChar);
+{ CCompiler.Type type = new CCompiler.Type (Sort.SignedChar);
     string text = Slash.SlashToChar(yytext);
     Error.Check(text.Length == 3, yytext, Message.Invalid_char_sequence);
     yylval.symbol = new Symbol(type, (BigInteger) ((int) text[1]));
@@ -2454,7 +2454,7 @@ return ((int) Tokens.MODULO_ASSIGN);
             break;
         case 248:
         case 249:
-{ CCompiler.Type type = new CCompiler.Type(Sort.String);
+{ CCompiler.Type type = new CCompiler.Type (Sort.String);
     string text = Slash.SlashToChar(yytext);
     object value = text.Substring(1, text.Length - 2);
     yylval.symbol = new Symbol(type, value);

@@ -237,7 +237,7 @@ namespace CCompiler {
     private static Stack<Type> m_structOrUnionTypeStack = new Stack<Type>();
 
     public static void StructUnionHeader(Sort sort, string optionalName) {
-      Type type = new CCompiler.Type(sort, null, null);
+      Type type = new Type(sort, null, null);
 
       if (optionalName != null) {
         type = SymbolTable.CurrentTable.AddTag(optionalName, type);

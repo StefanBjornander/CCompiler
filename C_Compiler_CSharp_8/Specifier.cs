@@ -94,7 +94,7 @@ namespace CCompiler {
 
       bool externalLinkage = (SymbolTable.CurrentTable.Scope == Scope.Global)
                              && ((storage == null) ||
-                                 (storage == CCompiler.Storage.Extern));
+                                 (storage == Storage.Extern));
 
       if (storage == null) {
         if (SymbolTable.CurrentTable.Scope == Scope.Global) {
@@ -134,18 +134,18 @@ namespace CCompiler {
           itemSymbol.Storage = storage.Value;
 
           switch (itemSymbol.Storage) {
-            case CCompiler.Storage.Static:
+            case Storage.Static:
               SymbolTable.StaticSet.Add(ConstantExpression.
                                          Value(itemSymbol));
               break;
 
-            case CCompiler.Storage.Auto:
-            case CCompiler.Storage.Register:
+            case Storage.Auto:
+            case Storage.Register:
               SymbolTable.CurrentTable.SetOffset(itemSymbol);
               break;
 
-            case CCompiler.Storage.Extern: {
-                Error.Check(!itemSymbol.InitializedEnum,
+            case Storage.Extern: {
+                  Error.Check(!itemSymbol.InitializedEnum,
                               itemSymbol + " = " + itemSymbol.Value,
                   Message.Extern_enumeration_item_cannot_be_initialized);
               }

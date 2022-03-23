@@ -282,7 +282,7 @@ WHITE_SPACE [ \t\r\n\f]
 }
 
 {CHAR_VALUE} {
-  { CCompiler.Type type = new CCompiler.Type(Sort.SignedChar);
+  { CCompiler.Type type = new CCompiler.Type (Sort.SignedChar);
     string text = Slash.SlashToChar(yytext);
     Error.Check(text.Length == 3, yytext, Message.Invalid_char_sequence);
     yylval.symbol = new Symbol(type, (BigInteger) ((int) text[1]));
@@ -291,7 +291,7 @@ WHITE_SPACE [ \t\r\n\f]
 }
 
 {STRING_VALUE} {
-  { CCompiler.Type type = new CCompiler.Type(Sort.String);
+  { CCompiler.Type type = new CCompiler.Type (Sort.String);
     string text = Slash.SlashToChar(yytext);
     object value = text.Substring(1, text.Length - 2);
     yylval.symbol = new Symbol(type, value);
