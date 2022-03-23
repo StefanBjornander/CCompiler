@@ -655,16 +655,18 @@ namespace CCompiler {
           Error.ErrorXXX(!(operand0 is string));
           return $"\t{operatorName} {operand0}, {operand1}";
         }
-        // mov ax, [bp + 2]; mov ax, [global + 4]
-        else if ((operand0 is Register) && ((operand1 is Register) ||
-                 (operand1 is string)) && (operand2 is int)) {
-          return $"\t{operatorName} {operand0}, [{operand1}{WithSign(operand2)}]";
-        }
         // mov [bp + 2], ax; mov [global + 4], ax; mov [bp + 2], 123; mov [global + 4], 123; mov [bp + 2], global; mov [global + 4], global
         else if (((operand0 is Register) || (operand0 is string)) &&
                  (operand1 is int) && ((operand2 is Register) ||
                   (operand2 is string) || (operand2 is BigInteger))) {
-          return $"\t{operatorName} [{operand0}{WithSign(operand1)}], {operand2}";
+          return $"\t{operatorName} [{operand0}{WithSign(operand1)}], " +
+                  "{operand2}";
+        }
+        // mov ax, [bp + 2]; mov ax, [global + 4]
+        else if ((operand0 is Register) && ((operand1 is Register) ||
+                 (operand1 is string)) && (operand2 is int)) {
+          return $"\t{operatorName} {operand0}, " +
+                  "[{operand1}{WithSign(operand2)}]";
         }
       }
       else if (Operator == AssemblyOperator.label) {
