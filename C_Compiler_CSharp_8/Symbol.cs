@@ -49,7 +49,7 @@ namespace CCompiler {
     }
 
     public Symbol(Type type) {
-      m_name = Symbol.TemporaryId + "temporary" + (TemporaryNameCount++);
+      m_name = $"{Symbol.TemporaryId}temporary{TemporaryNameCount++}";
       m_storage = Storage.Auto;
       m_type = type;
 
@@ -58,7 +58,7 @@ namespace CCompiler {
       }*/
     }
     public Symbol(ISet<MiddleCode> trueSet, ISet<MiddleCode> falseSet) {
-      m_name = Symbol.TemporaryId + "logical" + (TemporaryNameCount++);
+      m_name = $"{Symbol.TemporaryId}logical{TemporaryNameCount++}";
       m_storage = Storage.Auto;
       m_type = new Type(Sort.Logical);
       TrueSet = trueSet ?? (new HashSet<MiddleCode>());
@@ -74,19 +74,21 @@ namespace CCompiler {
       m_value = CheckValue(m_type, value);
 
       if (m_value is string text) {
-        m_name = "string_" + Slash.CharToHex(text) + Symbol.NumberId;
+        m_name = $"string_{Slash.CharToHex(text)}{Symbol.NumberId}";
       }
       else if (m_value is StaticBase staticBase) {
-        m_name = m_value.GetType().Name + "_" + staticBase.UniqueName +
-                 "_" + staticBase.Offset + Symbol.NumberId;
+        m_name = $"{m_value.GetType().Name} {staticBase.UniqueName}" +
+                 $"_{staticBase.Offset}{Symbol.NumberId}";
       }
       else if (m_type.IsFloating()) {
-        m_name = "floating" + m_type.Size() + Symbol.SeparatorId
-                 + m_value.ToString().Replace("-", "minus") + Symbol.NumberId;
+        m_name = $"floating{m_type.Size()}{Symbol.SeparatorId}" +
+                 $"{m_value.ToString().Replace("-", "minus")}" +
+                 Symbol.NumberId;
       }
       else {
-        m_name = "integral" + m_type.SizeAddress() + Symbol.SeparatorId
-                 + m_value.ToString().Replace("-", "minus") + Symbol.NumberId;
+        m_name = $"integral{m_type.SizeAddress()}{Symbol.SeparatorId}" +
+                 $"{m_value.ToString().Replace("-", "minus")}" +
+                 Symbol.NumberId;
       }
 
       m_uniqueName = Symbol.FileMarker + (UniqueNameCount++) + m_name;
@@ -100,7 +102,7 @@ namespace CCompiler {
 
         Error.Check((bigValue >= TypeSize.GetMinValue(type.Sort)) &&
                      (bigValue <= TypeSize.GetMaxValue(type.Sort)),
-                     type + ": " + value, Message.Value_overflow);
+                     $"{type}: {value}", Message.Value_overflow);
         return bigValue;
       }
 

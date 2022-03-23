@@ -48,7 +48,7 @@ namespace CCompiler {
       string funcText;
 
       if (SymbolTable.CurrentFunction != null) {
-        funcText = " in function " + SymbolTable.CurrentFunction.UniqueName;
+        funcText = $" in function {SymbolTable.CurrentFunction.UniqueName}";
       }
       else {
         funcText = " in global space";
@@ -58,27 +58,25 @@ namespace CCompiler {
     
       if ((message != null) &&
           (CCompiler_Main.Scanner.Path != null)) {
-        Console.Error.WriteLine(type + " at line " +
-                CCompiler_Main.Scanner.Line + funcText +
-                " in file " + CCompiler_Main.Scanner.Path.Name +
-                ". " + message + extraText + ".");
+        Console.Error.WriteLine($"{type} at line " +
+                                $"{CCompiler_Main.Scanner.Line}{funcText}" +
+                                $" in file {CCompiler_Main.Scanner.Path.Name}"
+                                + $". {message}{extraText}.");
       }
       else if ((message == null) &&
                (CCompiler_Main.Scanner.Path != null)) {
-        Console.Error.WriteLine(type + " at line " +
-                CCompiler_Main.Scanner.Line + funcText +
-                " in file " + CCompiler_Main.Scanner.Path.Name +
-                extraText + ".");
+        Console.Error.WriteLine($"{type} at line " +
+                                $"{CCompiler_Main.Scanner.Line}{funcText}" +
+                                $" in file {CCompiler_Main.Scanner.Path.Name}"
+                                + $"{extraText}.");
       }
       else if ((message != null) &&
                (CCompiler_Main.Scanner.Path == null)) {
-        Console.Error.WriteLine(type + ". " + message +
-                                extraText + ".");
+        Console.Error.WriteLine($"{type}. {message}{extraText}.");
       }
       else if ((message == null) &&
                (CCompiler_Main.Scanner.Path == null)) {
-        Console.Error.WriteLine(type + extraText + ".");
-      }
+        Console.Error.WriteLine($"{type}{extraText}.");      }
     }
   }
 }

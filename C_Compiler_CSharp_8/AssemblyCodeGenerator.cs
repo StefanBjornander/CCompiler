@@ -14,10 +14,10 @@ namespace CCompiler {
     private Stack<int> m_topStack = new Stack<int>();
 
     //public static string MainName = "main";
-    public static string InitializerName = Symbol.SeparatorId + "initializer";
-    public static string ArgsName = Symbol.SeparatorId + "args";
-    public static string PathName = Symbol.SeparatorId + "PathName";
-  
+    public static string InitializerName = $"{Symbol.SeparatorId}initializer";
+    public static string ArgsName = $"{Symbol.SeparatorId}args";
+    public static string PathName = $"{Symbol.SeparatorId}PathName";
+
     public AssemblyCodeGenerator(List<AssemblyCode> assemblyCodeList) {
       m_assemblyCodeList = assemblyCodeList;
     }
@@ -1652,8 +1652,7 @@ namespace CCompiler {
     }
 
     private static string AddStaticContainer(Type type) {
-      string containerName = "container" + type.Size() +
-                             "bytes" + Symbol.NumberId;
+      string containerName = $"container{type.Size()}bytes{Symbol.NumberId}";
       SymbolTable.StaticSet.Add(ConstantExpression.Value(containerName,
                                                          type, null));
       return containerName;

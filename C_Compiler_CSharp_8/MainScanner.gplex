@@ -243,7 +243,7 @@ WHITE_SPACE [ \t\r\n\f]
       SymbolTable.StaticSet.Add(yylval.symbol.StaticSymbol);*/
     }
     catch (OverflowException) {
-      Error.Report(type + ": " + text, Message.Value_overflow);
+      Error.Report($"{type}: {lowerText}", Message.Value_overflow);
     }
 
     return ((int) Tokens.VALUE);
@@ -274,7 +274,7 @@ WHITE_SPACE [ \t\r\n\f]
       SymbolTable.StaticSet.Add(yylval.symbol.StaticSymbol);*/
     }
     catch (OverflowException) {
-      Error.Report(type + ": " + text, Message.Value_overflow);
+      Error.Report($"{type}: {lowerText}", Message.Value_overflow);
     }
 
     return ((int) Tokens.VALUE);

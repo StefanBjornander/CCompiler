@@ -4,8 +4,8 @@ using System.Diagnostics;
 using System.Collections.Generic;
 
 namespace CCompiler {
-  public class Linker {    
-    public static string StackStart = Symbol.SeparatorId + "StackTop";
+  public class Linker {
+    public static string StackStart = $"{Symbol.SeparatorId}StackTop";
     private int m_totalSize = 256;
     private IDictionary<string,StaticSymbolWindows> m_globalMap =
       new Dictionary<string,StaticSymbolWindows>();
@@ -53,7 +53,7 @@ namespace CCompiler {
 
       StaticSymbolWindows mainInfo;
       Error.Check(m_globalMap.TryGetValue("main", out mainInfo),
-                   "non-static main", Message.Function_missing);
+                  "non-static main", Message.Function_missing);
       GenerateTrace(mainInfo);
       
       if (pathNameSymbol != null) {
@@ -73,7 +73,7 @@ namespace CCompiler {
         GenerateReturn(startAddress, staticSymbol.ReturnSet, byteList);
       }
 
-      { Console.Out.WriteLine("Generating \"" + targetFile.FullName + "\".");
+      { Console.Out.WriteLine($"Generating \"{targetFile.FullName}\".");
         targetFile.Delete();
         BinaryWriter targetStream =
           new BinaryWriter(File.OpenWrite(targetFile.FullName));

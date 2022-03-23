@@ -52,7 +52,7 @@ statement:
         }
       }
       catch (Exception exception) {
-        Console.Error.WriteLine("Invalid input: " + exception.ToString());
+        Console.Error.WriteLine($"Invalid input: {exception.ToString()}");
         Environment.Exit(-1);
       }
     }

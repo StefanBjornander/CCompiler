@@ -476,7 +476,7 @@ namespace CCompiler {
       if (Start.Linux) {
         List<string> textList = new List<string>();
         textList.Add("section .data");
-        textList.Add("\n" + uniqueName + ":");
+        textList.Add($"\n{uniqueName}:");
         ISet<string> externSet = new HashSet<string>();
         AssemblyCodeGenerator.LinuxTextList(assemblyCodeList, textList,
                                             externSet);

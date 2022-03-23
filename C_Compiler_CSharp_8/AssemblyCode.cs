@@ -543,19 +543,19 @@ namespace CCompiler {
     
       switch (size) {
         case 1:
-          name = name + "_byte";
+          name = $"{name}_byte";
           break;
-        
+
         case 2:
-          name = name + "_word";
+          name = $"{name}_word";
           break;
-        
+
         case 4:
-          name = name + "_dword";
+          name = $"{name}_dword";
           break;
 
         case 8:
-          name = name + "_qword";
+          name = $"{name}_qword";
           break;
       }
 
@@ -660,13 +660,13 @@ namespace CCompiler {
                  (operand1 is int) && ((operand2 is Register) ||
                   (operand2 is string) || (operand2 is BigInteger))) {
           return $"\t{operatorName} [{operand0}{WithSign(operand1)}], " +
-                  "{operand2}";
+                 $"{operand2}";
         }
         // mov ax, [bp + 2]; mov ax, [global + 4]
         else if ((operand0 is Register) && ((operand1 is Register) ||
                  (operand1 is string)) && (operand2 is int)) {
           return $"\t{operatorName} {operand0}, " +
-                  "[{operand1}{WithSign(operand2)}]";
+                 $"[{operand1}{WithSign(operand2)}]";
         }
       }
       else if (Operator == AssemblyOperator.label) {
@@ -761,11 +761,11 @@ namespace CCompiler {
       foreach (char c in text) {
         if (Char.IsControl(c) || (c == '\"') || (c == '\'')) {
           if (insideString) {
-            buffer.Append($"\", {((int)c).ToString()}, ");
+            buffer.Append($"\", {((int) c).ToString()}, ");
             insideString = false;
           }
           else {
-            buffer.Append(((int) c).ToString() + ", ");
+            buffer.Append($"{((int)c).ToString()}, ");
           }
         }
         else {
@@ -773,7 +773,7 @@ namespace CCompiler {
             buffer.Append(c);
           }
           else {
-            buffer.Append("\"" + c.ToString());
+            buffer.Append($"\"{c.ToString()}");
             insideString = true;
           }
         }

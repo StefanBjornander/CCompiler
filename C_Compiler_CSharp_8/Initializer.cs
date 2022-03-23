@@ -18,7 +18,7 @@ namespace CCompiler {
 
         if (toType.IsArray() && toType.ArrayType.IsChar() &&
             fromExpression.Symbol.Type.IsString()) {
-          string text = ((string) fromExpression.Symbol.Value) + "\0";
+          string text = $"{((string)fromExpression.Symbol.Value)}\0";
 
           if (toType.ArraySize == 0) {
             toType.ArraySize = text.Length;
@@ -58,7 +58,7 @@ namespace CCompiler {
                 indexSymbol.Storage = toSymbol.Storage;
                 indexSymbol.Offset = toSymbol.Offset +
                                     (index * toType.ArrayType.Size());
-                indexSymbol.Name = toSymbol.Name + "[" + index + "]";
+                indexSymbol.Name = $"{toSymbol.Name}[{index}]";
                 Generate(indexSymbol, fromList[index], codeList, extraOffset);
                 extraOffset += toType.ArrayType.Size();
               }
@@ -82,7 +82,7 @@ namespace CCompiler {
                 Symbol memberSymbol = memberList[index];
                 Symbol subSymbol = new Symbol(memberList[index].Type);
                 subSymbol.Storage = toSymbol.Storage;
-                subSymbol.Name = toSymbol.Name + "." + memberSymbol.Name;
+                subSymbol.Name = $"{toSymbol.Name}.{memberSymbol.Name}";
                 subSymbol.Offset = toSymbol.Offset + memberSymbol.Offset;
                 Generate(subSymbol, fromList[index], codeList, extraOffset);
                 extraOffset += memberSymbol.Type.Size();
@@ -104,7 +104,7 @@ namespace CCompiler {
               Symbol memberSymbol = memberList[0];
               Symbol subSymbol = new Symbol(memberSymbol.Type);
               subSymbol.Storage = toSymbol.Storage;
-              subSymbol.Name = toSymbol.Name + "." + memberSymbol.Name;
+              subSymbol.Name = $"{toSymbol.Name}.{memberSymbol.Name}";
               subSymbol.Offset = toSymbol.Offset;
               Generate(subSymbol, fromList[0], codeList, extraOffset);
 

@@ -23,12 +23,6 @@ namespace Calculator {
       VariableMap["pi"] = Math.PI;
       VariableMap["e"] = Math.E;
 
-      string s = "abcd", t = "\"\"";
-      string u = s.Substring(1, s.Length - 2);
-      string v = s.Substring(1, t.Length - 2);
-
-      //string text = Console.In.ReadLine();
-
       try {
         FileStream file = new(args[0], FileMode.Open);
         Scanner scanner = new(file);
