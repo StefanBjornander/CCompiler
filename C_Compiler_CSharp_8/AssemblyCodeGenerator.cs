@@ -376,7 +376,7 @@ namespace CCompiler {
       for (int index = 0; index < m_assemblyCodeList.Count; ++index) {
         AssemblyCode assemblyCode = m_assemblyCodeList[index];
      
-        if (assemblyCode.getOperator() == AssemblyOperator.set_track_size) {
+        if (assemblyCode.GetOperator() == AssemblyOperator.set_track_size) {
           Track track = (Track)assemblyCode[0];
 
           if (assemblyCode[1] is int) {
@@ -2237,10 +2237,10 @@ namespace CCompiler {
            assemblyIndex < m_assemblyCodeList.Count; ++assemblyIndex) {
         AssemblyCode assemblyCode = m_assemblyCodeList[assemblyIndex];
 
-        if (assemblyCode.getOperator() == AssemblyOperator.new_middle_code) {
+        if (assemblyCode.GetOperator() == AssemblyOperator.new_middle_code) {
           int middleIndex = (int) assemblyCode[0];
           middleToAssemblyMap.Add(middleIndex, assemblyIndex);
-          assemblyCode.setOperator(AssemblyOperator.empty);
+          assemblyCode.SetOperator(AssemblyOperator.empty);
         }
       }
 
@@ -2309,7 +2309,7 @@ namespace CCompiler {
           int byteDistance = (int) objectCode[0];
 
           if (byteDistance == 0) {
-            objectCode.setOperator(AssemblyOperator.empty);
+            objectCode.SetOperator(AssemblyOperator.empty);
           }
         }
       }
@@ -2317,7 +2317,7 @@ namespace CCompiler {
       for (int line = 0; line < m_assemblyCodeList.Count; ++line) {        
         AssemblyCode assemblyCode = m_assemblyCodeList[line];
 
-        if (assemblyCode.getOperator() == AssemblyOperator.return_address) {
+        if (assemblyCode.GetOperator() == AssemblyOperator.return_address) {
           int middleAddress = (int) ((BigInteger) assemblyCode[2]);
           int assemblyAddress = middleToAssemblyMap[middleAddress];
           int byteAddress = assemblyToByteMap[assemblyAddress];
@@ -2349,7 +2349,7 @@ namespace CCompiler {
 //      foreach (AssemblyCode assemblyCode in assemblyCodeList) {
       for (int index = 0; index < assemblyCodeList.Count; ++index) {
         AssemblyCode assemblyCode = assemblyCodeList[index];
-        AssemblyOperator assemblyOperator = assemblyCode.getOperator();
+        AssemblyOperator assemblyOperator = assemblyCode.GetOperator();
         object operand0 = assemblyCode[0],
                operand1 = assemblyCode[1],
                operand2 = assemblyCode[2];
@@ -2402,14 +2402,14 @@ namespace CCompiler {
 
         if (!assemblyCode.IsJumpNotRegister() &&
             !assemblyCode.IsRelationNotRegister() &&
-            (assemblyCode.getOperator() != AssemblyOperator.label) &&
-            (assemblyCode.getOperator() != AssemblyOperator.comment) &&
-            (assemblyCode.getOperator() != AssemblyOperator.define_zero_sequence)){
-          if (assemblyCode.getOperator() == AssemblyOperator.define_address) {
+            (assemblyCode.GetOperator() != AssemblyOperator.label) &&
+            (assemblyCode.GetOperator() != AssemblyOperator.comment) &&
+            (assemblyCode.GetOperator() != AssemblyOperator.define_zero_sequence)){
+          if (assemblyCode.GetOperator() == AssemblyOperator.define_address) {
             string name = (string) assemblyCode[0];
             accessMap.Add(byteList.Count - TypeSize.PointerSize, name);
           }
-          else if (assemblyCode.getOperator() == AssemblyOperator.define_value) {
+          else if (assemblyCode.GetOperator() == AssemblyOperator.define_value) {
             Sort sort = (Sort) assemblyCode[0];
             object value = assemblyCode[1];
 
@@ -2424,20 +2424,20 @@ namespace CCompiler {
               }
             }
           }
-          else if ((assemblyCode.getOperator() == AssemblyOperator.call) &&
+          else if ((assemblyCode.GetOperator() == AssemblyOperator.call) &&
                    (assemblyCode[0] is string)) {
             string calleeName = (string) assemblyCode[0];
             int address = byteList.Count - TypeSize.PointerSize;
             callMap.Add(address, calleeName);
           }
-          else if (assemblyCode.getOperator() == AssemblyOperator.return_address) {
+          else if (assemblyCode.GetOperator() == AssemblyOperator.return_address) {
             int address = byteList.Count - TypeSize.PointerSize;
             returnSet.Add(address);
           }
           else if (assemblyCode[0] is string) { // Add [g + 1], 2
             if (assemblyCode[2] is BigInteger) {
               int size = AssemblyCode.SizeOfValue((BigInteger)assemblyCode[2],
-                                                  assemblyCode.getOperator());
+                                                  assemblyCode.GetOperator());
               int address = byteList.Count - TypeSize.PointerSize - size;
               accessMap.Add(address, (string) assemblyCode[0]);
             }
