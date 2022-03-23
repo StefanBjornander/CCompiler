@@ -644,7 +644,7 @@ namespace CCompiler {
         else if ((operand0 is Register) && (operand1 == null) &&
                  (operand2 == null)) {
           Error.ErrorXXX(!(operand0 is BigInteger));
-          return $"\t{operatorName} {operand0}";
+          return "\t" + operatorName + " " + operand0;
         }
       }
       else if (IsBinary()) {
@@ -653,41 +653,43 @@ namespace CCompiler {
             (operand1 is string) || (operand1 is BigInteger)) &&
             (operand2 == null)) {
           Error.ErrorXXX(!(operand0 is string));
-          return $"\t{operatorName} {operand0}, {operand1}";
+          return "\t" + operatorName + " " + operand0 + ", " + operand1;
         }
         // mov ax, [bp + 2]; mov ax, [global + 4]
         else if ((operand0 is Register) && ((operand1 is Register) ||
                  (operand1 is string)) && (operand2 is int)) {
-          return $"\t{operatorName} {operand0}, [{operand1}{WithSign(operand2)}]";
+          return "\t" + operatorName + " " + operand0 +
+                 ", [" + operand1 + WithSign(operand2) + "]";
         }
         // mov [bp + 2], ax; mov [global + 4], ax; mov [bp + 2], 123; mov [global + 4], 123; mov [bp + 2], global; mov [global + 4], global
         else if (((operand0 is Register) || (operand0 is string)) &&
                  (operand1 is int) && ((operand2 is Register) ||
                   (operand2 is string) || (operand2 is BigInteger))) {
-          return $"\t{operatorName} [{operand0}{WithSign(operand1)}], {operand2}";
+          return "\t" + operatorName +
+                 " [" + operand0 + WithSign(operand1) + "], " + operand2;
         }
       }
       else if (Operator == AssemblyOperator.label) {
-        return $"\n {operand0}:";
+        return "\n " + operand0 + ":";
       }
       else if (Operator == AssemblyOperator.comment) {
-        return $"\t; {operand0}";
+        return "\t; " + operand0;
       }
       else if (Operator == AssemblyOperator.define_address) {
         string name = (string) operand0;
         int offset = (int) operand1;
-        return $"\tdq {name}{WithSign(offset)}";
+        return "\tdq " + name + WithSign(offset);
       }
       else if (Operator == AssemblyOperator.define_zero_sequence) {
         int size = (int) operand0;
-        return $"\ttimes {size} db 0";
+        return "\ttimes " + size + " db 0";
       }
       else if (Operator == AssemblyOperator.define_value) {
         Sort sort = (Sort) operand0;
         object value = operand1;
 
         if (sort == Sort.String) {
-          return $"\tdb {ToVisibleString((string) operand1)}";
+          return "\tdb " + ToVisibleString((string) operand1);
         }
         else {
           string text = operand1.ToString();
@@ -699,33 +701,34 @@ namespace CCompiler {
 
           switch (TypeSize.Size(sort)) {
             case 1:
-              return $"\tdb {text}";
+              return "\tdb " + text;
 
             case 2:
-              return $"\tdw {text}";
+              return "\tdw " + text;
 
             case 4:
-              return $"\tdd {text}";
+              return "\tdd " + text;
 
             case 8: 
-              return $"\tdq {text}";
+              return "\tdq " + text;
           }
         }
       }
       else if (IsJumpRegister() || IsCallRegister() ||
                IsCallNotRegister()) {
-        return $"\tjmp {operand0}";
+        return "\tjmp " + operand0;
       }
       else if (Operator == AssemblyOperator.return_address) {
         string target = SymbolTable.CurrentFunction.UniqueName +
                         Symbol.SeparatorId + operand2;
-        return $"\tmov qword [{operand0}{WithSign(operand1)}], {target}";
+        return "\tmov qword [" + operand0 + WithSign(operand1) + "], " +
+               target;
       }
       else if (IsRelationNotRegister() || IsJumpNotRegister()) {
         Error.ErrorXXX(operand2 is int);
         string label = SymbolTable.CurrentFunction.UniqueName +
                         Symbol.SeparatorId + operand2;
-        return $"\t{operatorName} {label}";
+        return "\t" + operatorName + " " + label;
 
         /*if (operand2 is int) {
           string label = SymbolTable.CurrentFunction.UniqueName +
@@ -759,7 +762,7 @@ namespace CCompiler {
       foreach (char c in text) {
         if (Char.IsControl(c) || (c == '\"') || (c == '\'')) {
           if (insideString) {
-            buffer.Append($"\", {((int)c).ToString()}, ");
+            buffer.Append("\", " + ((int) c).ToString() + ", ");
             insideString = false;
           }
           else {
@@ -795,10 +798,10 @@ namespace CCompiler {
       int offset = (int) value;
       
       if (offset > 0) {
-        return $" + {offset}";
+        return " + " + offset;
       }
       else if (offset < 0) {
-        return $" - (-offset)";
+        return " - " + (-offset);
       }
       else {
         return "";

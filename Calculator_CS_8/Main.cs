@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace Calculator {
   class MainX {
-    public static Dictionary<string,double> VariableMap =
-      new Dictionary<string,double>();
-          
+    public static Dictionary<string, double> VariableMap = new();
+
     static void Main(string[] args) {
       if (args.Length != 1) {
         Console.Out.WriteLine("Usage: calculator inputfile");
@@ -32,8 +31,8 @@ namespace Calculator {
 
       try {
         FileStream file = new(args[0], FileMode.Open);
-        Scanner scanner = new Scanner(file);
-        Parser parser = new Parser(scanner);
+        Scanner scanner = new(file);
+        Parser parser = new(scanner);
         parser.Parse();
       }
       catch (Exception exception) {
