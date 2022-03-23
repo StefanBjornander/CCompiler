@@ -28,7 +28,7 @@ namespace CCompiler {
     private static void SetRegistersInCodeList(List<AssemblyCode> 
                                                assemblyCodeList) {
       foreach (AssemblyCode assemblyCode in assemblyCodeList) {
-        if (assemblyCode.Operator == AssemblyOperator.set_track_size) {
+        if (assemblyCode.getOperator() == AssemblyOperator.set_track_size) {
           Track track = (Track) assemblyCode[0];
           object operand1 = assemblyCode[1];
 
@@ -39,7 +39,7 @@ namespace CCompiler {
             track.CurrentSize = ((Track) operand1).CurrentSize;
           }
 
-          assemblyCode.Operator = AssemblyOperator.empty;
+          assemblyCode.setOperator(AssemblyOperator.empty);
         }
         else {
           Check(assemblyCode, 0);

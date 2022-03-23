@@ -35,6 +35,14 @@ namespace CCompiler {
       get { return m_operator; }
       set { m_operator = value; }
     }
+    public AssemblyOperator getOperator() {
+       return m_operator;
+    }
+
+    public void setOperator(AssemblyOperator assemblyOperator) {
+      m_operator = assemblyOperator;
+    }
+
 
     public object this[int index] {
       get { return m_operandArray[index]; }

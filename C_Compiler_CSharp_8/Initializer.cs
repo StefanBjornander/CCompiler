@@ -129,7 +129,7 @@ namespace CCompiler {
           fromExpression = TypeCast.ImplicitCast(fromExpression, toType);
 
           foreach (MiddleCode middleCode in fromExpression.LongList) {
-            switch (middleCode.Operator) {
+            switch (middleCode.getOperator()) {
               case MiddleOperator.PreCall:
               case MiddleOperator.ParameterInitSize:
               case MiddleOperator.Parameter:

@@ -72,8 +72,8 @@ namespace CCompiler {
         AddAssemblyCode(AssemblyOperator.new_middle_code, middleIndex);
 
         if (SymbolTable.CurrentFunction != null) {
-          if ((middleCode.Operator != MiddleOperator.Initializer) &&
-              (middleCode.Operator != MiddleOperator.InitializerZero)) {
+          if ((middleCode.getOperator() != MiddleOperator.Initializer) &&
+              (middleCode.getOperator() != MiddleOperator.InitializerZero)) {
             string labelText = SymbolTable.CurrentFunction.UniqueName;
             
             if (middleIndex > 0) {
@@ -98,7 +98,7 @@ namespace CCompiler {
           int i = 1;
         }*/
 
-        switch (middleCode.Operator) {
+        switch (middleCode.getOperator()) {
           case MiddleOperator.PreCall:
             FunctionPreCall(middleCode);
             break;
@@ -376,7 +376,7 @@ namespace CCompiler {
       for (int index = 0; index < m_assemblyCodeList.Count; ++index) {
         AssemblyCode assemblyCode = m_assemblyCodeList[index];
      
-        if (assemblyCode.Operator == AssemblyOperator.set_track_size) {
+        if (assemblyCode.getOperator() == AssemblyOperator.set_track_size) {
           Track track = (Track)assemblyCode[0];
 
           if (assemblyCode[1] is int) {
@@ -876,7 +876,7 @@ namespace CCompiler {
   
     public void CarryExpression(MiddleCode middleCode) {
       AssemblyOperator objectOperator =
-        m_middleToIntegralMap[middleCode.Operator];
+        m_middleToIntegralMap[middleCode.getOperator()];
       int jumpTarget = (int) middleCode[0];
       AddAssemblyCode(objectOperator, null, null, jumpTarget);
     }
@@ -1185,7 +1185,7 @@ namespace CCompiler {
     public void IntegralUnary(MiddleCode middleCode) {
       Symbol resultSymbol = (Symbol)middleCode[0],
              unarySymbol = (Symbol)middleCode[1];
-      IntegralUnary(middleCode.Operator, resultSymbol, unarySymbol);
+      IntegralUnary(middleCode.getOperator(), resultSymbol, unarySymbol);
     }
 
     public void IntegralUnary(MiddleOperator middleOperator,
@@ -1268,10 +1268,10 @@ namespace CCompiler {
       AddAssemblyCode(AssemblyOperator.xor, zeroTrack, zeroTrack);
 
       Symbol rightSymbol = (Symbol) middleCode[2];
-      IntegralUnary(middleCode.Operator, rightSymbol, rightSymbol);
+      IntegralUnary(middleCode.getOperator(), rightSymbol, rightSymbol);
       Register resultRegister, discardRegister;
 
-      if (middleCode.Operator == MiddleOperator.Modulo) {
+      if (middleCode.getOperator() == MiddleOperator.Modulo) {
         resultRegister = m_remainderRegisterMap[typeSize];
         discardRegister = m_productQuintentRegisterMap[typeSize];
       }
@@ -1321,7 +1321,7 @@ namespace CCompiler {
       Symbol resultSymbol = (Symbol)middleCode[0],
              leftSymbol = (Symbol)middleCode[1],
              rightSymbol = (Symbol)middleCode[2];
-      IntegralBinary(middleCode.Operator, resultSymbol,
+      IntegralBinary(middleCode.getOperator(), resultSymbol,
                      leftSymbol, rightSymbol);
     }
 
@@ -1332,10 +1332,10 @@ namespace CCompiler {
 
       AssemblyOperator objectOperator;
       if (leftSymbol.Type.IsUnsigned()) {
-        objectOperator = m_unsignedToIntegralMap[middleCode.Operator];
+        objectOperator = m_unsignedToIntegralMap[middleCode.getOperator()];
       }
       else {
-        objectOperator = m_middleToIntegralMap[middleCode.Operator];
+        objectOperator = m_middleToIntegralMap[middleCode.getOperator()];
       }
 
       int target = (int) middleCode[0];
@@ -1551,11 +1551,11 @@ namespace CCompiler {
     public void FloatingBinary(MiddleCode middleCode) {
       --m_floatStackSize;
       Error.ErrorXXX(m_floatStackSize >= 0);
-      AddAssemblyCode(m_middleToFloatingMap[middleCode.Operator]);
+      AddAssemblyCode(m_middleToFloatingMap[middleCode.getOperator()]);
     }
 
     public void FloatingUnary(MiddleCode middleCode) {
-      AddAssemblyCode(m_middleToFloatingMap[middleCode.Operator]);
+      AddAssemblyCode(m_middleToFloatingMap[middleCode.getOperator()]);
     }
 
     public void FloatingParameter(MiddleCode middleCode) {
@@ -1576,7 +1576,7 @@ namespace CCompiler {
       AddAssemblyCode(AssemblyOperator.fstsw, Register.ax);
       AddAssemblyCode(AssemblyOperator.sahf);
       AssemblyOperator objectOperator =
-        m_middleToFloatingMap[middleCode.Operator];
+        m_middleToFloatingMap[middleCode.getOperator()];
       AddAssemblyCode(objectOperator, null, null, target);
     }
 
@@ -2167,10 +2167,10 @@ namespace CCompiler {
                assemblyIndex < m_assemblyCodeList.Count; ++assemblyIndex) {
             AssemblyCode assemblyCode = m_assemblyCodeList[assemblyIndex];
 
-            if (assemblyCode.Operator == AssemblyOperator.new_middle_code) {
+            if (assemblyCode.getOperator() == AssemblyOperator.new_middle_code) {
               int middleIndex = (int) assemblyCode[0];
               middleToAssemblyMap.Add(middleIndex, assemblyIndex);
-              assemblyCode.Operator = AssemblyOperator.empty;
+              assemblyCode.setOperator(AssemblyOperator.empty);
             }
           }
 
@@ -2218,7 +2218,7 @@ namespace CCompiler {
           for (int line = 0; line < (m_assemblyCodeList.Count - 1); ++line) {
             AssemblyCode assemblyCode = m_assemblyCodeList[line];
 
-            if (assemblyCode.Operator == AssemblyOperator.address_return) {
+            if (assemblyCode.getOperator() == AssemblyOperator.address_return) {
               int middleAddress = (int) ((BigInteger) assemblyCode[2]);
               int assemblyAddress = middleToAssemblyMap[middleAddress];
               int byteAddress = assemblyToByteMap[assemblyAddress];
@@ -2237,10 +2237,10 @@ namespace CCompiler {
            assemblyIndex < m_assemblyCodeList.Count; ++assemblyIndex) {
         AssemblyCode assemblyCode = m_assemblyCodeList[assemblyIndex];
 
-        if (assemblyCode.Operator == AssemblyOperator.new_middle_code) {
+        if (assemblyCode.getOperator() == AssemblyOperator.new_middle_code) {
           int middleIndex = (int) assemblyCode[0];
           middleToAssemblyMap.Add(middleIndex, assemblyIndex);
-          assemblyCode.Operator = AssemblyOperator.empty;
+          assemblyCode.setOperator(AssemblyOperator.empty);
         }
       }
 
@@ -2309,7 +2309,7 @@ namespace CCompiler {
           int byteDistance = (int) objectCode[0];
 
           if (byteDistance == 0) {
-            objectCode.Operator = AssemblyOperator.empty;
+            objectCode.setOperator(AssemblyOperator.empty);
           }
         }
       }
@@ -2317,7 +2317,7 @@ namespace CCompiler {
       for (int line = 0; line < m_assemblyCodeList.Count; ++line) {        
         AssemblyCode assemblyCode = m_assemblyCodeList[line];
 
-        if (assemblyCode.Operator == AssemblyOperator.return_address) {
+        if (assemblyCode.getOperator() == AssemblyOperator.return_address) {
           int middleAddress = (int) ((BigInteger) assemblyCode[2]);
           int assemblyAddress = middleToAssemblyMap[middleAddress];
           int byteAddress = assemblyToByteMap[assemblyAddress];
@@ -2330,7 +2330,7 @@ namespace CCompiler {
       for (int line = 0; line < m_assemblyCodeList.Count; ++line) {
         AssemblyCode assemblyCode = m_assemblyCodeList[line];
 
-        if (assemblyCode.Operator == AssemblyOperator.address_return) {
+        if (assemblyCode.getOperator() == AssemblyOperator.address_return) {
           int middleAddress = (int) ((BigInteger) assemblyCode[2]);
           int assemblyAddress = middleToAssemblyMap[middleAddress];
           int byteAddress = assemblyToByteMap[assemblyAddress];
@@ -2349,7 +2349,7 @@ namespace CCompiler {
 //      foreach (AssemblyCode assemblyCode in assemblyCodeList) {
       for (int index = 0; index < assemblyCodeList.Count; ++index) {
         AssemblyCode assemblyCode = assemblyCodeList[index];
-        AssemblyOperator assemblyOperator = assemblyCode.Operator;
+        AssemblyOperator assemblyOperator = assemblyCode.getOperator();
         object operand0 = assemblyCode[0],
                operand1 = assemblyCode[1],
                operand2 = assemblyCode[2];
@@ -2402,14 +2402,14 @@ namespace CCompiler {
 
         if (!assemblyCode.IsJumpNotRegister() &&
             !assemblyCode.IsRelationNotRegister() &&
-            (assemblyCode.Operator != AssemblyOperator.label) &&
-            (assemblyCode.Operator != AssemblyOperator.comment) &&
-            (assemblyCode.Operator != AssemblyOperator.define_zero_sequence)){
-          if (assemblyCode.Operator == AssemblyOperator.define_address) {
+            (assemblyCode.getOperator() != AssemblyOperator.label) &&
+            (assemblyCode.getOperator() != AssemblyOperator.comment) &&
+            (assemblyCode.getOperator() != AssemblyOperator.define_zero_sequence)){
+          if (assemblyCode.getOperator() == AssemblyOperator.define_address) {
             string name = (string) assemblyCode[0];
             accessMap.Add(byteList.Count - TypeSize.PointerSize, name);
           }
-          else if (assemblyCode.Operator == AssemblyOperator.define_value) {
+          else if (assemblyCode.getOperator() == AssemblyOperator.define_value) {
             Sort sort = (Sort) assemblyCode[0];
             object value = assemblyCode[1];
 
@@ -2424,20 +2424,20 @@ namespace CCompiler {
               }
             }
           }
-          else if ((assemblyCode.Operator == AssemblyOperator.call) &&
+          else if ((assemblyCode.getOperator() == AssemblyOperator.call) &&
                    (assemblyCode[0] is string)) {
             string calleeName = (string) assemblyCode[0];
             int address = byteList.Count - TypeSize.PointerSize;
             callMap.Add(address, calleeName);
           }
-          else if (assemblyCode.Operator == AssemblyOperator.return_address) {
+          else if (assemblyCode.getOperator() == AssemblyOperator.return_address) {
             int address = byteList.Count - TypeSize.PointerSize;
             returnSet.Add(address);
           }
           else if (assemblyCode[0] is string) { // Add [g + 1], 2
             if (assemblyCode[2] is BigInteger) {
               int size = AssemblyCode.SizeOfValue((BigInteger)assemblyCode[2],
-                                                  assemblyCode.Operator);
+                                                  assemblyCode.getOperator());
               int address = byteList.Count - TypeSize.PointerSize - size;
               accessMap.Add(address, (string) assemblyCode[0]);
             }
