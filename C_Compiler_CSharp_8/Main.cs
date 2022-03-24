@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace CCompiler {
   public class Start {
-    public static bool Linux = true, Windows;
+    public static bool Linux = false, Windows;
     public static string SourcePath = @"C:\Users\Stefa\Documents\vagrant\homestead\code\code\",
                          TargetPath = @"C:\D\";
 
