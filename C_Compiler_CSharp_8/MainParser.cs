@@ -85,7 +85,7 @@ public class ScanObj {
 }
 
 [GeneratedCodeAttribute( "Gardens Point Parser Generator", "1.5.2")]
-public partial class Parser: ShiftReduceParser<ValueType, LexLocation>
+public partial class Parser: ShiftReduceParser<ValueType,LexLocation>
 {
   // Verbatim content from MainParser.gppg - 2022-03-25 12:26:22
 #line 8 "MainParser.gppg"
@@ -95,7 +95,7 @@ public partial class Parser: ShiftReduceParser<ValueType, LexLocation>
   // End verbatim content from MainParser.gppg - 2022-03-25 12:26:22
 
 #pragma warning disable 649
-  private static Dictionary<int, string> aliases;
+  private static Dictionary<int,string> aliases;
 #pragma warning restore 649
   private static Rule[] rules = new Rule[224];
   private static State[] states = new State[417];
@@ -1607,8 +1607,7 @@ public partial class Parser: ShiftReduceParser<ValueType, LexLocation>
       case 126: // Anon@10 -> /* empty */
 #line 545 "MainParser.gppg"
                {
-      SymbolTable.CurrentTable =
-        new SymbolTable(SymbolTable.CurrentTable, Scope.Block);
+      SymbolTable.CurrentTable =/*XXX*/new(SymbolTable.CurrentTable, Scope.Block);
     }
 #line default
         break;

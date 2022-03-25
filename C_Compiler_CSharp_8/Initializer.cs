@@ -31,8 +31,7 @@ namespace CCompiler {
           List<object> list = new();
 
           foreach (char c in text) {
-            Symbol charSymbol =
-              new Symbol(toType.ArrayType, (BigInteger)((int)c));
+            Symbol charSymbol =/*XXX*/new(toType.ArrayType, (BigInteger)((int)c));
             list.Add(new Expression(charSymbol));
           }
 
@@ -168,8 +167,7 @@ namespace CCompiler {
                          (fromType.IsFunction() &&
                           fromType.Equals(toType.PointerType)),
                          Message.Invalid_type_cast);
-            StaticAddress staticAddress =
-              new StaticAddress(fromSymbol.UniqueName, 0);
+            StaticAddress staticAddress =/*XXX*/new(fromSymbol.UniqueName, 0);
             codeList.Add(new MiddleCode(MiddleOperator.Initializer,
                                         toType.Sort, staticAddress));
           }

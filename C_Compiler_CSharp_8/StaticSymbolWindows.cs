@@ -7,7 +7,7 @@ using System.Collections.Generic;
 namespace CCompiler {
   public class StaticSymbolWindows : StaticSymbol {
     private List<byte> m_byteList;
-    private Dictionary<int, string> m_accessMap, m_callMap;
+    private Dictionary<int,string> m_accessMap, m_callMap;
     private HashSet<int> m_returnSet;
 
     public StaticSymbolWindows() {
@@ -24,8 +24,8 @@ namespace CCompiler {
     }
 
     public StaticSymbolWindows(string uniqueName, List<byte> byteList, // Windows function definition
-                               Dictionary<int, string> accessMap,
-                       Dictionary<int, string> callMap, HashSet<int> returnSet)
+                               Dictionary<int,string> accessMap,
+                       Dictionary<int,string> callMap, HashSet<int> returnSet)
      : base(uniqueName) {
       m_byteList = byteList;
       m_accessMap = accessMap;

@@ -13,11 +13,9 @@ namespace CCompiler {
     private readonly SymbolTable m_parentTable;
     private int m_currentOffset;
 
-    private readonly IDictionary<string, Symbol> m_entryMap =
-      new Dictionary<string, Symbol>();
+    private readonly Dictionary<string,Symbol> m_entryMap =/*XXX*/new();
     private readonly List<Symbol> m_entryList = new();
-    private readonly IDictionary<string, Type> m_tagMap =
-     new Dictionary<string, Type>();
+    private readonly Dictionary<string,Type> m_tagMap =/*XXX*/new();
 
     public static SymbolTable CurrentTable = null;
     public static Symbol CurrentFunction = null;

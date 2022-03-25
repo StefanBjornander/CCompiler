@@ -13,13 +13,11 @@ namespace CCompiler {
     public static List<object> ModifyArray(Type type, List<object> list) {
       Dictionary<int,int> dimensionToSizeMap = new();
       int maxDimension = DimensionToSizeMap(type, dimensionToSizeMap);
-      IDictionary<object,int> initializerToDimensionMap =
-        new Dictionary<object,int>();
+      Dictionary<object,int> initializerToDimensionMap =/*XXX*/new();
       InitializerToDimensionMap(list, initializerToDimensionMap);
 
       for (int dimension = 1; dimension < maxDimension; ++dimension) {
-        List<object> totalList =
-          new List<object>(), currentList = new();
+        List<object> totalList =/*XXX*/new(), currentList = new();
         int arraySize = dimensionToSizeMap[dimension];
         Error.ErrorXXX(arraySize > 0);
 

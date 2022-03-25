@@ -5,8 +5,7 @@ using System.Collections.Generic;
 
 namespace CCompiler {
   public class AssemblyCodeGenerator {
-    public Dictionary<Symbol, Track> m_trackMap =
-      new Dictionary<Symbol,Track>();
+    public Dictionary<Symbol,Track> m_trackMap =/*XXX*/new();
     public List<AssemblyCode> m_assemblyCodeList;
 
     private int m_floatStackSize = 0;
@@ -28,8 +27,7 @@ namespace CCompiler {
 
     public static void GenerateAssembly(List<MiddleCode> middleCodeList,
                                         List<AssemblyCode> assemblyCodeList) {
-      AssemblyCodeGenerator objectCodeGenerator =
-        new AssemblyCodeGenerator(assemblyCodeList);
+      AssemblyCodeGenerator objectCodeGenerator =/*XXX*/new(assemblyCodeList);
       objectCodeGenerator.AssemblyCodeList(middleCodeList);
       ISet<Track> trackSet = objectCodeGenerator.TrackSet();
       objectCodeGenerator.RegisterAllocation(trackSet);
@@ -39,8 +37,7 @@ namespace CCompiler {
       (List<AssemblyCode> assemblyCodeList, List<byte> byteList,
        IDictionary<int,string> accessMap, IDictionary<int,string> callMap,
        ISet<int> returnSet) {
-      AssemblyCodeGenerator objectCodeGenerator =
-        new AssemblyCodeGenerator(assemblyCodeList);
+      AssemblyCodeGenerator objectCodeGenerator =/*XXX*/new(assemblyCodeList);
       objectCodeGenerator.WindowsJumpInfo();
       objectCodeGenerator.WindowsByteList
                           (byteList, accessMap, callMap, returnSet);
@@ -49,8 +46,7 @@ namespace CCompiler {
     public AssemblyCode AddAssemblyCode(AssemblyOperator objectOp,
                           object operand0 = null, object operand1 = null,
                           object operand2 = null, int size = 0) {
-      AssemblyCode assemblyCode =
-        new AssemblyCode(objectOp, operand0, operand1, operand2, size);
+      AssemblyCode assemblyCode =/*XXX*/new(objectOp, operand0, operand1, operand2, size);
       m_assemblyCodeList.Add(assemblyCode);
       return assemblyCode;
     }
@@ -59,8 +55,7 @@ namespace CCompiler {
                     AssemblyOperator objectOp, object operand0 = null,
                     object operand1 = null, object operand2 = null,
                     int size = 0) {
-      AssemblyCode assemblyCode =
-        new AssemblyCode(objectOp, operand0, operand1, operand2, size);
+      AssemblyCode assemblyCode =/*XXX*/new(objectOp, operand0, operand1, operand2, size);
       list.Add(assemblyCode);
       return assemblyCode;
     }
@@ -420,10 +415,8 @@ namespace CCompiler {
 
     private int m_totalExtraSize = 0;
     private Stack<int> m_recordSizeStack = new();
-    private Stack<Dictionary<Symbol, Track>> m_trackMapStack =
-      new Stack<Dictionary<Symbol, Track>>();
-    private Stack<Dictionary<Track, int>> m_registerMapStack =
-      new Stack<Dictionary<Track, int>>();
+    private Stack<Dictionary<Symbol,Track>> m_trackMapStack =/*XXX*/new();
+    private Stack<Dictionary<Track,int>> m_registerMapStack =/*XXX*/new();
 
     public void FunctionPreCall(MiddleCode middleCode) {
       Register baseRegister = BaseRegister(null);
@@ -437,7 +430,7 @@ namespace CCompiler {
       extraSize += totalSize * doubleTypeSize;
 
       Dictionary<Track,int> registerMap = new();
-      foreach (KeyValuePair<Symbol, Track> pair in m_trackMap) {
+      foreach (KeyValuePair<Symbol,Track> pair in m_trackMap) {
         Track track = pair.Value;
         AddAssemblyCode(AssemblyOperator.mov, baseRegister,
                         recordSize + extraSize, track);
@@ -535,7 +528,7 @@ namespace CCompiler {
     public void FunctionPostCall(MiddleCode middleCode) {
       Register baseRegister = BaseRegister(null);
       m_trackMap = m_trackMapStack.Pop();
-      IDictionary<Track,int> postMap = m_registerMapStack.Pop();
+      Dictionary<Track,int> postMap = m_registerMapStack.Pop();
 
       /*if (m_returnType.IsIntegralLogicalOrPointer() ||
           m_returnType.IsStructOrUnion()) {
@@ -689,11 +682,9 @@ namespace CCompiler {
           }
           Error.ErrorXXX(lastLine >= 0);
 
-          AssemblyCode setCode =
-            new AssemblyCode(AssemblyOperator.set_track_size,
+          AssemblyCode setCode =/*XXX*/new(AssemblyOperator.set_track_size,
                              newTrack, oldTrack);
-          AssemblyCode movCode =
-            new AssemblyCode(AssemblyOperator.mov, newTrack, oldTrack);
+          AssemblyCode movCode =/*XXX*/new(AssemblyOperator.mov, newTrack, oldTrack);
           m_assemblyCodeList.Insert(lastLine + 1, setCode);
           m_assemblyCodeList.Insert(lastLine + 2, movCode);
           break;
@@ -1144,9 +1135,8 @@ namespace CCompiler {
 
     // Integral Unary
 
-    public static IDictionary<MiddleOperator,AssemblyOperator>
-      m_middleToIntegralMap =
-      new Dictionary<MiddleOperator, AssemblyOperator>() {
+    public static Dictionary<MiddleOperator,AssemblyOperator>
+      m_middleToIntegralMap = new() {
         {MiddleOperator.BitwiseNot, AssemblyOperator.not},
         {MiddleOperator.Minus, AssemblyOperator.neg},
         {MiddleOperator.Multiply, AssemblyOperator.imul},
@@ -1170,8 +1160,7 @@ namespace CCompiler {
         {MiddleOperator.GreaterThan, AssemblyOperator.jg},
         {MiddleOperator.GreaterThanEqual, AssemblyOperator.jge}},
 
-      m_unsignedToIntegralMap =
-      new Dictionary<MiddleOperator, AssemblyOperator>() {
+      m_unsignedToIntegralMap =/*XXX*/new() {
         {MiddleOperator.Multiply, AssemblyOperator.mul},
         {MiddleOperator.Divide, AssemblyOperator.div},
         {MiddleOperator.Modulo, AssemblyOperator.div},
@@ -1241,20 +1230,16 @@ namespace CCompiler {
 
     // Integral Multiplication, Division, and Modulo
 
-    public static IDictionary<int,Register> m_leftRegisterMap =
-      new Dictionary<int,Register>() {{1, Register.al}, {2, Register.ax},
+    public static Dictionary<int,Register> m_leftRegisterMap =/*XXX*/new() {{1, Register.al}, {2, Register.ax},
                                       {4, Register.eax}, {8, Register.rax}};
 
-    public static IDictionary<int,Register> m_zeroRegisterMap =
-      new Dictionary<int,Register>() {{1, Register.ah}, {2, Register.dx},
+    public static Dictionary<int,Register> m_zeroRegisterMap =/*XXX*/new() {{1, Register.ah}, {2, Register.dx},
                                       {4, Register.edx}, {8, Register.rdx}};
 
-    public static IDictionary<int,Register> m_productQuintentRegisterMap =
-      new Dictionary<int,Register>() {{1, Register.al}, {2, Register.ax},
+    public static Dictionary<int,Register> m_productQuintentRegisterMap =/*XXX*/new() {{1, Register.al}, {2, Register.ax},
                                       {4, Register.eax}, {8, Register.rax}};
 
-    public static IDictionary<int,Register> m_remainderRegisterMap =
-      new Dictionary<int,Register>() {{1, Register.ah}, {2, Register.dx},
+    public static Dictionary<int,Register> m_remainderRegisterMap =/*XXX*/new() {{1, Register.ah}, {2, Register.dx},
                                       {4, Register.edx}, {8, Register.rdx}};
 
     public void IntegralMultiply(MiddleCode middleCode) {
@@ -1532,9 +1517,8 @@ namespace CCompiler {
 
     // Floating Binary
 
-    public static IDictionary<MiddleOperator, AssemblyOperator>
-      m_middleToFloatingMap =
-        new Dictionary<MiddleOperator,AssemblyOperator>() {
+    public static Dictionary<MiddleOperator, AssemblyOperator>
+      m_middleToFloatingMap = new() {
           {MiddleOperator.Minus, AssemblyOperator.fchs},
           {MiddleOperator.Add, AssemblyOperator.fadd},
           {MiddleOperator.Subtract, AssemblyOperator.fsub},
@@ -1616,8 +1600,8 @@ namespace CCompiler {
         AddAssemblyCode(AssemblyOperator.fld1);
       }
       else {
-//        PairX<bool, int> pair =
-//          new PairX<bool, int>(symbol.Type.IsFloating(), symbol.Type.Size());
+//        PairX<bool,int> pair =
+//          new PairX<bool,int>(symbol.Type.IsFloating(), symbol.Type.Size());
         (bool floating, int size) pair =
           (symbol.Type.IsFloating(), symbol.Type.Size());
         AssemblyOperator objectOperator = m_floatPushMap[pair];
@@ -1808,8 +1792,7 @@ namespace CCompiler {
     public void StructUnionGetReturnValue(MiddleCode middleCode) {
       Symbol targetSymbol = (Symbol) middleCode[0];
       CheckRegister(targetSymbol, AssemblyCode.ReturnAddressRegister);
-      Track targetAddressTrack =
-        new Track(targetSymbol.AddressSymbol, 
+      Track targetAddressTrack =/*XXX*/new(targetSymbol.AddressSymbol, 
                   AssemblyCode.ReturnAddressRegister);
       m_trackMap.Add(targetSymbol.AddressSymbol, targetAddressTrack);
     }
@@ -1884,8 +1867,7 @@ namespace CCompiler {
         HashSet<string> externSet = new();
         AssemblyCodeGenerator.LinuxTextList(assemblyCodeList, textList,
                                             externSet);
-        SymbolTable.InitSymbol =
-          new StaticSymbolLinux(AssemblyCodeGenerator.InitializerName,
+        SymbolTable.InitSymbol =/*XXX*/new(AssemblyCodeGenerator.InitializerName,
                                 textList, externSet);
       }
 
@@ -1980,8 +1962,7 @@ namespace CCompiler {
         HashSet<string> externSet = new();
         AssemblyCodeGenerator.LinuxTextList(assemblyCodeList, textList,
                                             externSet);
-        SymbolTable.ArgsSymbol =
-          new StaticSymbolLinux(AssemblyCodeGenerator.ArgsName,
+        SymbolTable.ArgsSymbol =/*XXX*/new(AssemblyCodeGenerator.ArgsName,
                                 textList, externSet);
       }
       

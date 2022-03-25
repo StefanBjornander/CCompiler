@@ -44,8 +44,7 @@ namespace CCompiler {
         case MiddleOperator.Dot:
           if (leftSymbol.IsExternOrStatic()) {
             object resultValue =
-              new StaticValue(leftSymbol.UniqueName,
-                              rightSymbol.Offset); // s.i
+              new StaticValue(leftSymbol.UniqueName, rightSymbol.Offset);
             Symbol resultSymbol = new(leftType, resultValue);
             return (new Expression(resultSymbol, null, null));
           }
@@ -79,17 +78,13 @@ namespace CCompiler {
       switch (middleOp) {
         case MiddleOperator.Address: {
             if (symbol.Value is StaticValue staticValue) { // &a[i], &s.i
-              StaticAddress staticAddress =
-                new StaticAddress(staticValue.UniqueName, staticValue.Offset);
-              Symbol resultSymbol =
-                new Symbol(new Type(symbol.Type), staticAddress);
+              StaticAddress staticAddress =/*XXX*/new(staticValue.UniqueName, staticValue.Offset);
+              Symbol resultSymbol =/*XXX*/new(new Type(symbol.Type), staticAddress);
               return (new Expression(resultSymbol, null, null));
             }
             else if (symbol.IsExternOrStatic()) { // &i
-              StaticAddress staticAddress =
-                new StaticAddress(symbol.UniqueName, 0);
-              Symbol resultSymbol =
-                new Symbol(new Type(symbol.Type), staticAddress);
+              StaticAddress staticAddress =/*XXX*/new(symbol.UniqueName, 0);
+              Symbol resultSymbol =/*XXX*/new(new Type(symbol.Type), staticAddress);
               return (new Expression(resultSymbol, null, null));
             }
           }
@@ -97,11 +92,9 @@ namespace CCompiler {
 
         case MiddleOperator.Dereference: {
             if (symbol.Value is StaticAddress staticAddress) {
-              StaticValue staticValue =
-                new StaticValue(staticAddress.UniqueName,
+              StaticValue staticValue =/*XXX*/new(staticAddress.UniqueName,
                                 staticAddress.Offset);
-              Symbol resultSymbol =
-                new Symbol(new Type(symbol.Type), staticValue);
+              Symbol resultSymbol =/*XXX*/new(new Type(symbol.Type), staticValue);
               return (new Expression(resultSymbol, null, null));
             }
           }

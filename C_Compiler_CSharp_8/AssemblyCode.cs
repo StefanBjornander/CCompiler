@@ -294,42 +294,20 @@ namespace CCompiler {
       return m_registerSizeMap[register];
     }
 
-    /*private static IList<ISet<Register>> m_registerSetList =
-      new HashSet<Register>[]{
-        new HashSet<Register>() {Register.al, Register.bl, Register.cl, Register.dl,
-                                 Register.ah, Register.bh, Register.ch, Register.dh},
-        new HashSet<Register>() {Register.ax, Register.bx, Register.cx, Register.dx,
-                                 Register.si, Register.di, Register.bp, Register.sp},
-        new HashSet<Register>() {Register.eax, Register.ebx, Register.ecx, Register.edx,
-                                 Register.esi, Register.edi, Register.ebp, Register.esp},
-        new HashSet<Register>() {Register.rax, Register.rbx, Register.rcx, Register.rdx,
-                                 Register.rsi, Register.rdi, Register.rbp, Register.rsp}
-     };
-
-    private static IDictionary<int,int> m_indexToSizeMap =
-      new Dictionary<int,int>() {{0, 1}, {1, 2}, {2, 4}, {3, 8}};
-
-    public static int SizeOfRegister(Register register) {
-      for (int index = 0; index < m_registerSetList.Count; ++index)
-      if (m_registerSetList[index].Contains(register)) {
-        return m_indexToSizeMap[index];
-      }
-
-      Error.ErrorXXX(false);
-      return 0;
-    }*/
-
-    private static ISet<IList<Register>> m_registerListSet =
-      new HashSet<IList<Register>>() {
-        new Register[] {Register.al, Register.ax, Register.eax, Register.rax},
-        new Register[] {Register.bl, Register.bx, Register.ebx, Register.rbx},
-        new Register[] {Register.cl, Register.cx, Register.ecx, Register.rcx},
-        new Register[] {Register.dl, Register.dx, Register.edx, Register.rdx},
-        new Register[] {default(Register), Register.si, Register.esi, Register.rsi},
-        new Register[] {default(Register), Register.di, Register.edi, Register.rdi},
-        new Register[] {default(Register), Register.bp, Register.ebp, Register.rbp},
-        new Register[] {default(Register), Register.sp, Register.esp, Register.rsp}
-      };
+    private static HashSet<IList<Register>> m_registerListSet = new() {
+      new Register[] {Register.al, Register.ax, Register.eax, Register.rax},
+      new Register[] {Register.bl, Register.bx, Register.ebx, Register.rbx},
+      new Register[] {Register.cl, Register.cx, Register.ecx, Register.rcx},
+      new Register[] {Register.dl, Register.dx, Register.edx, Register.rdx},
+      new Register[] {default(Register), Register.si,
+                      Register.esi, Register.rsi},
+      new Register[] {default(Register), Register.di,
+                      Register.edi, Register.rdi},
+      new Register[] {default(Register), Register.bp,
+                      Register.ebp, Register.rbp},
+      new Register[] {default(Register), Register.sp,
+                      Register.esp, Register.rsp}
+    };
 
     private static Dictionary<int,int> m_sizeToIndexMap = new()
       {{1, 0}, {2, 1}, {4, 2}, {8, 3}};
@@ -350,162 +328,6 @@ namespace CCompiler {
       Error.ErrorXXX(false);
       return default(Register);
     }
-
-    /*private static IDictionary<PairX<Register,int>,Register> m_registerToSizeMap =
-      new Dictionary<PairX<Register,int>,Register>() {
-       {new PairX<Register,int>(Register.al, 2), Register.ax},
-       {new PairX<Register,int>(Register.al, 4), Register.eax},
-       {new PairX<Register,int>(Register.al, 8), Register.rax},
-       {new PairX<Register,int>(Register.ax, 1), Register.al},
-       {new PairX<Register,int>(Register.ax, 4), Register.eax},
-       {new PairX<Register,int>(Register.ax, 8), Register.rax},
-       {new PairX<Register,int>(Register.eax, 1), Register.al},
-       {new PairX<Register,int>(Register.eax, 2), Register.ax},
-       {new PairX<Register,int>(Register.eax, 8), Register.rax},
-       {new PairX<Register,int>(Register.rax, 1), Register.al},
-       {new PairX<Register,int>(Register.rax, 2), Register.ax},
-       {new PairX<Register,int>(Register.rax, 4), Register.eax},
-
-       {new PairX<Register,int>(Register.bl, 2), Register.bx},
-       {new PairX<Register,int>(Register.bl, 4), Register.ebx},
-       {new PairX<Register,int>(Register.bl, 8), Register.rbx},
-       {new PairX<Register,int>(Register.bx, 1), Register.bl},
-       {new PairX<Register,int>(Register.bx, 4), Register.ebx},
-       {new PairX<Register,int>(Register.bx, 8), Register.rbx},
-       {new PairX<Register,int>(Register.ebx, 1), Register.bl},
-       {new PairX<Register,int>(Register.ebx, 2), Register.bx},
-       {new PairX<Register,int>(Register.ebx, 8), Register.rbx},
-       {new PairX<Register,int>(Register.rbx, 1), Register.bl},
-       {new PairX<Register,int>(Register.rbx, 2), Register.bx},
-       {new PairX<Register,int>(Register.rbx, 4), Register.ebx},
-
-       {new PairX<Register,int>(Register.cl, 2), Register.cx},
-       {new PairX<Register,int>(Register.cl, 4), Register.ecx},
-       {new PairX<Register,int>(Register.cl, 8), Register.rcx},
-       {new PairX<Register,int>(Register.cx, 1), Register.cl},
-       {new PairX<Register,int>(Register.cx, 4), Register.ecx},
-       {new PairX<Register,int>(Register.cx, 8), Register.rcx},
-       {new PairX<Register,int>(Register.ecx, 1), Register.cl},
-       {new PairX<Register,int>(Register.ecx, 2), Register.cx},
-       {new PairX<Register,int>(Register.ecx, 8), Register.rcx},
-       {new PairX<Register,int>(Register.rcx, 1), Register.cl},
-       {new PairX<Register,int>(Register.rcx, 2), Register.cx},
-       {new PairX<Register,int>(Register.rcx, 4), Register.ecx},
-
-       {new PairX<Register,int>(Register.dl, 2), Register.dx},
-       {new PairX<Register,int>(Register.dl, 4), Register.edx},
-       {new PairX<Register,int>(Register.dl, 8), Register.rdx},
-       {new PairX<Register,int>(Register.dx, 1), Register.dl},
-       {new PairX<Register,int>(Register.dx, 4), Register.edx},
-       {new PairX<Register,int>(Register.dx, 8), Register.rdx},
-       {new PairX<Register,int>(Register.edx, 1), Register.dl},
-       {new PairX<Register,int>(Register.edx, 2), Register.dx},
-       {new PairX<Register,int>(Register.edx, 8), Register.rdx},
-       {new PairX<Register,int>(Register.rdx, 1), Register.dl},
-       {new PairX<Register,int>(Register.rdx, 2), Register.dx},
-       {new PairX<Register,int>(Register.rdx, 4), Register.edx},
-
-       {new PairX<Register,int>(Register.si, 4), Register.esi},
-       {new PairX<Register,int>(Register.si, 8), Register.rsi},
-       {new PairX<Register,int>(Register.esi, 2), Register.si},
-       {new PairX<Register,int>(Register.esi, 8), Register.rsi},
-       {new PairX<Register,int>(Register.rsi, 2), Register.si},
-       {new PairX<Register,int>(Register.rsi, 4), Register.esi},
-
-       {new PairX<Register,int>(Register.di, 4), Register.edi},
-       {new PairX<Register,int>(Register.di, 8), Register.rdi},
-       {new PairX<Register,int>(Register.edi, 2), Register.di},
-       {new PairX<Register,int>(Register.edi, 8), Register.rdi},
-       {new PairX<Register,int>(Register.rdi, 2), Register.di},
-       {new PairX<Register,int>(Register.rdi, 4), Register.edi},
-
-       {new PairX<Register,int>(Register.bp, 4), Register.ebp},
-       {new PairX<Register,int>(Register.bp, 8), Register.rbp},
-       {new PairX<Register,int>(Register.ebp, 2), Register.bp},
-       {new PairX<Register,int>(Register.ebp, 8), Register.rbp},
-       {new PairX<Register,int>(Register.rbp, 2), Register.bp},
-       {new PairX<Register,int>(Register.rbp, 4), Register.ebp},
-
-       {new PairX<Register,int>(Register.sp, 4), Register.esp},
-       {new PairX<Register,int>(Register.sp, 8), Register.rsp},
-       {new PairX<Register,int>(Register.esp, 2), Register.sp},
-       {new PairX<Register,int>(Register.esp, 8), Register.rsp},
-       {new PairX<Register,int>(Register.rsp, 2), Register.sp},
-       {new PairX<Register,int>(Register.rsp, 4), Register.esp},
-      };
-
-    public static Register RegisterToSize(Register register, int size) {
-      Error.ErrorXXX((size == 1) || (size == 2) || (size == 4) || (size == 8));
-
-      if (m_registerSizeMap[register] == size) {
-        return register;
-      }
-      else {
-        PairX<Register,int> pair = new(register, size);
-        Error.ErrorXXX(m_registerToSizeMap.ContainsKey(pair));
-        return m_registerToSizeMap[pair];
-      }
-    }
-
-    private static IDictionary<AssemblyOperator,int> m_operatorSizeMap =
-      new Dictionary<AssemblyOperator,int>() {
-       {AssemblyOperator.mov_byte, 1}, {AssemblyOperator.mov_word, 2},
-       {AssemblyOperator.mov_dword, 4}, {AssemblyOperator.mov_qword, 8},
-       {AssemblyOperator.cmp_byte, 1}, {AssemblyOperator.cmp_word, 2},
-       {AssemblyOperator.cmp_dword, 4}, {AssemblyOperator.cmp_qword, 8},
-
-       {AssemblyOperator.add_byte, 1}, {AssemblyOperator.add_word, 2},
-       {AssemblyOperator.add_dword, 4}, {AssemblyOperator.add_qword, 8},
-       {AssemblyOperator.sub_byte, 1}, {AssemblyOperator.sub_word, 2},
-       {AssemblyOperator.sub_dword, 4}, {AssemblyOperator.sub_qword, 8},
-
-       {AssemblyOperator.mul_byte, 1}, {AssemblyOperator.mul_word, 2},
-       {AssemblyOperator.mul_dword, 4}, {AssemblyOperator.mul_qword, 8},
-       {AssemblyOperator.div_byte, 1}, {AssemblyOperator.div_word, 2},
-       {AssemblyOperator.div_dword, 4}, {AssemblyOperator.div_qword, 8},
-
-       {AssemblyOperator.imul_byte, 1}, {AssemblyOperator.imul_word, 2},
-       {AssemblyOperator.imul_dword, 4}, {AssemblyOperator.imul_qword, 8},
-       {AssemblyOperator.idiv_byte, 1}, {AssemblyOperator.idiv_word, 2},
-       {AssemblyOperator.idiv_dword, 4}, {AssemblyOperator.idiv_qword, 8},
-
-       {AssemblyOperator.inc_byte, 1}, {AssemblyOperator.inc_word, 2},
-       {AssemblyOperator.inc_dword, 4}, {AssemblyOperator.inc_qword, 8},
-       {AssemblyOperator.dec_byte, 1}, {AssemblyOperator.dec_word, 2},
-       {AssemblyOperator.dec_dword, 4}, {AssemblyOperator.dec_qword, 8},
-
-       {AssemblyOperator.neg_byte, 1}, {AssemblyOperator.neg_word, 2},
-       {AssemblyOperator.neg_dword, 4}, {AssemblyOperator.neg_qword, 8},
-       {AssemblyOperator.not_byte, 1}, {AssemblyOperator.not_word, 2},
-       {AssemblyOperator.not_dword, 4}, {AssemblyOperator.not_qword, 8},
-
-       {AssemblyOperator.and_byte, 1}, {AssemblyOperator.and_word, 2},
-       {AssemblyOperator.and_dword, 4}, {AssemblyOperator.and_qword, 8},
-       {AssemblyOperator.or_byte, 1}, {AssemblyOperator.or_word, 2},
-       {AssemblyOperator.or_dword, 4}, {AssemblyOperator.or_qword, 8},
-       {AssemblyOperator.xor_byte, 1}, {AssemblyOperator.xor_word, 2},
-       {AssemblyOperator.xor_dword, 4}, {AssemblyOperator.xor_qword, 8},
-
-       {AssemblyOperator.shl_byte, 1}, {AssemblyOperator.shl_word, 2},
-       {AssemblyOperator.shl_dword, 4}, {AssemblyOperator.shl_qword, 8},
-       {AssemblyOperator.shr_byte, 1}, {AssemblyOperator.shr_word, 2},
-       {AssemblyOperator.shr_dword, 4}, {AssemblyOperator.shr_qword, 8},
-       
-       {AssemblyOperator.fld_dword, 4}, {AssemblyOperator.fld_qword, 8},
-       {AssemblyOperator.fst_dword, 4}, {AssemblyOperator.fst_qword, 8},
-       {AssemblyOperator.fstp_dword, 4}, {AssemblyOperator.fstp_qword, 8},
-       
-                                         {AssemblyOperator.fild_word, 2},
-       {AssemblyOperator.fild_dword, 4}, {AssemblyOperator.fild_qword, 8},
-                                         {AssemblyOperator.fist_word, 2},
-       {AssemblyOperator.fist_dword, 4}, {AssemblyOperator.fist_qword, 8},
-                                          {AssemblyOperator.fistp_word, 2},
-       {AssemblyOperator.fistp_dword, 4}, {AssemblyOperator.fistp_qword, 8}
-      };
-
-    public static int SizeOfOperator(AssemblyOperator objectOp) {
-      return m_operatorSizeMap[objectOp];
-    }*/
 
     public static int SizeOfOperator(AssemblyOperator objectOp) {
       string name = Enum.GetName(typeof(AssemblyOperator), objectOp);
@@ -1250,8 +1072,7 @@ namespace CCompiler {
       operand1 = (operand1 is string) ? null : operand1;
       operand2 = (operand2 is string) ? null : operand2;
 
-      ObjectCodeInfo info =
-        new ObjectCodeInfo(objectOp, operand0, operand1, operand2);
+      ObjectCodeInfo info =/*XXX*/new(objectOp, operand0, operand1, operand2);
       //(AssemblyOperator, Object, Object, Object) info =
       //  (objectOp, operand0, operand1, operand2);
       byte[] byteArray = ObjectCodeTable.MainArrayMap[info];

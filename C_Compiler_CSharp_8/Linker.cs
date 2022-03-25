@@ -7,12 +7,9 @@ namespace CCompiler {
   public class Linker {
     public static string StackStart = $"{Symbol.SeparatorId}StackTop";
     private int m_totalSize = 256;
-    private IDictionary<string,StaticSymbolWindows> m_globalMap =
-      new Dictionary<string,StaticSymbolWindows>();
-    private List<StaticSymbolWindows> m_globalList =
-      new List<StaticSymbolWindows>();
-    private IDictionary<string,int> m_addressMap =
-      new Dictionary<string,int>();
+    private Dictionary<string,StaticSymbolWindows> m_globalMap =/*XXX*/new();
+    private List<StaticSymbolWindows> m_globalList =/*XXX*/new();
+    private Dictionary<string,int> m_addressMap =/*XXX*/new();
   
     public void Add(StaticSymbol staticSymbol) {
       StaticSymbolWindows staticSymbolWindows = (StaticSymbolWindows) staticSymbol;
@@ -44,7 +41,7 @@ namespace CCompiler {
         m_addressMap.Add(AssemblyCodeGenerator.ArgsName, 0);
 
         List<byte> byteList = new();
-        Dictionary<int, string> accessMap = new();
+        Dictionary<int,string> accessMap = new();
         pathNameSymbol = (StaticSymbolWindows)
           ConstantExpression.Value(AssemblyCodeGenerator.PathName,
                                    Type.StringType, @"C:\D\Main.com");
@@ -75,8 +72,7 @@ namespace CCompiler {
 
       { Console.Out.WriteLine($"Generating \"{targetFile.FullName}\".");
         targetFile.Delete();
-        BinaryWriter targetStream =
-          new BinaryWriter(File.OpenWrite(targetFile.FullName));
+        BinaryWriter targetStream =/*XXX*/new(File.OpenWrite(targetFile.FullName));
 
         foreach (StaticSymbolWindows staticSymbol in m_globalList) {
           foreach (sbyte b in staticSymbol.ByteList) {
@@ -93,9 +89,8 @@ namespace CCompiler {
         m_globalList.Add(staticSymbol);
         m_addressMap.Add(staticSymbol.UniqueName, m_totalSize);
         m_totalSize += (int) staticSymbol.ByteList.Count;
-      
-        ISet<string> accessNameSet =
-          new HashSet<string>(staticSymbol.AccessMap.Values);
+
+        HashSet<string> accessNameSet = new(staticSymbol.AccessMap.Values);
         foreach (string accessName in accessNameSet) {
           StaticSymbolWindows accessSymbol;
           Error.Check(m_globalMap.TryGetValue(accessName, out accessSymbol),
@@ -104,8 +99,7 @@ namespace CCompiler {
           GenerateTrace(accessSymbol);
         }
 
-        ISet<string> callNameSet =
-          new HashSet<string>(staticSymbol.CallMap.Values);
+        HashSet<string> callNameSet = new(staticSymbol.CallMap.Values);
         foreach (string callName in callNameSet) {
           StaticSymbolWindows funcSymbol;
           Error.Check(m_globalMap.TryGetValue(callName, out funcSymbol),

@@ -447,15 +447,12 @@ namespace CCompiler {
              Replace("signed", "signed ");
     }
 
-    public static Type SignedShortIntegerType =
-      new Type(Sort.SignedShortInt);
-    public static Type UnsignedShortIntegerType =
-      new Type(Sort.UnsignedShortInt);
+    public static Type SignedShortIntegerType =/*XXX*/new(Sort.SignedShortInt);
+    public static Type UnsignedShortIntegerType =/*XXX*/new(Sort.UnsignedShortInt);
     public static Type SignedIntegerType = new Type(Sort.SignedInt);
     public static Type UnsignedIntegerType = new Type(Sort.UnsignedInt);
     public static Type SignedLongIntegerType = new Type(Sort.SignedLongInt);
-    public static Type UnsignedLongIntegerType =
-      new Type(Sort.UnsignedLongInt);
+    public static Type UnsignedLongIntegerType =/*XXX*/new(Sort.UnsignedLongInt);
     public static Type FloatType = new Type(Sort.Float);
     public static Type DoubleType = new Type(Sort.Double);
     public static Type LongDoubleType = new Type(Sort.LongDouble);

@@ -51,8 +51,7 @@ namespace CCompiler {
     }
 
     public void ObjectToIntegerAddresses() {
-      IDictionary<MiddleCode, int> addressMap =
-        new Dictionary<MiddleCode, int>();
+      Dictionary<MiddleCode,int> addressMap =/*XXX*/new();
 
       for (int index = 0; index < m_middleCodeList.Count; ++index) {
         MiddleCode middleCode = m_middleCodeList[index];
@@ -106,8 +105,7 @@ namespace CCompiler {
     // 1. if a >= b goto 10
     // 2. empty
 
-    public static IDictionary<MiddleOperator, MiddleOperator> m_inverseMap =
-      new Dictionary<MiddleOperator, MiddleOperator>() {
+    public static Dictionary<MiddleOperator,MiddleOperator> m_inverseMap =/*XXX*/new() {
         {MiddleOperator.Equal, MiddleOperator.NotEqual},
         {MiddleOperator.NotEqual, MiddleOperator.Equal},
         {MiddleOperator.Carry, MiddleOperator.NotCarry},
@@ -466,8 +464,7 @@ namespace CCompiler {
       }
     }
 
-    public static IDictionary<MiddleOperator, MiddleOperator> m_swapMap =
-       new Dictionary<MiddleOperator, MiddleOperator>() {
+    public static Dictionary<MiddleOperator,MiddleOperator> m_swapMap =/*XXX*/new() {
         {MiddleOperator.Equal, MiddleOperator.Equal},
         {MiddleOperator.NotEqual, MiddleOperator.NotEqual},
         {MiddleOperator.LessThan, MiddleOperator.GreaterThan},

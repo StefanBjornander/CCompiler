@@ -3,8 +3,7 @@ using System.Collections.Generic;
 
 namespace CCompiler {
   class Slash {
-    private static IDictionary<char,char> m_slashMap =
-      new Dictionary<char,char>() {
+    private static Dictionary<char,char> m_slashMap =/*XXX*/new() {
                       // Key, ASCII value
         {'0', '\0'},  // Terminator, 0
         {'a', '\a'},  // Alert (Beep, Bell), 7

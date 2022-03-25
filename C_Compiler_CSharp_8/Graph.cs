@@ -50,8 +50,7 @@ namespace CCompiler {
     }
 
     public void EraseVertex(VertexType vertex) {
-      ISet<(VertexType, VertexType)> edgeSetCopy =
-        new HashSet<(VertexType, VertexType)>(m_edgeSet);
+      HashSet<(VertexType, VertexType)> edgeSetCopy = new(m_edgeSet);
 
       foreach ((VertexType, VertexType) edge in edgeSetCopy) {
         if ((vertex.Equals(edge.Item1)) || (vertex.Equals(edge.Item2))) {
@@ -103,9 +102,8 @@ namespace CCompiler {
     }
 //The <k>InducedSubGraph</k> method goes through the edge set and add all edges which both end vertices are members of the vertex set.
     private Graph<VertexType> InducedSubGraph(ISet<VertexType> vertexSet) {
-      ISet<(VertexType, VertexType)> resultEdgeSet =
-        new HashSet<(VertexType, VertexType)>();
-   
+      HashSet<(VertexType, VertexType)> resultEdgeSet = new();
+
       foreach ((VertexType, VertexType) edge in m_edgeSet) {
         if (vertexSet.Contains(edge.Item1) &&
             vertexSet.Contains(edge.Item2)) {

@@ -6,7 +6,7 @@ namespace CCompiler {
     public static int PointerSize;
     public static int SignedIntegerSize;
 
-    private static Dictionary<int, BigInteger>
+    private static Dictionary<int,BigInteger>
       m_maskMap = new() {
         {1, (BigInteger) 0x000000FF},
         {2, (BigInteger) 0x0000FFFF},

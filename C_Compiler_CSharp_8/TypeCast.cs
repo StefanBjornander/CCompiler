@@ -69,8 +69,7 @@ namespace CCompiler {
         targetSymbol = new Symbol(targetType);
 
         Symbol oneSymbol = new Symbol(targetType, BigInteger.One);
-        MiddleCode trueCode =
-          new MiddleCode(MiddleOperator.Assign, targetSymbol, oneSymbol);
+        MiddleCode trueCode =/*XXX*/new(MiddleOperator.Assign, targetSymbol, oneSymbol);
         MiddleCodeGenerator.Backpatch(sourceSymbol.TrueSet, trueCode);
         longList.Add(trueCode);
 
@@ -78,8 +77,7 @@ namespace CCompiler {
         longList.Add(new MiddleCode(MiddleOperator.Jump, targetCode));
 
         Symbol zeroSymbol = new Symbol(targetType, BigInteger.Zero);
-        MiddleCode falseCode =
-          new MiddleCode(MiddleOperator.Assign, targetSymbol, zeroSymbol);
+        MiddleCode falseCode =/*XXX*/new(MiddleOperator.Assign, targetSymbol, zeroSymbol);
         MiddleCodeGenerator.Backpatch(sourceSymbol.FalseSet, falseCode);
         longList.Add(falseCode);
 
@@ -107,8 +105,7 @@ namespace CCompiler {
                                                   : ((object)BigInteger.Zero);
         Symbol zeroSymbol = new Symbol(targetType, zeroValue);
 
-        MiddleCode testCode =
-          new MiddleCode(MiddleOperator.NotEqual, null,
+        MiddleCode testCode =/*XXX*/new(MiddleOperator.NotEqual, null,
                          sourceSymbol, zeroSymbol);
         HashSet<MiddleCode> trueSet = new();
         trueSet.Add(testCode);
@@ -132,18 +129,15 @@ namespace CCompiler {
           Type tempType = sourceType.IsSigned() ? Type.SignedIntegerType
                                                 : Type.UnsignedIntegerType;
           Symbol tempSymbol = new Symbol(tempType);
-          MiddleCode tempCode =
-            new MiddleCode(MiddleOperator.FloatingToIntegral, tempSymbol,
+          MiddleCode tempCode =/*XXX*/new(MiddleOperator.FloatingToIntegral, tempSymbol,
                            sourceSymbol);
           longList.Add(tempCode);
-          MiddleCode resultCode =
-            new MiddleCode(MiddleOperator.IntegralToIntegral, targetSymbol,
+          MiddleCode resultCode =/*XXX*/new(MiddleOperator.IntegralToIntegral, targetSymbol,
                            tempSymbol);
           longList.Add(resultCode);
         }
         else {
-          MiddleCode resultCode =
-            new MiddleCode(MiddleOperator.FloatingToIntegral, targetSymbol,
+          MiddleCode resultCode =/*XXX*/new(MiddleOperator.FloatingToIntegral, targetSymbol,
                            sourceSymbol);
           longList.Add(resultCode);
         }

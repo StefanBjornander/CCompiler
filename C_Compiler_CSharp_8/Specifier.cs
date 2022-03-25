@@ -9,8 +9,7 @@ namespace CCompiler {
     private Storage? m_storage;
     private Type m_type;
 
-    private static IDictionary<int, Sort> m_maskToSortMap =
-      new Dictionary<int, Sort>() {  
+    private static Dictionary<int,Sort> m_maskToSortMap =/*XXX*/new() {  
         {(int) Mask.Void, Sort.Void},
         {(int) Mask.Char, Sort.SignedChar},
         {(int) Mask.SignedChar, Sort.SignedChar},

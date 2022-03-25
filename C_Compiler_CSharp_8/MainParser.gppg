@@ -543,8 +543,7 @@ closed_statement:
       $$ = MiddleCodeGenerator.BreakStatement();
     }
   | LEFT_BLOCK {
-      SymbolTable.CurrentTable =
-        new SymbolTable(SymbolTable.CurrentTable, Scope.Block);
+      SymbolTable.CurrentTable =/*XXX*/new(SymbolTable.CurrentTable, Scope.Block);
     }
     optional_declaration_list optional_statement_list RIGHT_BLOCK {
       SymbolTable.CurrentTable =
