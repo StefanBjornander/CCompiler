@@ -423,8 +423,8 @@ namespace CCompiler {
         MiddleCode gotoCode = new MiddleCode(MiddleOperator.Jump);
         longList.Add(gotoCode);
 
-        ISet<MiddleCode> trueSet = new HashSet<MiddleCode>(),
-                         falseSet = new HashSet<MiddleCode>();
+        HashSet<MiddleCode> trueSet = new(), falseSet = new();
+        
         if (isTrue) {
           trueSet.Add(gotoCode);
         }

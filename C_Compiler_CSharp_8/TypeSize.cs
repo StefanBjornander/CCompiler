@@ -14,13 +14,11 @@ namespace CCompiler {
 
     public static IDictionary<Sort,int> m_sizeMap = new Dictionary<Sort,int>();
 
-    public static IDictionary<int,Sort>
-      m_signedMap = new Dictionary<int,Sort>(),
-      m_unsignedMap = new Dictionary<int,Sort>();
+    public static Dictionary<int,Sort> m_signedMap = new(),
+                                       m_unsignedMap = new();
 
-    private static IDictionary<Sort,BigInteger>
-      m_minValueMap = new Dictionary<Sort,BigInteger>(),
-      m_maxValueMap = new Dictionary<Sort,BigInteger>();
+    private static Dictionary<Sort,BigInteger> m_minValueMap = new(),
+                                               m_maxValueMap = new();
     
     /*private static IDictionary<Sort,decimal>
       m_minValueFloatMap = new Dictionary<Sort,decimal>(),

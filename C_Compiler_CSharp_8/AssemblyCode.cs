@@ -179,29 +179,20 @@ namespace CCompiler {
       }
     }
 
-    private static ISet<ISet<Register>> m_registerOverlapSet =
-      new HashSet<ISet<Register>>() {
-        new HashSet<Register>() {Register.al, Register.ax,
-                                  Register.eax, Register.rax},
-        new HashSet<Register>() {Register.ah, Register.ax,
-                                  Register.eax, Register.rax},
-        new HashSet<Register>() {Register.bl, Register.bx,
-                                  Register.ebx, Register.rbx},
-        new HashSet<Register>() {Register.bh, Register.bx,
-                                  Register.ebx, Register.rbx},
-        new HashSet<Register>() {Register.cl, Register.cx,
-                                  Register.ecx, Register.rcx},
-        new HashSet<Register>() {Register.ch, Register.cx,
-                                  Register.ecx, Register.rcx},
-        new HashSet<Register>() {Register.dl, Register.dx,
-                                  Register.edx, Register.rdx},
-        new HashSet<Register>() {Register.dh, Register.dx,
-                                  Register.edx, Register.rdx},
-        new HashSet<Register>() {Register.si, Register.esi, Register.rsi},
-        new HashSet<Register>() {Register.di, Register.edi, Register.rdi},
-        new HashSet<Register>() {Register.bp, Register.ebp, Register.rbp},
-        new HashSet<Register>() {Register.sp, Register.esp, Register.rsp}
-      };
+    private static HashSet<HashSet<Register>> m_registerOverlapSet = new() {
+      new(){Register.al, Register.ax, Register.eax, Register.rax},
+      new(){Register.ah, Register.ax, Register.eax, Register.rax},
+      new(){Register.bl, Register.bx, Register.ebx, Register.rbx},
+      new(){Register.bh, Register.bx, Register.ebx, Register.rbx},
+      new(){Register.cl, Register.cx, Register.ecx, Register.rcx},
+      new(){Register.ch, Register.cx, Register.ecx, Register.rcx},
+      new(){Register.dl, Register.dx, Register.edx, Register.rdx},
+      new(){Register.dh, Register.dx, Register.edx, Register.rdx},
+      new(){Register.si, Register.esi, Register.rsi},
+      new(){Register.di, Register.edi, Register.rdi},
+      new(){Register.bp, Register.ebp, Register.rbp},
+      new(){Register.sp, Register.esp, Register.rsp}
+    };
 
     public static bool RegisterOverlap(Register? register1,
                                        Register? register2) {
@@ -288,8 +279,7 @@ namespace CCompiler {
       return (Register) Enum.Parse(typeof(Register), name);
     }*/
 
-    private static IDictionary<Register,int> m_registerSizeMap =
-      new Dictionary<Register,int>() {
+    private static Dictionary<Register,int> m_registerSizeMap = new() {
        {Register.al, 1}, {Register.bl, 1}, {Register.cl, 1}, {Register.dl, 1},
        {Register.ah, 1}, {Register.bh, 1}, {Register.ch, 1}, {Register.dh, 1},
        {Register.ax, 2}, {Register.bx, 2}, {Register.cx, 2}, {Register.dx, 2},
@@ -341,8 +331,8 @@ namespace CCompiler {
         new Register[] {default(Register), Register.sp, Register.esp, Register.rsp}
       };
 
-    private static IDictionary<int,int> m_sizeToIndexMap =
-      new Dictionary<int, int>() {{1, 0}, {2, 1}, {4, 2}, {8, 3}};
+    private static Dictionary<int,int> m_sizeToIndexMap = new()
+      {{1, 0}, {2, 1}, {4, 2}, {8, 3}};
 
     public static Register RegisterToSize(Register register, int size) {
       if (m_registerSizeMap[register] == size) {
@@ -838,7 +828,7 @@ namespace CCompiler {
         }
         else if ((sort == Sort.Double) || (sort == Sort.LongDouble)) {
           double doubleValue = (double) ((decimal) value);
-          byteList = new List<byte>(BitConverter.GetBytes(doubleValue));
+          byteList = new(BitConverter.GetBytes(doubleValue));
         }
         else if (sort == Sort.String) {
           string text = (string) value;

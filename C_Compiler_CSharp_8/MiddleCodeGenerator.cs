@@ -948,7 +948,7 @@ namespace CCompiler {
 
       Symbol resultSymbol;
       if (middleOp == MiddleOperator.LogicalOr) {
-        ISet<MiddleCode> trueSet = new HashSet<MiddleCode>();
+        HashSet<MiddleCode> trueSet = new();
         trueSet.UnionWith(leftExpression.Symbol.TrueSet);
         trueSet.UnionWith(rightExpression.Symbol.TrueSet);
 
@@ -1005,9 +1005,8 @@ namespace CCompiler {
       List<MiddleCode> longList = new List<MiddleCode>();
       longList.AddRange(leftExpression.LongList);
       longList.AddRange(rightExpression.LongList);
-    
-      ISet<MiddleCode> trueSet = new HashSet<MiddleCode>(),
-                       falseSet = new HashSet<MiddleCode>();
+
+      HashSet<MiddleCode> trueSet = new(), falseSet = new();
       trueSet.Add(AddMiddleCode(longList, middleOp, null,
                                 leftExpression.Symbol, rightExpression.Symbol));
       falseSet.Add(AddMiddleCode(longList, MiddleOperator.Jump));
@@ -1574,8 +1573,7 @@ namespace CCompiler {
     }
 
     public static Expression CarryFlagExpression() {
-      ISet<MiddleCode> trueSet = new HashSet<MiddleCode>(),
-                       falseSet = new HashSet<MiddleCode>();
+      HashSet<MiddleCode> trueSet = new(), falseSet = new();
       List<MiddleCode> longList = new List<MiddleCode>();
       trueSet.Add(AddMiddleCode(longList, MiddleOperator.Carry));
       falseSet.Add(AddMiddleCode(longList, MiddleOperator.Jump));

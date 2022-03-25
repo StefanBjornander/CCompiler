@@ -98,19 +98,20 @@ namespace CCompiler {
       return false;
     }
 
-    public static ISet<Register>
-      VariadicFunctionPointerRegisterSet = new HashSet<Register>() {
+    public static HashSet<Register>
+      VariadicFunctionPointerRegisterSet = new() {
         AssemblyCode.RegisterToSize(Register.bp, TypeSize.PointerSize),
         AssemblyCode.RegisterToSize(Register.si, TypeSize.PointerSize),
         AssemblyCode.RegisterToSize(Register.di, TypeSize.PointerSize),
         AssemblyCode.RegisterToSize(Register.bx, TypeSize.PointerSize)
       },
-      RegularFunctionPointerRegisterSet = new HashSet<Register>(VariadicFunctionPointerRegisterSet),
-      Byte1RegisterSet = new HashSet<Register>() {
+      RegularFunctionPointerRegisterSet =
+        new(VariadicFunctionPointerRegisterSet),
+      Byte1RegisterSet = new() {
         Register.al,Register.ah, Register.bl, Register.bh, 
         Register.cl, Register.ch, Register.dl, Register.dh
       },
-      Byte2RegisterSet = new HashSet<Register>() {
+      Byte2RegisterSet = new() {
         Register.ax, Register.bx, Register.cx, Register.dx
       };
 

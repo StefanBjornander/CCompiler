@@ -558,8 +558,7 @@ namespace CCompiler {
     }
 
     private void RemoveTemporaryAccess() {
-      ISet<Symbol> simpleSet = new HashSet<Symbol>(),
-                   doubleSet = new HashSet<Symbol>();
+      HashSet<Symbol> simpleSet = new(), doubleSet = new();
 
       foreach (MiddleCode middleCode in m_middleCodeList) {
         if (middleCode[0] is Symbol resultSymbol) {
