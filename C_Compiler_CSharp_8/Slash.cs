@@ -3,21 +3,21 @@ using System.Collections.Generic;
 
 namespace CCompiler {
   class Slash {
-    private static Dictionary<char,char> m_slashMap =/*XXX*/new() {
-                      // Key, ASCII value
-        {'0', '\0'},  // Terminator, 0
-        {'a', '\a'},  // Alert (Beep, Bell), 7
-        {'b', '\b'},  // Backspace, 8
-        {'f', '\f'},  // Form Feed (Page Break), 12
-        {'n', '\n'},  // New Line (Line Feed), 10
-        {'r', '\r'},  // Carrige Return, 13
-        {'t', '\t'},  // Horizontal Tabulator, 9
-        {'v', '\v'},  // Vertical Tabulator, 11
-        {'\'', '\''}, // Single Quotation Mark, 39
-        {'\"', '\"'}, // Double Quotation Mark, 34
-        {'?', '?'},   // Question Mark, 63
-        {'\\', '\\'}  // Backslash, 92
-      };
+    private static Dictionary<char,char> m_slashMap = new() {
+                    // Key, ASCII value
+      { '0', '\0'}, // Terminator, ASCII number 0
+      {'a', '\a'},  // Alert (Beep, Bell), ASCII number 7 
+      {'b', '\b'},  // Backspace, ASCII number 8 
+      {'f', '\f'},  // Form Feed (Page Break), ASCII number 12
+      {'n', '\n'},  // New Line (Line Feed), ASCII number 10
+      {'r', '\r'},  // Carrige Return, ASCII number 13
+      {'t', '\t'},  // Horizontal Tabulator, ASCII number 9
+      {'v', '\v'},  // Vertical Tabulator, ASCII number 11
+      {'\'', '\''}, // Single Quotation Mark, ASCII number 39
+      {'\"', '\"'}, // Double Quotation Mark, ASCII number 34
+      {'?', '?'},   // Question Mark, ASCII number 63
+      {'\\', '\\'}  // Backslash, ASCII number 92
+    };
 
     public static string SlashToChar(string text) {
       StringBuilder buffer = new(text);

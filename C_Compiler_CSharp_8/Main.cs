@@ -61,7 +61,8 @@ namespace CCompiler {
           }
 
           if (doLink) {
-            FileInfo targetFile =/*XXX*/new(TargetPath + argList[0] + ".com");
+            FileInfo targetFile =
+              new FileInfo(TargetPath + argList[0] + ".com");
             Linker linker = new Linker();
 
             CCompiler_Main.Scanner.Path = null;
@@ -125,7 +126,8 @@ namespace CCompiler {
       FileInfo objectFile = new FileInfo($"{file.FullName}.obj");
 
       try {
-        BinaryReader dataInputStream =/*XXX*/new(File.OpenRead(objectFile.FullName));
+        BinaryReader dataInputStream =
+          new BinaryReader(File.OpenRead(objectFile.FullName));
 
         int linkerSetSize = dataInputStream.ReadInt32();
         for (int count = 0; count < linkerSetSize; ++count) {
@@ -159,7 +161,7 @@ namespace CCompiler {
         new CCompiler_Main.Scanner(memoryStream);
 
       try {
-        SymbolTable.CurrentTable = new SymbolTable(null, Scope.Global);
+        SymbolTable.CurrentTable = new(null, Scope.Global);
         //CCompiler_Main.Scanner.Path = sourceFile;
         CCompiler_Main.Scanner.Line = 2000; 
         CCompiler_Main.Parser parser = new CCompiler_Main.Parser(scanner);
@@ -229,7 +231,8 @@ namespace CCompiler {
 
       if (Start.Windows) {
         FileInfo objectFile = new FileInfo($"{file.FullName}.obj");
-        BinaryWriter binaryWriter =/*XXX*/new(File.Open(objectFile.FullName, FileMode.Create));
+        BinaryWriter binaryWriter =
+          new BinaryWriter(File.Open(objectFile.FullName, FileMode.Create));
 
         binaryWriter.Write(SymbolTable.StaticSet.Count);    
         foreach (StaticSymbol staticSymbol in SymbolTable.StaticSet) {
@@ -242,8 +245,10 @@ namespace CCompiler {
 
     private static void GenerateIncludeFile(FileInfo file,
                                             ISet<FileInfo> includeSet) {
-      FileInfo dependencySetFile =/*XXX*/new($"{file.FullName}.dependency");
-      StreamWriter dependencyWriter =/*XXX*/new(File.Open(SourcePath + dependencySetFile.Name, FileMode.Create));
+      FileInfo dependencySetFile =
+        new FileInfo($"{file.FullName}.dependency");
+      StreamWriter dependencyWriter =
+        new StreamWriter(File.Open(SourcePath + dependencySetFile.Name, FileMode.Create));
 
       dependencyWriter.Write($"{file.Name}.c");
       foreach (FileInfo includeFile in includeSet) {
@@ -255,7 +260,8 @@ namespace CCompiler {
 
     public static bool IsGeneratedFileUpToDate(FileInfo file, string suffix) {
       FileInfo generatedFile = new FileInfo($"{file.FullName}{suffix}"),
-               dependencySetFile =/*XXX*/new($"{file.FullName}.dependency");
+               dependencySetFile =
+                 new FileInfo($"{file.FullName}.dependency");
 
       if (!generatedFile.Exists || !dependencySetFile.Exists) {
         return false;
@@ -263,7 +269,8 @@ namespace CCompiler {
 
       if (dependencySetFile.Exists) {
         try {
-          StreamReader dependencySetReader =/*XXX*/new(File.OpenRead(dependencySetFile.FullName));
+          StreamReader dependencySetReader =
+            new StreamReader(File.OpenRead(dependencySetFile.FullName));
           string dependencySetText = dependencySetReader.ReadToEnd();
           dependencySetReader.Close();
 
@@ -271,7 +278,8 @@ namespace CCompiler {
             string[] dependencyNameArray = dependencySetText.Split(' ');
 
             foreach (string dependencyName in dependencyNameArray)  {
-              FileInfo dependencyFile =/*XXX*/new(SourcePath + dependencyName);
+              FileInfo dependencyFile =
+                new FileInfo(SourcePath + dependencyName);
 
               if (dependencyFile.LastWriteTime > generatedFile.LastWriteTime) {
                 return false;

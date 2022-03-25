@@ -4,7 +4,7 @@
 
 // GPPG version 1.5.2
 // Machine:  LAPTOP-7Q575VHS
-// DateTime: 2022-03-25 13:02:27
+// DateTime: 2022-03-25 15:41:19
 // UserName: stefa
 // Input file <PreParser.gppg - 2022-02-03 15:41:42>
 
@@ -49,7 +49,7 @@ public class ScanObj {
 }
 
 [GeneratedCodeAttribute( "Gardens Point Parser Generator", "1.5.2")]
-public partial class Parser: ShiftReduceParser<ValueType,LexLocation>
+public partial class Parser: ShiftReduceParser<ValueType, LexLocation>
 {
   // Verbatim content from PreParser.gppg - 2022-02-03 15:41:42
 #line 5 "PreParser.gppg"
@@ -58,7 +58,7 @@ public partial class Parser: ShiftReduceParser<ValueType,LexLocation>
   // End verbatim content from PreParser.gppg - 2022-02-03 15:41:42
 
 #pragma warning disable 649
-  private static Dictionary<int,string> aliases;
+  private static Dictionary<int, string> aliases;
 #pragma warning restore 649
   private static Rule[] rules = new Rule[3];
   private static State[] states = new State[3];

@@ -1072,9 +1072,7 @@ namespace CCompiler {
       operand1 = (operand1 is string) ? null : operand1;
       operand2 = (operand2 is string) ? null : operand2;
 
-      ObjectCodeInfo info =/*XXX*/new(objectOp, operand0, operand1, operand2);
-      //(AssemblyOperator, Object, Object, Object) info =
-      //  (objectOp, operand0, operand1, operand2);
+      ObjectCodeInfo info = new(objectOp, operand0, operand1, operand2);
       byte[] byteArray = ObjectCodeTable.MainArrayMap[info];
       Error.ErrorXXX(byteArray != null);
       List<byte> byteList = new();

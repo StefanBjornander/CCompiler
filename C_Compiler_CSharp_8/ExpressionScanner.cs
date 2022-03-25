@@ -6,7 +6,7 @@
 //
 //  GPLEX Version:  1.2.2
 //  Machine:  LAPTOP-7Q575VHS
-//  DateTime: 25/03/2022 13:02:30
+//  DateTime: 25/03/2022 15:41:20
 //  UserName: stefa
 //  GPLEX input file <ExpressionScanner.gplex - 23/03/2022 12:13:21>
 //  GPLEX frame file <embedded resource>
@@ -151,7 +151,7 @@ namespace CCompiler_Exp
         int tokELin;       // line number at end of token
         string tokTxt;     // lazily constructed text of token
 #if STACK          
-        private Stack<int> scStack = new();
+        private Stack<int> scStack = new Stack<int>();
 #endif // STACK
 
 #region ScannerTables

@@ -7,10 +7,10 @@ namespace CCompiler {
   public class Linker {
     public static string StackStart = $"{Symbol.SeparatorId}StackTop";
     private int m_totalSize = 256;
-    private Dictionary<string,StaticSymbolWindows> m_globalMap =/*XXX*/new();
-    private List<StaticSymbolWindows> m_globalList =/*XXX*/new();
-    private Dictionary<string,int> m_addressMap =/*XXX*/new();
-  
+    private Dictionary<string, StaticSymbolWindows> m_globalMap = new();
+    private List<StaticSymbolWindows> m_globalList = new();
+    private Dictionary<string, int> m_addressMap = new();
+
     public void Add(StaticSymbol staticSymbol) {
       StaticSymbolWindows staticSymbolWindows = (StaticSymbolWindows) staticSymbol;
       string uniqueName = staticSymbolWindows.UniqueName;
@@ -72,7 +72,7 @@ namespace CCompiler {
 
       { Console.Out.WriteLine($"Generating \"{targetFile.FullName}\".");
         targetFile.Delete();
-        BinaryWriter targetStream =/*XXX*/new(File.OpenWrite(targetFile.FullName));
+        BinaryWriter targetStream = new(File.OpenWrite(targetFile.FullName));
 
         foreach (StaticSymbolWindows staticSymbol in m_globalList) {
           foreach (sbyte b in staticSymbol.ByteList) {

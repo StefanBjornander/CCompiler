@@ -4,9 +4,9 @@
 
 // GPPG version 1.5.2
 // Machine:  LAPTOP-7Q575VHS
-// DateTime: 2022-03-25 13:02:24
+// DateTime: 2022-03-25 15:41:17
 // UserName: stefa
-// Input file <MainParser.gppg - 2022-03-25 12:26:22>
+// Input file <MainParser.gppg - 2022-03-25 15:33:58>
 
 // options: lines gplex
 
@@ -85,17 +85,17 @@ public class ScanObj {
 }
 
 [GeneratedCodeAttribute( "Gardens Point Parser Generator", "1.5.2")]
-public partial class Parser: ShiftReduceParser<ValueType,LexLocation>
+public partial class Parser: ShiftReduceParser<ValueType, LexLocation>
 {
-  // Verbatim content from MainParser.gppg - 2022-03-25 12:26:22
+  // Verbatim content from MainParser.gppg - 2022-03-25 15:33:58
 #line 8 "MainParser.gppg"
   public static Stack<Specifier> SpecifierStack = new();
   public static Stack<Scope> ScopeStack = new();
 #line default
-  // End verbatim content from MainParser.gppg - 2022-03-25 12:26:22
+  // End verbatim content from MainParser.gppg - 2022-03-25 15:33:58
 
 #pragma warning disable 649
-  private static Dictionary<int,string> aliases;
+  private static Dictionary<int, string> aliases;
 #pragma warning restore 649
   private static Rule[] rules = new Rule[224];
   private static State[] states = new State[417];
@@ -1607,7 +1607,8 @@ public partial class Parser: ShiftReduceParser<ValueType,LexLocation>
       case 126: // Anon@10 -> /* empty */
 #line 545 "MainParser.gppg"
                {
-      SymbolTable.CurrentTable =/*XXX*/new(SymbolTable.CurrentTable, Scope.Block);
+      SymbolTable.CurrentTable =
+        new SymbolTable(SymbolTable.CurrentTable, Scope.Block);
     }
 #line default
         break;

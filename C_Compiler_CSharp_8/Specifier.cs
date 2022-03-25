@@ -9,32 +9,32 @@ namespace CCompiler {
     private Storage? m_storage;
     private Type m_type;
 
-    private static Dictionary<int,Sort> m_maskToSortMap =/*XXX*/new() {  
-        {(int) Mask.Void, Sort.Void},
-        {(int) Mask.Char, Sort.SignedChar},
-        {(int) Mask.SignedChar, Sort.SignedChar},
-        {(int) Mask.UnsignedChar, Sort.UnsignedChar},
-        {(int) Mask.Short, Sort.SignedShortInt},
-        {(int) Mask.ShortInt, Sort.SignedShortInt},
-        {(int) Mask.SignedShort, Sort.SignedShortInt},
-        {(int) Mask.SignedShortInt, Sort.SignedShortInt},
-        {(int) Mask.UnsignedShort, Sort.UnsignedShortInt},
-        {(int) Mask.UnsignedShortInt, Sort.UnsignedShortInt},
-        {(int) Mask.Int, Sort.SignedInt},
-        {(int) Mask.Signed, Sort.SignedInt},
-        {(int) Mask.SignedInt, Sort.SignedInt},
-        {(int) Mask.Unsigned, Sort.UnsignedInt},
-        {(int) Mask.UnsignedInt, Sort.UnsignedInt},
-        {(int) Mask.Long, Sort.SignedLongInt},
-        {(int) Mask.LongInt, Sort.SignedLongInt},
-        {(int) Mask.SignedLong, Sort.SignedLongInt},
-        {(int) Mask.SignedLongInt, Sort.SignedLongInt},
-        {(int) Mask.UnsignedLong, Sort.UnsignedLongInt},
-        {(int) Mask.UnsignedLongInt, Sort.UnsignedLongInt},
-        {(int) Mask.Float, Sort.Float},
-        {(int) Mask.Double, Sort.Double},
-        {(int) Mask.LongDouble, Sort.LongDouble}
-      };
+    private static Dictionary<int,Sort> m_maskToSortMap = new() {
+      {(int) Mask.Void, Sort.Void},
+      {(int) Mask.Char, Sort.SignedChar},
+      {(int) Mask.SignedChar, Sort.SignedChar},
+      {(int) Mask.UnsignedChar, Sort.UnsignedChar},
+      {(int) Mask.Short, Sort.SignedShortInt},
+      {(int) Mask.ShortInt, Sort.SignedShortInt},
+      {(int) Mask.SignedShort, Sort.SignedShortInt},
+      {(int) Mask.SignedShortInt, Sort.SignedShortInt},
+      {(int) Mask.UnsignedShort, Sort.UnsignedShortInt},
+      {(int) Mask.UnsignedShortInt, Sort.UnsignedShortInt},
+      {(int) Mask.Int, Sort.SignedInt},
+      {(int) Mask.Signed, Sort.SignedInt},
+      {(int) Mask.SignedInt, Sort.SignedInt},
+      {(int) Mask.Unsigned, Sort.UnsignedInt},
+      {(int) Mask.UnsignedInt, Sort.UnsignedInt},
+      {(int) Mask.Long, Sort.SignedLongInt},
+      {(int) Mask.LongInt, Sort.SignedLongInt},
+      {(int) Mask.SignedLong, Sort.SignedLongInt},
+      {(int) Mask.SignedLongInt, Sort.SignedLongInt},
+      {(int) Mask.UnsignedLong, Sort.UnsignedLongInt},
+      {(int) Mask.UnsignedLongInt, Sort.UnsignedLongInt},
+      {(int) Mask.Float, Sort.Float},
+      {(int) Mask.Double, Sort.Double},
+      {(int) Mask.LongDouble, Sort.LongDouble}
+    };
 
     public Specifier(bool externalLinkage, Storage? storage, Type type) {
       m_externalLinkage = externalLinkage;

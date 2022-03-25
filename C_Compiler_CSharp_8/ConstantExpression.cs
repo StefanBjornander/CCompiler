@@ -318,7 +318,8 @@ namespace CCompiler {
     public static Expression LogicalNot(Expression expression) {
       if (IsConstant(expression)) {
         expression = ToLogical(expression);
-        Symbol resultSymbol =/*XXX*/new(expression.Symbol.FalseSet, expression.Symbol.TrueSet);
+        Symbol resultSymbol = new(expression.Symbol.FalseSet,
+                                  expression.Symbol.TrueSet);
         return (new Expression(resultSymbol, null, expression.LongList));
       }
 

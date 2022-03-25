@@ -6,7 +6,7 @@
 //
 //  GPLEX Version:  1.2.2
 //  Machine:  LAPTOP-7Q575VHS
-//  DateTime: 25/03/2022 13:02:26
+//  DateTime: 25/03/2022 15:41:19
 //  UserName: stefa
 //  GPLEX input file <MainScanner.gplex - 25/03/2022 12:49:12>
 //  GPLEX frame file <embedded resource>
@@ -157,7 +157,7 @@ FLOATING_VALUE {DECIMAL_PART}{EXPONENT_PART}*/
         int tokELin;       // line number at end of token
         string tokTxt;     // lazily constructed text of token
 #if STACK          
-        private Stack<int> scStack = new();
+        private Stack<int> scStack = new Stack<int>();
 #endif // STACK
 
 #region ScannerTables
