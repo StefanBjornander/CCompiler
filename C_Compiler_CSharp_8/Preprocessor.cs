@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace CCompiler {
   public class Preprocessor {
-    private Dictionary<string,Macro> m_macroMap =/*XXX*/new();
+    private Dictionary<string, Macro> m_macroMap = new();
     private Stack<FileInfo> m_includeStack = new();
     private HashSet<FileInfo> m_includeSet = new();
     private Stack<IfElseChain> m_ifElseChainStack = new();
@@ -37,7 +37,7 @@ namespace CCompiler {
 
     private void DoProcess(FileInfo file) {
       StreamReader streamReader = new StreamReader(file.FullName);
-      StringBuilder inputBuffer =/*XXX*/new(streamReader.ReadToEnd());
+      StringBuilder inputBuffer = new(streamReader.ReadToEnd());
       streamReader.Close();
 
       CCompiler_Main.Scanner.Path = file;
@@ -58,10 +58,10 @@ namespace CCompiler {
         stackSize, Message.Unbalanced_if_and_endif_directive_structure);
     }
 
-    private static Dictionary<string,string> m_triGraphMap =/*XXX*/new()
-        {{"??=", "#"}, {"??/", "\\"}, {"??\'", "^"},
-         {"??(", "["}, {"??)", "]"}, {"??!", "|"},
-         {"??<", "{"}, {"??>", "}"}, {"??-", "~"}};
+    private static Dictionary<string,string> m_triGraphMap =
+      new () {{"??=", "#"}, {"??/", "\\"}, {"??\'", "^"},
+             {"??(", "["}, {"??)", "]"}, {"??!", "|"},
+             {"??<", "{"}, {"??>", "}"}, {"??-", "~"}};
 
     public void GenerateTriGraphs(StringBuilder buffer) {
       foreach (KeyValuePair<string,string> pair in m_triGraphMap) {
@@ -384,7 +384,7 @@ namespace CCompiler {
       }
 
       if (listSize == 4) {
-        CCompiler_Main.Scanner.Path =/*XXX*/new((string) tokenList[3].Value);
+        CCompiler_Main.Scanner.Path = new((string)tokenList[3].Value);
       }
 
       m_outputBuffer.Append($"{Symbol.SeparatorId}" +
@@ -489,7 +489,8 @@ namespace CCompiler {
         for (int index = macroList.Count - 1; index >= 0; --index) {
           if (macroList[index].Id == CCompiler_Pre.Tokens.NAME_WITH_PARENTHESES) {
             macroList[index].Id = CCompiler_Pre.Tokens.NAME;
-            Token newToken =/*XXX*/new(CCompiler_Pre.Tokens.LEFT_PARENTHESIS, "(");
+            Token newToken =
+              new(CCompiler_Pre.Tokens.LEFT_PARENTHESIS, "(");
             macroList.Insert(index + 1, newToken);
           }
         }
@@ -654,7 +655,8 @@ namespace CCompiler {
           else {
             switch (name) {
               case "__STDC__":
-                tokenList[index] =/*XXX*/new(CCompiler_Pre.Tokens.TOKEN, 1, beginNewlineCount);
+                tokenList[index] =
+                  new Token(CCompiler_Pre.Tokens.TOKEN, 1, beginNewlineCount);
                 break;
 
               case "__FILE__": {
@@ -666,8 +668,9 @@ namespace CCompiler {
                 break;
           
               case "__LINE__":
-                tokenList[index] =/*XXX*/new(CCompiler_Pre.Tokens.TOKEN,
-                            CCompiler_Main.Scanner.Line, beginNewlineCount);
+                tokenList[index] =
+                  new(CCompiler_Pre.Tokens.TOKEN,
+                      CCompiler_Main.Scanner.Line, beginNewlineCount);
                 break;
 
               case "__DATE__": {

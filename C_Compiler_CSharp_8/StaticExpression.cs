@@ -78,13 +78,15 @@ namespace CCompiler {
       switch (middleOp) {
         case MiddleOperator.Address: {
             if (symbol.Value is StaticValue staticValue) { // &a[i], &s.i
-              StaticAddress staticAddress =/*XXX*/new(staticValue.UniqueName, staticValue.Offset);
-              Symbol resultSymbol =/*XXX*/new(new Type(symbol.Type), staticAddress);
+              StaticAddress staticAddress =
+                new(staticValue.UniqueName, staticValue.Offset);
+              Symbol resultSymbol = new(new Type(symbol.Type), staticAddress);
               return (new Expression(resultSymbol, null, null));
             }
             else if (symbol.IsExternOrStatic()) { // &i
-              StaticAddress staticAddress =/*XXX*/new(symbol.UniqueName, 0);
-              Symbol resultSymbol =/*XXX*/new(new Type(symbol.Type), staticAddress);
+              StaticAddress staticAddress = new(symbol.UniqueName, 0);
+              Symbol resultSymbol =
+                new Symbol(new Type(symbol.Type), staticAddress);
               return (new Expression(resultSymbol, null, null));
             }
           }
@@ -92,9 +94,9 @@ namespace CCompiler {
 
         case MiddleOperator.Dereference: {
             if (symbol.Value is StaticAddress staticAddress) {
-              StaticValue staticValue =/*XXX*/new(staticAddress.UniqueName,
-                                staticAddress.Offset);
-              Symbol resultSymbol =/*XXX*/new(new Type(symbol.Type), staticValue);
+              StaticValue staticValue = new(staticAddress.UniqueName,
+                                            staticAddress.Offset);
+              Symbol resultSymbol = new(new Type(symbol.Type), staticValue);
               return (new Expression(resultSymbol, null, null));
             }
           }
