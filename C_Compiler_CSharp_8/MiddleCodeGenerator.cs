@@ -77,7 +77,8 @@ namespace CCompiler {
                     Message.Function_main_must_return_void_or_integer);
       }
 
-      SymbolTable.CurrentTable =/*XXX*/new(SymbolTable.CurrentTable, Scope.Function);
+      SymbolTable.CurrentTable = new(SymbolTable.CurrentTable,
+                                     Scope.Function);
     }
 
     public static void FunctionDefinition() {
@@ -167,7 +168,7 @@ namespace CCompiler {
         streamWriter.Close();
       }
 
-      MiddleCodeOptimizer middleCodeOptimizer =/*XXX*/new(statement.CodeList);
+      MiddleCodeOptimizer middleCodeOptimizer = new(statement.CodeList);
       middleCodeOptimizer.Optimize();
 
       if (SymbolTable.CurrentFunction.Name.Equals("exp") ||
@@ -242,7 +243,7 @@ namespace CCompiler {
       }
 
       m_structOrUnionTypeStack.Push(type);
-      SymbolTable.CurrentTable =/*XXX*/new(SymbolTable.CurrentTable, (Scope) sort);
+      SymbolTable.CurrentTable = new(SymbolTable.CurrentTable, (Scope)sort);
     }
 
     public static Type StructUnionSpecifier() {
@@ -267,7 +268,7 @@ namespace CCompiler {
 
     // ---------------------------------------------------------------------------------------------------------------------
 
-    public static Stack<BigInteger> m_enumerationStack =/*XXX*/new();
+    public static Stack<BigInteger> m_enumerationStack = new();
 
     public static void EnumumerationHeader() {
       m_enumerationStack.Push(BigInteger.Zero);
@@ -308,8 +309,8 @@ namespace CCompiler {
       else {
         value = m_enumerationStack.Pop();
       }
-    
-      Symbol itemSymbol =/*XXX*/new(itemName, false, Storage.Auto, itemType, value);
+
+      Symbol itemSymbol = new(itemName, false, Storage.Auto, itemType, value);
       if (optionalInitSymbol != null) {
         itemSymbol.InitializedEnum = true;
       }
@@ -520,18 +521,18 @@ namespace CCompiler {
       nextSet.UnionWith(falseStatement.NextSet);
 
       Symbol voidSymbol = new(new Type(Sort.Void));
-      Expression trueExpression =/*XXX*/new(voidSymbol, trueStatement.CodeList),
-                 falseExpression =/*XXX*/new(voidSymbol, falseStatement.CodeList);
+      Expression trueExpression = new(voidSymbol, trueStatement.CodeList),
+                 falseExpression = new(voidSymbol, falseStatement.CodeList);
 
       Expression conditionExpression =
         ConditionExpression(testExpression, trueExpression, falseExpression);
       return (new Statement(conditionExpression.ShortList, nextSet));
     }
 
-    private static Stack<IDictionary<BigInteger,MiddleCode>> m_caseMapStack =/*XXX*/new();
+    private static Stack<IDictionary<BigInteger, MiddleCode>> m_caseMapStack =
+      new();
     private static Stack<MiddleCode> m_defaultStack = new();
-    private static Stack<ISet<MiddleCode>> m_breakSetStack =/*XXX*/new();
-
+    private static Stack<ISet<MiddleCode>> m_breakSetStack = new();
     public static void SwitchHeader() {
       m_caseMapStack.Push(new Dictionary<BigInteger,MiddleCode>());
       m_defaultStack.Push(null);
@@ -603,8 +604,8 @@ namespace CCompiler {
       return (new Statement(codeList));
     }
 
-    private static Stack<ISet<MiddleCode>> m_continueSetStack =/*XXX*/new();
-  
+    private static Stack<ISet<MiddleCode>> m_continueSetStack = new();
+
     public static void LoopHeader() {
       m_breakSetStack.Push(new HashSet<MiddleCode>());
       m_continueSetStack.Push(new HashSet<MiddleCode>());
@@ -678,9 +679,8 @@ namespace CCompiler {
       return (new Statement(codeList));
     }
 
-    public static Dictionary<string,MiddleCode> m_labelMap =/*XXX*/new();
-    public static IDictionary<string, ISet<MiddleCode>> m_gotoSetMap =
-      new Dictionary<string, ISet<MiddleCode>>();
+    public static Dictionary<string, MiddleCode> m_labelMap = new();
+    public static Dictionary<string, ISet<MiddleCode>> m_gotoSetMap = new();
 
     public static Statement LabelStatement(string labelName,
                                            Statement statement) {
@@ -1085,7 +1085,8 @@ namespace CCompiler {
         Symbol subtractSymbol = new(leftType);
         AddMiddleCode(longList, MiddleOperator.Subtract, subtractSymbol,
                       leftExpression.Symbol, rightExpression.Symbol);
-        Expression subtractExpression =/*XXX*/new(subtractSymbol, shortList, longList);
+        Expression subtractExpression =
+          new(subtractSymbol, shortList, longList);
         Expression integerExpression =
           TypeCast.ExplicitCast(subtractExpression, Type.SignedIntegerType);
 
@@ -1109,7 +1110,8 @@ namespace CCompiler {
           int typeSize =
             leftExpression.Symbol.Type.PointerArrayOrStringType.Size();
 
-          Symbol sizeSymbol =/*XXX*/new(rightExpression.Symbol.Type, new BigInteger(typeSize));
+          Symbol sizeSymbol = new(Type.SignedIntegerType,
+                                  new BigInteger(typeSize));
           rightExpression =
             ArithmeticExpression(MiddleOperator.Multiply, rightExpression,
                                  new Expression(sizeSymbol));
@@ -1191,7 +1193,8 @@ namespace CCompiler {
       }
 
       expression = TypeCast.ToLogical(expression);
-      Symbol notSymbol =/*XXX*/new(expression.Symbol.FalseSet, expression.Symbol.TrueSet);
+      Symbol notSymbol =
+        new(expression.Symbol.FalseSet, expression.Symbol.TrueSet);
       return (new Expression(notSymbol, expression.ShortList,
                              expression.LongList));
     }
@@ -1200,7 +1203,8 @@ namespace CCompiler {
       Error.Check(!type.IsVoid() && !type.IsFunction() &&
                    !type.IsBitfield(), type,
                    Message.Invalid_sizeof_expression);
-      Symbol symbol =/*XXX*/new(Type.SignedIntegerType, (BigInteger)type.Size());
+      Symbol symbol =
+        new(Type.SignedIntegerType, (BigInteger)type.Size());
       return (new Expression(symbol, new List<MiddleCode>(),
                              new List<MiddleCode>()));
     }
@@ -1255,7 +1259,7 @@ namespace CCompiler {
         return staticExpression;
       }
 
-      Symbol resultSymbol =/*XXX*/new(expression.Symbol.Type.PointerArrayOrStringType);
+      Symbol resultSymbol = new(expression.Symbol.Type.PointerArrayOrStringType);
       resultSymbol.AddressSymbol = expression.Symbol;
       resultSymbol.AddressOffset = 0;
       AddMiddleCode(expression.LongList, MiddleOperator.Dereference,
@@ -1298,7 +1302,7 @@ namespace CCompiler {
 
       string name = parentSymbol.Name + Symbol.SeparatorDot + memberSymbol.Name;
       Symbol resultSymbol = new(name, parentSymbol.ExternalLinkage,
-                                       parentSymbol.Storage, memberSymbol.Type);
+                                parentSymbol.Storage, memberSymbol.Type);
 
       /*if (parentSymbol.AddressSymbol != null) {
         resultSymbol = new(name, parentSymbol.ExternalLinkage,
@@ -1348,7 +1352,7 @@ namespace CCompiler {
         return AssignmentExpression(middleOp, expression, oneExpression);
       }
       else {
-        Symbol oneSymbol =/*XXX*/new(expression.Symbol.Type, BigInteger.One);
+        Symbol oneSymbol = new(expression.Symbol.Type, BigInteger.One);
         return AssignmentExpression(middleOp, expression,
                                     new Expression(oneSymbol));
       }
@@ -1361,7 +1365,8 @@ namespace CCompiler {
       if (expression.Symbol.Type.IsFloating()) {
         Expression prefixExpression =
           PrefixIncrementExpression(middleOp, expression);
-        InsertMiddleCode(0, prefixExpression.LongList, MiddleOperator.PushFloat, expression.Symbol);
+        InsertMiddleCode(0, prefixExpression.LongList,
+                         MiddleOperator.PushFloat, expression.Symbol);
         AddMiddleCode(prefixExpression.LongList, MiddleOperator.PopEmpty);
         return prefixExpression;
       }
@@ -1369,8 +1374,10 @@ namespace CCompiler {
         List<MiddleCode> longList = new();
         Symbol resultSymbol = new(expression.Symbol.Type);
         Expression resultExpression = new(resultSymbol, longList, longList);
-        longList.AddRange(Assignment(resultExpression, expression, false).ShortList);
-        longList.AddRange(PrefixIncrementExpression(middleOp, expression).ShortList);
+        longList.AddRange(Assignment(resultExpression, expression,
+                                     false).ShortList);
+        longList.AddRange(PrefixIncrementExpression(middleOp,
+                                                    expression).ShortList);
         return resultExpression;
       }
     }
