@@ -72,7 +72,7 @@ namespace CCompiler {
     private readonly ISet<Symbol> m_enumeratorItemSet = null;
 
     /*public static Type enumeratorType(ISet<Symbol> enumeratorItemSet) {
-      Type type = new Type();
+      Type type = new();
       type.m_sort = Sort.SignedInt;
       type.m_enumeratorItemSet = enumeratorItemSet;
       return type;
@@ -449,18 +449,18 @@ namespace CCompiler {
 
     public static Type SignedShortIntegerType = new(Sort.SignedShortInt);
     public static Type UnsignedShortIntegerType = new(Sort.UnsignedShortInt);
-    public static Type SignedIntegerType = new Type(Sort.SignedInt);
-    public static Type UnsignedIntegerType = new Type(Sort.UnsignedInt);
-    public static Type SignedLongIntegerType = new Type(Sort.SignedLongInt);
+    public static Type SignedIntegerType = new(Sort.SignedInt);
+    public static Type UnsignedIntegerType = new(Sort.UnsignedInt);
+    public static Type SignedLongIntegerType = new(Sort.SignedLongInt);
     public static Type UnsignedLongIntegerType = new(Sort.UnsignedLongInt);
-    public static Type FloatType = new Type(Sort.Float);
-    public static Type DoubleType = new Type(Sort.Double);
-    public static Type LongDoubleType = new Type(Sort.LongDouble);
-    public static Type SignedCharType = new Type(Sort.SignedChar);
-    public static Type UnsignedCharType = new Type(Sort.UnsignedChar);
-    public static Type StringType = new Type(Sort.String);
-    public static Type IntegerPointerType = new Type(SignedIntegerType);
-    public static Type VoidPointerType = new Type(new Type(Sort.Void));
-    public static Type LogicalType = new Type(Sort.Logical);
+    public static Type FloatType = new(Sort.Float);
+    public static Type DoubleType = new(Sort.Double);
+    public static Type LongDoubleType = new(Sort.LongDouble);
+    public static Type SignedCharType = new(Sort.SignedChar);
+    public static Type UnsignedCharType = new(Sort.UnsignedChar);
+    public static Type StringType = new(Sort.String);
+    public static Type IntegerPointerType = new(SignedIntegerType);
+    public static Type VoidPointerType = new(new Type(Sort.Void));
+    public static Type LogicalType = new(Sort.Logical);
   }
 }

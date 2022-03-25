@@ -72,8 +72,8 @@ namespace CCompiler {
     }
 //E.3.3. 	<a3>Graph Partition</a3>
 //The method <ct>partitionate</ct> divides the graph into free subgraphs; that is, subgraphs which vertices have no neighbors in any of the other free subgraphs. First, we go through the vertices and perform a deep search to find all vertices reachable from the vertex. Then we generate a subgraph for each such vertex set.
-    public ISet<Graph<VertexType>> Split() {
-      ISet<ISet<VertexType>> subgraphSet = new HashSet<ISet<VertexType>>();
+    public HashSet<Graph<VertexType>> Split() {
+      HashSet<ISet<VertexType>> subgraphSet = new();
 
       foreach (VertexType vertex in m_vertexSet) {
         HashSet<VertexType> vertexSet = new();
@@ -81,7 +81,7 @@ namespace CCompiler {
         subgraphSet.Add(vertexSet);
       }
 
-      ISet<Graph<VertexType>> graphSet = new HashSet<Graph<VertexType>>();
+      HashSet<Graph<VertexType>> graphSet = new();
       foreach (ISet<VertexType> vertexSet in subgraphSet) {
         Graph<VertexType> subGraph = InducedSubGraph(vertexSet);
         graphSet.Add(subGraph);

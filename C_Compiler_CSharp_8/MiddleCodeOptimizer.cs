@@ -19,7 +19,7 @@ namespace CCompiler {
       if (SymbolTable.CurrentFunction.Name.Equals("log")) {
         string name = @"C:\Users\Stefa\Documents\vagrant\homestead\code\code\" +
                       SymbolTable.CurrentFunction.Name + ".middlenumber";
-        StreamWriter streamWriter = new StreamWriter(name);
+        StreamWriter streamWriter = new(name);
 
         for (int index = 0; index < m_middleCodeList.Count; ++index) {
           MiddleCode middleCode = m_middleCodeList[index];
@@ -414,7 +414,7 @@ namespace CCompiler {
           else if ((thisCode.getOperator() == MiddleOperator.Multiply) &&
                    (leftSymbol.Value is BigInteger) &&
                    (leftSymbol.Value.Equals(BigInteger.Zero))) {
-            newSymbol = new Symbol(resultSymbol.Type, BigInteger.Zero);
+            newSymbol = new(resultSymbol.Type, BigInteger.Zero);
           }
           // t0 = 1 * i
           else if ((thisCode.getOperator() == MiddleOperator.Multiply) &&
@@ -426,7 +426,7 @@ namespace CCompiler {
           else if ((thisCode.getOperator() == MiddleOperator.Multiply) &&
                     (rightSymbol != null) && (rightSymbol.Value is BigInteger) &&
                     (rightSymbol.Value.Equals(BigInteger.Zero))) {
-            newSymbol = new Symbol(resultSymbol.Type, BigInteger.Zero);
+            newSymbol = new(resultSymbol.Type, BigInteger.Zero);
           }
           // t0 = -1 * i
           else if ((thisCode.getOperator() == MiddleOperator.Multiply) &&

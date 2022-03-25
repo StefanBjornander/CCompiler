@@ -179,7 +179,7 @@ namespace CCompiler {
       }
     }
 
-    public MiddleCode Clone() {
+    public MiddleCode CloneX() {
       return (new MiddleCode(m_middleOperator, m_operandArray[0],
                              m_operandArray[1], m_operandArray[2]));
     }

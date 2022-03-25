@@ -459,8 +459,7 @@ direct_abstract_declarator:
 
 optional_statement_list:
     /* Empty */ {
-      $$ = new(new List<MiddleCode>(),
-                         new HashSet<MiddleCode>());
+      $$ = new(new List<MiddleCode>(), new HashSet<MiddleCode>());
     }
   | optional_statement_list statement {
       MiddleCodeGenerator.Backpatch($1.NextSet, $2.CodeList);
@@ -543,8 +542,7 @@ closed_statement:
       $$ = MiddleCodeGenerator.BreakStatement();
     }
   | LEFT_BLOCK {
-      SymbolTable.CurrentTable =
-        new SymbolTable(SymbolTable.CurrentTable, Scope.Block);
+      SymbolTable.CurrentTable = new(SymbolTable.CurrentTable, Scope.Block);
     }
     optional_declaration_list optional_statement_list RIGHT_BLOCK {
       SymbolTable.CurrentTable =

@@ -178,11 +178,11 @@ namespace CCompiler {
     }
 
     public static Type SizeToSignedType(int size) {
-      return new Type(m_signedMap[size]);
+      return (new Type(m_signedMap[size]));
     }
 
     public static Type SizeToUnsignedType(int size) {
-      return new Type(m_unsignedMap[size]);
+      return (new Type(m_unsignedMap[size]));
     }
 
     public static int Size(Sort sort) {

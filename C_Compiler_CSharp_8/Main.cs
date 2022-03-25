@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace CCompiler {
   public class Start {
-    public static bool Linux = false, Windows;
+    public static bool Linux = true, Windows;
     public static string SourcePath = @"C:\Users\Stefa\Documents\vagrant\homestead\code\code\",
                          TargetPath = @"C:\D\";
 
@@ -30,7 +30,7 @@ namespace CCompiler {
       try {
         if (Start.Linux) {
           foreach (string arg in argList) {
-            FileInfo file = new FileInfo(SourcePath + arg);
+            FileInfo file = new(SourcePath + arg);
 
             if (rebuild || !IsGeneratedFileUpToDate(file, ".asm")) {
               if (print) {
@@ -48,7 +48,7 @@ namespace CCompiler {
           bool doLink = false;
 
           foreach (string arg in argList) {
-            FileInfo file = new FileInfo(SourcePath + arg);
+            FileInfo file = new(SourcePath + arg);
 
             if (rebuild || !IsGeneratedFileUpToDate(file, ".obj")) {
               if (print) {
@@ -61,13 +61,12 @@ namespace CCompiler {
           }
 
           if (doLink) {
-            FileInfo targetFile =
-              new FileInfo(TargetPath + argList[0] + ".com");
-            Linker linker = new Linker();
+            FileInfo targetFile = new(TargetPath + argList[0] + ".com");
+            Linker linker = new();
 
             CCompiler_Main.Scanner.Path = null;
             foreach (string arg in argList) {
-              FileInfo file = new FileInfo(SourcePath + arg);
+              FileInfo file = new(SourcePath + arg);
 
               if (print) {
                 Console.Out.WriteLine($"Loading \"{file.FullName}.obj\".");
@@ -91,7 +90,7 @@ namespace CCompiler {
     }
 
     private static void GenerateMakeFile(List<string> argList) {
-      StreamWriter makeStream = new StreamWriter($"{SourcePath}makefile");
+      StreamWriter makeStream = new($"{SourcePath}makefile");
 
       makeStream.Write("main:");
       foreach (string arg in argList) {
@@ -123,15 +122,15 @@ namespace CCompiler {
     }
 
     public static void ReadObjectFile(FileInfo file, Linker linker) {
-      FileInfo objectFile = new FileInfo($"{file.FullName}.obj");
+      FileInfo objectFile = new($"{file.FullName}.obj");
 
       try {
         BinaryReader dataInputStream =
-          new BinaryReader(File.OpenRead(objectFile.FullName));
+          new(File.OpenRead(objectFile.FullName));
 
         int linkerSetSize = dataInputStream.ReadInt32();
         for (int count = 0; count < linkerSetSize; ++count) {
-          StaticSymbolWindows staticSymbol = new StaticSymbolWindows();
+          StaticSymbolWindows staticSymbol = new();
           staticSymbol.Read(dataInputStream);
           linker.Add(staticSymbol);
         }
@@ -145,26 +144,25 @@ namespace CCompiler {
     }
   
     public static void CompileSourceFile(FileInfo file) {
-      FileInfo sourceFile = new FileInfo($"{file.FullName}.c");
-      Preprocessor preprocessor = new Preprocessor(sourceFile);
+      FileInfo sourceFile = new($"{file.FullName}.c");
+      Preprocessor preprocessor = new(sourceFile);
       GenerateIncludeFile(file, preprocessor.IncludeSet);
 
-      FileInfo pFile = new FileInfo($"{file.FullName}.p");
-      StreamWriter pWriter = new StreamWriter(pFile.FullName);
+      FileInfo pFile = new($"{file.FullName}.p");
+      StreamWriter pWriter = new(pFile.FullName);
       pWriter.Write(preprocessor.PreprocessedCode);
       pWriter.Close();
 
       byte[] byteArray =
         Encoding.ASCII.GetBytes(preprocessor.PreprocessedCode);
-      MemoryStream memoryStream = new MemoryStream(byteArray);
-      CCompiler_Main.Scanner scanner =
-        new CCompiler_Main.Scanner(memoryStream);
+      MemoryStream memoryStream = new(byteArray);
+      CCompiler_Main.Scanner scanner = new(memoryStream);
 
       try {
         SymbolTable.CurrentTable = new(null, Scope.Global);
         //CCompiler_Main.Scanner.Path = sourceFile;
-        CCompiler_Main.Scanner.Line = 2000; 
-        CCompiler_Main.Parser parser = new CCompiler_Main.Parser(scanner);
+        CCompiler_Main.Scanner.Line = 2000;
+        CCompiler_Main.Parser parser = new(scanner);
         Error.Check(parser.Parse(), Message.Syntax_error);
       }
       catch (IOException ioException) {
@@ -184,9 +182,9 @@ namespace CCompiler {
           totalExternSet.Remove(staticSymbol.UniqueName);
         }
 
-        FileInfo assemblyFile = new FileInfo($"{file.FullName}.asm");
+        FileInfo assemblyFile = new($"{file.FullName}.asm");
         File.Delete(assemblyFile.FullName);
-        StreamWriter streamWriter = new StreamWriter(assemblyFile.FullName);
+        StreamWriter streamWriter = new(assemblyFile.FullName);
 
         foreach (StaticSymbol staticSymbol in SymbolTable.StaticSet) {
           if (!staticSymbol.UniqueName.Contains(Symbol.SeparatorId) &&
@@ -230,9 +228,9 @@ namespace CCompiler {
       }
 
       if (Start.Windows) {
-        FileInfo objectFile = new FileInfo($"{file.FullName}.obj");
+        FileInfo objectFile = new($"{file.FullName}.obj");
         BinaryWriter binaryWriter =
-          new BinaryWriter(File.Open(objectFile.FullName, FileMode.Create));
+          new(File.Open(objectFile.FullName, FileMode.Create));
 
         binaryWriter.Write(SymbolTable.StaticSet.Count);    
         foreach (StaticSymbol staticSymbol in SymbolTable.StaticSet) {
@@ -245,10 +243,10 @@ namespace CCompiler {
 
     private static void GenerateIncludeFile(FileInfo file,
                                             ISet<FileInfo> includeSet) {
-      FileInfo dependencySetFile =
-        new FileInfo($"{file.FullName}.dependency");
+      FileInfo dependencySetFile = new($"{file.FullName}.dependency");
       StreamWriter dependencyWriter =
-        new StreamWriter(File.Open(SourcePath + dependencySetFile.Name, FileMode.Create));
+        new(File.Open(SourcePath + dependencySetFile.Name,
+                       FileMode.Create));
 
       dependencyWriter.Write($"{file.Name}.c");
       foreach (FileInfo includeFile in includeSet) {
@@ -259,9 +257,8 @@ namespace CCompiler {
     }
 
     public static bool IsGeneratedFileUpToDate(FileInfo file, string suffix) {
-      FileInfo generatedFile = new FileInfo($"{file.FullName}{suffix}"),
-               dependencySetFile =
-                 new FileInfo($"{file.FullName}.dependency");
+      FileInfo generatedFile = new($"{file.FullName}{suffix}"),
+               dependencySetFile = new($"{file.FullName}.dependency");
 
       if (!generatedFile.Exists || !dependencySetFile.Exists) {
         return false;
@@ -270,7 +267,7 @@ namespace CCompiler {
       if (dependencySetFile.Exists) {
         try {
           StreamReader dependencySetReader =
-            new StreamReader(File.OpenRead(dependencySetFile.FullName));
+            new(File.OpenRead(dependencySetFile.FullName));
           string dependencySetText = dependencySetReader.ReadToEnd();
           dependencySetReader.Close();
 
@@ -278,8 +275,7 @@ namespace CCompiler {
             string[] dependencyNameArray = dependencySetText.Split(' ');
 
             foreach (string dependencyName in dependencyNameArray)  {
-              FileInfo dependencyFile =
-                new FileInfo(SourcePath + dependencyName);
+              FileInfo dependencyFile = new(SourcePath + dependencyName);
 
               if (dependencyFile.LastWriteTime > generatedFile.LastWriteTime) {
                 return false;

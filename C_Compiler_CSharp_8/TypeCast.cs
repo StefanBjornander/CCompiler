@@ -57,27 +57,27 @@ namespace CCompiler {
                        longList = sourceExpression.LongList;
 
       if (targetType.IsVoid()) {
-        targetSymbol = new Symbol(targetType);
+        targetSymbol = new(targetType);
       }
       else if (sourceType.IsStructOrUnion() && targetType.IsStructOrUnion()) {
         Error.Check(sourceType.Equals(targetType), $"{sourceType} to " +
                     targetType, Message.Invalid_type_cast);
-        targetSymbol = new Symbol(targetType);
+        targetSymbol = new(targetType);
       }
       else if (sourceType.IsLogical() &&
                targetType.IsIntegralPointerOrArray()) {
-        targetSymbol = new Symbol(targetType);
+        targetSymbol = new(targetType);
 
-        Symbol oneSymbol = new Symbol(targetType, BigInteger.One);
+        Symbol oneSymbol = new(targetType, BigInteger.One);
         MiddleCode trueCode =
           new(MiddleOperator.Assign, targetSymbol, oneSymbol);
         MiddleCodeGenerator.Backpatch(sourceSymbol.TrueSet, trueCode);
         longList.Add(trueCode);
 
-        MiddleCode targetCode = new MiddleCode(MiddleOperator.Empty);
+        MiddleCode targetCode = new(MiddleOperator.Empty);
         longList.Add(new MiddleCode(MiddleOperator.Jump, targetCode));
 
-        Symbol zeroSymbol = new Symbol(targetType, BigInteger.Zero);
+        Symbol zeroSymbol = new(targetType, BigInteger.Zero);
         MiddleCode falseCode =
           new(MiddleOperator.Assign, targetSymbol, zeroSymbol);
         MiddleCodeGenerator.Backpatch(sourceSymbol.FalseSet, falseCode);
@@ -86,16 +86,16 @@ namespace CCompiler {
         longList.Add(targetCode);
       }
       else if (sourceType.IsLogical() && targetType.IsFloating()) {
-        targetSymbol = new Symbol(targetType);
+        targetSymbol = new(targetType);
 
-        MiddleCode trueCode = new MiddleCode(MiddleOperator.PushOne);
+        MiddleCode trueCode = new(MiddleOperator.PushOne);
         MiddleCodeGenerator.Backpatch(sourceSymbol.TrueSet, trueCode);
         longList.Add(trueCode);
 
-        MiddleCode targetCode = new MiddleCode(MiddleOperator.Empty);
+        MiddleCode targetCode = new(MiddleOperator.Empty);
         longList.Add(new MiddleCode(MiddleOperator.Jump, targetCode));
 
-        MiddleCode falseCode = new MiddleCode(MiddleOperator.PushZero);
+        MiddleCode falseCode = new(MiddleOperator.PushZero);
         MiddleCodeGenerator.Backpatch(sourceSymbol.FalseSet, falseCode);
         longList.Add(falseCode);
 
@@ -105,7 +105,7 @@ namespace CCompiler {
                targetType.IsLogical()) {
         object zeroValue = sourceType.IsLogical() ? ((object) decimal.Zero)
                                                   : ((object)BigInteger.Zero);
-        Symbol zeroSymbol = new Symbol(targetType, zeroValue);
+        Symbol zeroSymbol = new(targetType, zeroValue);
 
         MiddleCode testCode = new(MiddleOperator.NotEqual, null,
                                   sourceSymbol, zeroSymbol);
@@ -113,24 +113,24 @@ namespace CCompiler {
         trueSet.Add(testCode);
         longList.Add(testCode);
 
-        MiddleCode gotoCode = new MiddleCode(MiddleOperator.Jump);
+        MiddleCode gotoCode = new(MiddleOperator.Jump);
         HashSet<MiddleCode> falseSet = new();
         falseSet.Add(gotoCode);
         longList.Add(gotoCode);
 
-        targetSymbol = new Symbol(trueSet, falseSet);
+        targetSymbol = new(trueSet, falseSet);
       }
       else if (sourceType.IsFloating() && targetType.IsFloating()) {
-        targetSymbol = new Symbol(targetType);
+        targetSymbol = new(targetType);
       }
       else if (sourceType.IsFloating() &&
                targetType.IsIntegralPointerOrArray()) {
-        targetSymbol = new Symbol(targetType);
+        targetSymbol = new(targetType);
 
         if (targetType.Size() == 1) {
           Type tempType = sourceType.IsSigned() ? Type.SignedIntegerType
                                                 : Type.UnsignedIntegerType;
-          Symbol tempSymbol = new Symbol(tempType);
+          Symbol tempSymbol = new(tempType);
           MiddleCode tempCode = new(MiddleOperator.FloatingToIntegral,
                                     tempSymbol, sourceSymbol);
           longList.Add(tempCode);
@@ -146,12 +146,12 @@ namespace CCompiler {
       }
       else if (sourceType.IsIntegralPointerArrayStringOrFunction () &&
                targetType.IsFloating()) {
-        targetSymbol = new Symbol(targetType);
+        targetSymbol = new(targetType);
 
         if (sourceType.Size() == 1) {
           Type tempType = sourceType.IsSigned() ? Type.SignedIntegerType
                                                 : Type.UnsignedIntegerType;
-          Symbol tempSymbol = new Symbol(tempType);
+          Symbol tempSymbol = new(tempType);
           MiddleCodeGenerator.
             AddMiddleCode(longList, MiddleOperator.IntegralToIntegral,
                           tempSymbol, sourceSymbol);
@@ -167,7 +167,7 @@ namespace CCompiler {
       }
       else if (sourceType.IsIntegralPointerArrayStringOrFunction () &&
                targetType.IsIntegralPointerOrArray()) {
-        targetSymbol = new Symbol(targetType);
+        targetSymbol = new(targetType);
         MiddleCodeGenerator.
           AddMiddleCode(longList, MiddleOperator.IntegralToIntegral,
                         targetSymbol, sourceSymbol);

@@ -121,13 +121,13 @@ namespace CCompiler {
       }
 
       List<MiddleCode> longList = new();
-      MiddleCode jumpCode = new MiddleCode(MiddleOperator.Jump);
+      MiddleCode jumpCode = new(MiddleOperator.Jump);
       longList.Add(jumpCode);
 
       HashSet<MiddleCode> jumpSet = new();
       jumpSet.Add(jumpCode);
 
-      Symbol resultSymbol = new Symbol(null, null);
+      Symbol resultSymbol = new(null, null);
       if (resultValue) {
         resultSymbol.TrueSet = jumpSet;
       }
@@ -157,13 +157,13 @@ namespace CCompiler {
       }
 
       List<MiddleCode> longList = new();
-      MiddleCode jumpCode = new MiddleCode(MiddleOperator.Jump);
+      MiddleCode jumpCode = new(MiddleOperator.Jump);
       longList.Add(jumpCode);
 
       HashSet<MiddleCode> jumpSet = new();
       jumpSet.Add(jumpCode);
 
-      Symbol resultSymbol = new Symbol(null, null);
+      Symbol resultSymbol = new(null, null);
       if (resultValue) {
         resultSymbol.TrueSet = jumpSet;
       }
@@ -308,7 +308,7 @@ namespace CCompiler {
           break;
       }
 
-      Symbol resultSymbol = new Symbol(maxType, resultDecimal);
+      Symbol resultSymbol = new(maxType, resultDecimal);
       List<MiddleCode> longList = new();
       MiddleCodeGenerator.AddMiddleCode(longList, MiddleOperator.PushFloat,
                                         resultSymbol);
@@ -347,15 +347,15 @@ namespace CCompiler {
       Symbol resultSymbol = null;
       switch (middleOp) {
         case MiddleOperator.Plus:
-          resultSymbol = new Symbol(expression.Symbol.Type, value);
+          resultSymbol = new(expression.Symbol.Type, value);
           break;
 
         case MiddleOperator.Minus:
-          resultSymbol = new Symbol(expression.Symbol.Type, -value);
+          resultSymbol = new(expression.Symbol.Type, -value);
           break;
 
         case MiddleOperator.BitwiseNot:
-          resultSymbol = new Symbol(expression.Symbol.Type, ~value);
+          resultSymbol = new(expression.Symbol.Type, ~value);
           break;
       }
 
@@ -370,11 +370,11 @@ namespace CCompiler {
 
       switch (middleOp) {
         case MiddleOperator.Plus:
-          resultSymbol = new Symbol(expression.Symbol.Type, value);
+          resultSymbol = new(expression.Symbol.Type, value);
           break;
         
         case MiddleOperator.Minus:
-          resultSymbol = new Symbol(expression.Symbol.Type, -value);
+          resultSymbol = new(expression.Symbol.Type, -value);
           break;
       }
 
@@ -397,11 +397,11 @@ namespace CCompiler {
 
       if (sourceType.IsIntegralOrPointer() && targetType.IsFloating()) {
         decimal targetValue = ((decimal) ((BigInteger) sourceValue));
-        targetSymbol = new Symbol(targetType, targetValue);
+        targetSymbol = new(targetType, targetValue);
       }
       else if (sourceType.IsFloating() && targetType.IsIntegralOrPointer()) {
         BigInteger targetValue = ((BigInteger)((decimal)sourceValue));
-        targetSymbol = new Symbol(targetType, targetValue);
+        targetSymbol = new(targetType, targetValue);
       }
       else if (sourceType.IsLogical() && targetType.IsArithmeticOrPointer()) {
         bool isTrue = (sourceSymbol.TrueSet.Count > 0);
@@ -414,13 +414,13 @@ namespace CCompiler {
           targetValue = isTrue ? decimal.One : decimal.Zero;
         }
 
-        targetSymbol = new Symbol(targetType, targetValue);
+        targetSymbol = new(targetType, targetValue);
       }
       else if (sourceType.IsArithmeticOrPointer() && targetType.IsLogical()) {
         bool isTrue = !sourceValue.Equals(BigInteger.Zero) &&
                       !sourceValue.Equals(decimal.Zero);
 
-        MiddleCode gotoCode = new MiddleCode(MiddleOperator.Jump);
+        MiddleCode gotoCode = new(MiddleOperator.Jump);
         longList.Add(gotoCode);
 
         HashSet<MiddleCode> trueSet = new(), falseSet = new();
@@ -432,10 +432,10 @@ namespace CCompiler {
           falseSet.Add(gotoCode);
         }
 
-        targetSymbol = new Symbol(trueSet, falseSet);
+        targetSymbol = new(trueSet, falseSet);
       }
       else {
-        targetSymbol = new Symbol(targetType, sourceValue);
+        targetSymbol = new(targetType, sourceValue);
       }
 
       if (targetType.IsFloating()) {

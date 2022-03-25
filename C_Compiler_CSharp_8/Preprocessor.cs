@@ -10,7 +10,7 @@ namespace CCompiler {
     private Stack<FileInfo> m_includeStack = new();
     private HashSet<FileInfo> m_includeSet = new();
     private Stack<IfElseChain> m_ifElseChainStack = new();
-    private StringBuilder m_outputBuffer = new StringBuilder();
+    private StringBuilder m_outputBuffer = new();
     public static IDictionary<string,Macro> MacroMap;
 
     public string PreprocessedCode {
@@ -36,7 +36,7 @@ namespace CCompiler {
     }
 
     private void DoProcess(FileInfo file) {
-      StreamReader streamReader = new StreamReader(file.FullName);
+      StreamReader streamReader = new(file.FullName);
       StringBuilder inputBuffer = new(streamReader.ReadToEnd());
       streamReader.Close();
 
@@ -59,9 +59,9 @@ namespace CCompiler {
     }
 
     private static Dictionary<string,string> m_triGraphMap =
-      new () {{"??=", "#"}, {"??/", "\\"}, {"??\'", "^"},
-             {"??(", "["}, {"??)", "]"}, {"??!", "|"},
-             {"??<", "{"}, {"??>", "}"}, {"??-", "~"}};
+      new(){{"??=", "#"}, {"??/", "\\"}, {"??\'", "^"},
+            {"??(", "["}, {"??)", "]"}, {"??!", "|"},
+            {"??<", "{"}, {"??>", "}"}, {"??-", "~"}};
 
     public void GenerateTriGraphs(StringBuilder buffer) {
       foreach (KeyValuePair<string,string> pair in m_triGraphMap) {
@@ -180,7 +180,7 @@ namespace CCompiler {
           }
           else {
             bool first = true;
-            StringBuilder buffer = new StringBuilder();
+            StringBuilder buffer = new();
 
             for (; (index < mergeList.Count) &&
                    !mergeList[index].StartsWith("#"); ++index) {
@@ -207,7 +207,7 @@ namespace CCompiler {
 
       while (index < trimList.Count) {
         if (trimList[index].StartsWith("#")) {
-          StringBuilder buffer = new StringBuilder();
+          StringBuilder buffer = new();
 
           for (; (index < trimList.Count) && trimList[index].EndsWith("\\");
                ++index) {
@@ -222,7 +222,7 @@ namespace CCompiler {
           resultList.Add(buffer.ToString());
         }
         else {
-          StringBuilder buffer = new StringBuilder();
+          StringBuilder buffer = new();
 
           for (; (index < trimList.Count) && !trimList[index].StartsWith("#");
                ++index) {
@@ -238,7 +238,7 @@ namespace CCompiler {
 
     private List<Token> Scan(string text) {
       byte[] byteArray = Encoding.ASCII.GetBytes(text);
-      MemoryStream memoryStream = new MemoryStream(byteArray);
+      MemoryStream memoryStream = new(byteArray);
       CCompiler_Pre.Scanner scanner = new CCompiler_Pre.Scanner(memoryStream);
       List<Token> tokenList = new();
 
@@ -258,7 +258,7 @@ namespace CCompiler {
     }
 
     private string TokenListToString(List<Token> tokenList) {
-      StringBuilder buffer = new StringBuilder();
+      StringBuilder buffer = new();
     
       foreach (Token token in tokenList) {
         buffer.Append(((buffer.Length > 0) ? " " : "") + token.ToString());
@@ -402,10 +402,10 @@ namespace CCompiler {
           (tokenList[3].Id == CCompiler_Pre.Tokens.END_OF_LINE)) {
         string text = tokenList[2].ToString();
         string file = text.ToString().Substring(1, text.Length - 1);
-        includeFile = new FileInfo(Start.SourcePath + file);
+        includeFile = new(Start.SourcePath + file);
       }
       else {
-        StringBuilder buffer = new StringBuilder();
+        StringBuilder buffer = new();
 
         foreach (Token token in tokenList.GetRange(2, tokenList.Count - 2)) {
           buffer.Append(token.ToString());
@@ -415,7 +415,7 @@ namespace CCompiler {
 
         if (text.StartsWith("<") && text.EndsWith(">")) {
           string file = text.ToString().Substring(1, text.Length - 2);
-          includeFile = new FileInfo(Start.SourcePath + file);
+          includeFile = new(Start.SourcePath + file);
         }
         else {
           Error.Report(TokenListToString(tokenList),
@@ -455,7 +455,7 @@ namespace CCompiler {
       Macro macro;
 
       if (tokenList[2].Id == CCompiler_Pre.Tokens.NAME) {
-        macro = new Macro(0, tokenList.GetRange(3, tokenList.Count - 3), null);
+        macro = new(0, tokenList.GetRange(3, tokenList.Count - 3), null);
       }
       else {
         int tokenIndex = 3, paramIndex = 0;
@@ -508,7 +508,7 @@ namespace CCompiler {
           }
         }
 
-        macro = new Macro(paramMap.Count, macroList, indexToParamMap);
+        macro = new(paramMap.Count, macroList, indexToParamMap);
       }
     
       string name = (string) tokenList[2].Value;
@@ -546,7 +546,7 @@ namespace CCompiler {
 
       try {
         byte[] byteArray = Encoding.ASCII.GetBytes(line);
-        MemoryStream memoryStream = new MemoryStream(byteArray);
+        MemoryStream memoryStream = new(byteArray);
         CCompiler_Exp.Scanner expressionScanner =
           new CCompiler_Exp.Scanner(memoryStream);
         MacroMap = m_macroMap;
@@ -662,7 +662,7 @@ namespace CCompiler {
               case "__FILE__": {
                     string text = "\"" + CCompiler_Main.Scanner.Path
                                 .FullName.Replace("\\", "\\\\") + "\"";
-                    tokenList[index] = new Token(CCompiler_Pre.Tokens.TOKEN, 
+                    tokenList[index] = new(CCompiler_Pre.Tokens.TOKEN, 
                                                  text, beginNewlineCount);
                 }
                 break;
@@ -675,14 +675,14 @@ namespace CCompiler {
 
               case "__DATE__": {
                   string text = $"\"{DateTime.Now.ToString("MMMM dd yyyy")}\"";
-                  tokenList[index] = new Token(CCompiler_Pre.Tokens.TOKEN,
+                  tokenList[index] = new(CCompiler_Pre.Tokens.TOKEN,
                                                text, beginNewlineCount);
                 }
                 break;
 
               case "__TIME__": {
                   string text = $"\"{DateTime.Now.ToString("HH:mm:ss")}\"";
-                  tokenList[index] = new Token(CCompiler_Pre.Tokens.TOKEN,
+                  tokenList[index] = new(CCompiler_Pre.Tokens.TOKEN,
                                                text, beginNewlineCount);
                 }
                 break;

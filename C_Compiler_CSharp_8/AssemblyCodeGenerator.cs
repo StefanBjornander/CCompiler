@@ -1605,8 +1605,6 @@ namespace CCompiler {
         AddAssemblyCode(AssemblyOperator.fld1);
       }
       else {
-//        PairX<bool,int> pair =
-//          new PairX<bool,int>(symbol.Type.IsFloating(), symbol.Type.Size());
         (bool floating, int size) pair =
           (symbol.Type.IsFloating(), symbol.Type.Size());
         AssemblyOperator objectOperator = m_floatPushMap[pair];
@@ -1671,29 +1669,8 @@ namespace CCompiler {
         {(Floating: true, Size: 4), AssemblyOperator.fst_dword},
         {(Floating: true, Size: 8), AssemblyOperator.fst_qword}
       };
-
-    /*    public static IDictionary<PairX<bool,int>,AssemblyOperator>
-          m_floatPopMap = new Dictionary<PairX<bool,int>, AssemblyOperator>() {
-            {new PairX<bool,int>(false, 2), AssemblyOperator.fistp_word},
-            {new PairX<bool,int>(false, 4), AssemblyOperator.fistp_dword},
-            {new PairX<bool,int>(false, 8), AssemblyOperator.fistp_qword},
-            {new PairX<bool,int>(true, 4), AssemblyOperator.fstp_dword},
-            {new PairX<bool,int>(true, 8), AssemblyOperator.fstp_qword}
-          };
-
-        public static IDictionary<PairX<bool,int>,AssemblyOperator>
-          m_floatTopMap = new Dictionary<PairX<bool,int>, AssemblyOperator>() {
-            {new PairX<bool,int>(false, 2), AssemblyOperator.fist_word},
-            {new PairX<bool,int>(false, 4), AssemblyOperator.fist_dword},
-            {new PairX<bool,int>(false, 8), AssemblyOperator.fist_qword},
-            {new PairX<bool,int>(true, 4), AssemblyOperator.fst_dword},
-            {new PairX<bool,int>(true, 8), AssemblyOperator.fst_qword}
-          };*/
-
     public void TopPopSymbol(Symbol symbol, TopOrPop topOrPop) {
       Error.ErrorXXX(symbol != null);
-//      PairX<bool,int> pair =
-//        new PairX<bool,int>(symbol.Type.IsFloating(), symbol.Type.Size());
       (bool floating, int size) pair =
         (symbol.Type.IsFloating(), symbol.Type.Size());
       AssemblyOperator objectOperator;

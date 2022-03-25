@@ -85,8 +85,7 @@ namespace CCompiler {
             }
             else if (symbol.IsExternOrStatic()) { // &i
               StaticAddress staticAddress = new(symbol.UniqueName, 0);
-              Symbol resultSymbol =
-                new Symbol(new Type(symbol.Type), staticAddress);
+              Symbol resultSymbol = new(new Type(symbol.Type), staticAddress);
               return (new Expression(resultSymbol, null, null));
             }
           }
