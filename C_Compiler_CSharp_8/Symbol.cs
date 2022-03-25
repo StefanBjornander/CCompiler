@@ -60,7 +60,7 @@ namespace CCompiler {
     public Symbol(ISet<MiddleCode> trueSet, ISet<MiddleCode> falseSet) {
       m_name = $"{Symbol.TemporaryId}logical{TemporaryNameCount++}";
       m_storage = Storage.Auto;
-      m_type = new Type(Sort.Logical);
+      m_type = new(Sort.Logical);
       TrueSet = trueSet ?? (new HashSet<MiddleCode>());
       FalseSet = falseSet ?? (new HashSet<MiddleCode>());
     }

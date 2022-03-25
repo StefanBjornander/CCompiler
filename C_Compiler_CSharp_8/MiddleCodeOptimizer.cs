@@ -151,7 +151,7 @@ namespace CCompiler {
         MiddleCode middleCode = m_middleCodeList[index];
 
         if (middleCode.IsRelationCarryOrGoto()) {
-          ISet<int> sourceSet = new HashSet<int>();
+          HashSet<int> sourceSet = new();
           sourceSet.Add(index);
 
           int firstTarget = (int)middleCode[0];
@@ -185,7 +185,7 @@ namespace CCompiler {
     // --------------------------------------------------------------------------
 
     private void ClearUnreachableCode() {
-      ISet<MiddleCode> visitedSet = new HashSet<MiddleCode>();
+      HashSet<MiddleCode> visitedSet = new();
       SearchReachableCode(0, visitedSet);
 
       for (int index = 0; index < (m_middleCodeList.Count - 1); ++index) {
@@ -263,7 +263,7 @@ namespace CCompiler {
     // top x
 
     public void MergePopPushToTop() {
-      ISet<int> targetIndexSet = new HashSet<int>();
+      HashSet<int> targetIndexSet = new();
 
       foreach (MiddleCode middleCode in m_middleCodeList) {
         if (middleCode.IsRelationCarryOrGoto()) {
@@ -621,7 +621,7 @@ namespace CCompiler {
     }
 
 /*    private static ISet<Symbol> CloneSet(ISet<Symbol> inSet) {
-      ISet<Symbol> outSet = new HashSet<Symbol>();
+      HashSet<Symbol> outSet = new();
 
       foreach (Symbol symbol in inSet) {
         outSet.Add(symbol);
@@ -632,7 +632,7 @@ namespace CCompiler {
 
     private void CheckIntegral() {
       Stack<ISet<Symbol>> integralSetStack = new Stack<ISet<Symbol>>();
-      ISet<Symbol> integralSet = new HashSet<Symbol>();
+      HashSet<Symbol> integralSet = new();
 
       for (int line = 0; line < m_middleCodeList.Count; ++line) {
         MiddleCode middleCode = m_middleCodeList[line];
@@ -649,7 +649,7 @@ namespace CCompiler {
           case MiddleOperator.PreCall: {
               middleCode[1] = CloneSet(integralSet);
               integralSetStack.Push(integralSet);
-              integralSet = new HashSet<Symbol>();
+              integralSet = new();
             }
             break;
 

@@ -5,8 +5,8 @@
 %using System.Numerics;
 
 %{
-  public static Stack<Specifier> SpecifierStack = new Stack<Specifier>();
-  public static Stack<Scope> ScopeStack = new Stack<Scope>();
+  public static Stack<Specifier> SpecifierStack = new();
+  public static Stack<Scope> ScopeStack = new();
 %}
 
 %token AUTO REGISTER STATIC EXTERN TYPEDEF CONSTANT VOLATILE
@@ -150,13 +150,13 @@ function_definition:
     };
 
 optional_declaration_list:
-    /* Empty */      { $$ = new List<MiddleCode>(); } 
+    /* Empty */      { $$ = new(); } 
   | declaration_list { $$ = $1; };
 
 declaration:
     declaration_specifier_list SEMICOLON {
       SpecifierStack.Push(Specifier.SpecifierList($1));
-      $$ = new List<MiddleCode>();
+      $$ = new();
     }
   | declaration_specifier_list_x declarator_list SEMICOLON {
       SpecifierStack.Pop();
@@ -170,7 +170,7 @@ declaration_specifier_list_x:
 
 declaration_specifier_list:
     declaration_specifier {
-      $$ = new List<object>();
+      $$ = new();
       $$.Add($1);
     }
   | declaration_specifier declaration_specifier_list {
@@ -240,7 +240,7 @@ enum_specifier:
 
 enum_list:
     enum {
-      ISet<Symbol> memberSet = new HashSet<Symbol>();
+      HashSet<Symbol> memberSet = new();
       memberSet.Add($1);
       $$ = memberSet;
     }
@@ -279,7 +279,7 @@ initialization_bitfield_simple_declarator:
   | optional_simple_declarator COLON constant_integral_expression {
       MiddleCodeGenerator.Declarator
         (SpecifierStack.Peek(), $1, null, $3.Symbol);
-      $$ = new List<MiddleCode>();
+      $$ = new();
     };
 
 optional_simple_declarator:
@@ -316,7 +316,7 @@ pointer_marker:
 
 optional_qualifier_list:
     /* Empty */    {
-      $$ = new List<Mask>();
+      $$ = new();
     }
   | optional_qualifier_list qualifier {
       $$ = $1;
@@ -329,7 +329,7 @@ qualifier:
 
 direct_declarator:
     NAME {
-      $$ = new Declarator($1);
+      $$ = new($1);
     }
   | LEFT_PARENTHESIS declarator RIGHT_PARENTHESIS {
       $$ = $2; 
@@ -366,7 +366,7 @@ parameter_list:
     }
     parameter_declaration {
       SymbolTable.CurrentTable.Scope = ScopeStack.Pop();
-      $$ = new List<Symbol>();
+      $$ = new();
       $$.Add($2);
     }
   | parameter_list COMMA {
@@ -391,12 +391,12 @@ parameter_declaration:
     };
 
 optional_name_list:
-    /* Empty */ { $$ = new List<string>(); }
+    /* Empty */ { $$ = new(); }
   | name_list   { $$ = $1;                 };
 
 name_list:
     NAME {
-      $$ = new List<string>();
+      $$ = new();
       $$.Add($1);
     }
   | name_list COMMA NAME {
@@ -418,7 +418,7 @@ optional_comma:
 
 initializer_list:
     initializer {
-      $$ = new List<object>();
+      $$ = new();
       $$.Add($1);
     }
   | initializer_list COMMA initializer {
@@ -459,15 +459,15 @@ direct_abstract_declarator:
 
 optional_statement_list:
     /* Empty */ {
-      $$ = new Statement(new List<MiddleCode>(),
+      $$ = new(new List<MiddleCode>(),
                          new HashSet<MiddleCode>());
     }
   | optional_statement_list statement {
       MiddleCodeGenerator.Backpatch($1.NextSet, $2.CodeList);
-      List<MiddleCode> codeList = new List<MiddleCode>();
+      List<MiddleCode> codeList = new();
       codeList.AddRange($1.CodeList);
       codeList.AddRange($2.CodeList);
-      $$ = new Statement(codeList, $2.NextSet);
+      $$ = new(codeList, $2.NextSet);
     };
 
 statement:
@@ -562,7 +562,7 @@ closed_statement:
       $$ = MiddleCodeGenerator.ExpressionStatement($1);
     }
 /*  | declaration {
-      $$ = new Statement($1, null);
+      $$ = new($1, null);
     }*/
   | JUMP_REGISTER LEFT_PARENTHESIS REGISTER_NAME RIGHT_PARENTHESIS SEMICOLON {
       $$ = MiddleCodeGenerator.JumpRegisterStatement($3);
@@ -815,12 +815,12 @@ postfix_expression:
     };
 
 optional_argument_expression_list:
-    /* Empty */              { $$ = new List<Expression>(); }
+    /* Empty */              { $$ = new(); }
   | argument_expression_list { $$ = $1;                     };
 
 argument_expression_list:
     assignment_expression {
-      $$ = new List<Expression>();
+      $$ = new();
       $$.Add(MiddleCodeGenerator.ArgumentExpression(0, $1));
     }
   | argument_expression_list COMMA assignment_expression {

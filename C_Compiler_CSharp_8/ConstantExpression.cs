@@ -120,11 +120,11 @@ namespace CCompiler {
           break;
       }
 
-      List<MiddleCode> longList = new List<MiddleCode>();
+      List<MiddleCode> longList = new();
       MiddleCode jumpCode = new MiddleCode(MiddleOperator.Jump);
       longList.Add(jumpCode);
 
-      ISet<MiddleCode> jumpSet = new HashSet<MiddleCode>();
+      HashSet<MiddleCode> jumpSet = new();
       jumpSet.Add(jumpCode);
 
       Symbol resultSymbol = new Symbol(null, null);
@@ -156,11 +156,11 @@ namespace CCompiler {
           break;
       }
 
-      List<MiddleCode> longList = new List<MiddleCode>();
+      List<MiddleCode> longList = new();
       MiddleCode jumpCode = new MiddleCode(MiddleOperator.Jump);
       longList.Add(jumpCode);
 
-      ISet<MiddleCode> jumpSet = new HashSet<MiddleCode>();
+      HashSet<MiddleCode> jumpSet = new();
       jumpSet.Add(jumpCode);
 
       Symbol resultSymbol = new Symbol(null, null);
@@ -309,7 +309,7 @@ namespace CCompiler {
       }
 
       Symbol resultSymbol = new Symbol(maxType, resultDecimal);
-      List<MiddleCode> longList = new List<MiddleCode>();
+      List<MiddleCode> longList = new();
       MiddleCodeGenerator.AddMiddleCode(longList, MiddleOperator.PushFloat,
                                         resultSymbol);
       return (new Expression(resultSymbol, null, longList));
@@ -378,7 +378,7 @@ namespace CCompiler {
           break;
       }
 
-      List<MiddleCode> longList = new List<MiddleCode>();
+      List<MiddleCode> longList = new();
       MiddleCodeGenerator.AddMiddleCode(longList, MiddleOperator.PushFloat,
                                         resultSymbol);
       return (new Expression(resultSymbol, null, longList));
@@ -393,7 +393,7 @@ namespace CCompiler {
       Symbol sourceSymbol = sourceExpression.Symbol, targetSymbol;
       Type sourceType = sourceSymbol.Type;
       object sourceValue = sourceSymbol.Value;
-      List<MiddleCode> longList = new List<MiddleCode>();
+      List<MiddleCode> longList = new();
 
       if (sourceType.IsIntegralOrPointer() && targetType.IsFloating()) {
         decimal targetValue = ((decimal) ((BigInteger) sourceValue));
@@ -457,7 +457,7 @@ namespace CCompiler {
         middleCodeList = (List<MiddleCode>) value;
       }
       else {
-        middleCodeList = new List<MiddleCode>();
+        middleCodeList = new();
       
         if (value != null) {
           middleCodeList.Add(new MiddleCode(MiddleOperator.Initializer,
@@ -469,23 +469,23 @@ namespace CCompiler {
         }
       }
 
-      List<AssemblyCode> assemblyCodeList = new List<AssemblyCode>();
+      List<AssemblyCode> assemblyCodeList = new();
       AssemblyCodeGenerator.GenerateAssembly(middleCodeList,
                                              assemblyCodeList);
 
       if (Start.Linux) {
-        List<string> textList = new List<string>();
+        List<string> textList = new();
         textList.Add("section .data");
         textList.Add($"\n{uniqueName}:");
-        ISet<string> externSet = new HashSet<string>();
+        HashSet<string> externSet = new();
         AssemblyCodeGenerator.LinuxTextList(assemblyCodeList, textList,
                                             externSet);
         return (new StaticSymbolLinux(uniqueName, textList, externSet));
       }
 
       if (Start.Windows) {
-        List<byte> byteList = new List<byte>();
-        IDictionary<int,string> accessMap = new Dictionary<int,string>();
+        List<byte> byteList = new();
+        Dictionary<int,string> accessMap = new();
         AssemblyCodeGenerator.
           GenerateTargetWindows(assemblyCodeList, byteList,
                                 accessMap, null, null);

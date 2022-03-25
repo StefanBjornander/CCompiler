@@ -21,7 +21,7 @@ namespace CCompiler {
       };
 
     public static string SlashToChar(string text) {
-      StringBuilder buffer = new StringBuilder(text);
+      StringBuilder buffer = new(text);
       buffer.Append("\0\0\0");
 
       for (int index = 0; buffer[index] != '\0'; ++index) {
@@ -81,7 +81,7 @@ namespace CCompiler {
     }
 
     public static string CharToHex(string text) {
-      StringBuilder buffer = new StringBuilder();
+      StringBuilder buffer = new();
 
       for (int index = 0; index < text.Length; ++index) {
         char theChar = text[index];

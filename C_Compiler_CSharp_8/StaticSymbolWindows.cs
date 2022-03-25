@@ -7,26 +7,26 @@ using System.Collections.Generic;
 namespace CCompiler {
   public class StaticSymbolWindows : StaticSymbol {
     private List<byte> m_byteList;
-    private IDictionary<int,string> m_accessMap, m_callMap;
-    private ISet<int> m_returnSet;
+    private Dictionary<int, string> m_accessMap, m_callMap;
+    private HashSet<int> m_returnSet;
 
     public StaticSymbolWindows() {
       // Empty.
     }
 
     public StaticSymbolWindows(string uniqueName, List<byte> byteList = null,
-                        IDictionary<int,string> accessMap = null)
+                        Dictionary<int,string> accessMap = null)
      :base(uniqueName) {
       m_byteList = byteList;
       m_accessMap = accessMap;
-      m_callMap = new Dictionary<int,string>();
-      m_returnSet = new HashSet<int>();
+      m_callMap = new();
+      m_returnSet = new();
     }
 
     public StaticSymbolWindows(string uniqueName, List<byte> byteList, // Windows function definition
-                        IDictionary<int,string> accessMap,
-                        IDictionary<int,string> callMap, ISet<int> returnSet)
-     :base(uniqueName) {
+                               Dictionary<int, string> accessMap,
+                       Dictionary<int, string> callMap, HashSet<int> returnSet)
+     : base(uniqueName) {
       m_byteList = byteList;
       m_accessMap = accessMap;
       m_callMap = callMap;
@@ -78,7 +78,7 @@ namespace CCompiler {
     public override void Read(BinaryReader inStream) {
       base.Read(inStream);
 
-      { m_byteList = new List<byte>();
+      { m_byteList = new();
         int byteListSize = inStream.ReadInt32();
 
         for (int index = 0; index < byteListSize; ++index) {
@@ -87,7 +87,7 @@ namespace CCompiler {
         }
       }
     
-      { m_accessMap = new Dictionary<int,string>();
+      { m_accessMap = new();
         int accessMapSize = inStream.ReadInt32();
         for (int index = 0; index < accessMapSize; ++index) {
           int address = inStream.ReadInt32();
@@ -96,7 +96,7 @@ namespace CCompiler {
         }
       }
     
-      { m_callMap = new Dictionary<int,string>();
+      { m_callMap = new();
         int callMapSize = inStream.ReadInt32();
         for (int index = 0; index < callMapSize; ++index) {
           int address = inStream.ReadInt32();
@@ -105,7 +105,7 @@ namespace CCompiler {
         }
       }
     
-      { m_returnSet = new HashSet<int>();
+      { m_returnSet = new();
         int returnSetSize = inStream.ReadInt32();
         for (int index = 0; index < returnSetSize; ++index) {
           int address = inStream.ReadInt32();

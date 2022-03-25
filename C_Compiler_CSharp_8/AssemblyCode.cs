@@ -441,7 +441,7 @@ namespace CCompiler {
         return register;
       }
       else {
-        PairX<Register,int> pair = new PairX<Register,int>(register, size);
+        PairX<Register,int> pair = new(register, size);
         Error.ErrorXXX(m_registerToSizeMap.ContainsKey(pair));
         return m_registerToSizeMap[pair];
       }
@@ -745,7 +745,7 @@ namespace CCompiler {
     }
 
     private static string ToVisibleString(string text) {
-      StringBuilder buffer = new StringBuilder();
+      StringBuilder buffer = new();
       bool insideString = false;
 
       foreach (char c in text) {
@@ -809,7 +809,7 @@ namespace CCompiler {
       }
       else if (Operator == AssemblyOperator.define_address) {
         int offset = (int) operand1;
-        List<byte> byteList = new List<byte>(new byte[TypeSize.PointerSize]);
+        List<byte> byteList = new(new byte[TypeSize.PointerSize]);
         LoadByteList(byteList, 0, TypeSize.PointerSize, (BigInteger)offset); 
         return byteList;
       }
@@ -824,7 +824,7 @@ namespace CCompiler {
 
         if (sort == Sort.Float) {
           float floatValue = (float) ((decimal) operand0);
-          byteList =  new List<byte>(BitConverter.GetBytes(floatValue));
+          byteList = new(BitConverter.GetBytes(floatValue));
         }
         else if ((sort == Sort.Double) || (sort == Sort.LongDouble)) {
           double doubleValue = (double) ((decimal) value);
@@ -832,7 +832,7 @@ namespace CCompiler {
         }
         else if (sort == Sort.String) {
           string text = (string) value;
-          byteList = new List<byte>();
+          byteList = new();
 
           foreach (char c in text) {
             byteList.Add((byte) c);
@@ -842,7 +842,7 @@ namespace CCompiler {
         }
         else {
           int size = TypeSize.Size(sort);
-          byteList = new List<byte>(new byte[size]);
+          byteList = new(new byte[size]);
           
           if (value is StaticAddress staticAddress) {
             LoadByteList(byteList, 0, size,
@@ -1256,7 +1256,7 @@ namespace CCompiler {
       //  (objectOp, operand0, operand1, operand2);
       byte[] byteArray = ObjectCodeTable.MainArrayMap[info];
       Error.ErrorXXX(byteArray != null);
-      List<byte> byteList = new List<byte>();
+      List<byte> byteList = new();
 
       foreach (byte b in byteArray) {
         byteList.Add(b);

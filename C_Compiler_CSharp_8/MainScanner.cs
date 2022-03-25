@@ -6,9 +6,9 @@
 //
 //  GPLEX Version:  1.2.2
 //  Machine:  LAPTOP-7Q575VHS
-//  DateTime: 23/03/2022 16:07:25
+//  DateTime: 25/03/2022 13:02:26
 //  UserName: stefa
-//  GPLEX input file <MainScanner.gplex - 23/03/2022 16:07:20>
+//  GPLEX input file <MainScanner.gplex - 25/03/2022 12:49:12>
 //  GPLEX frame file <embedded resource>
 //
 //  Option settings: parser, minimize
@@ -157,7 +157,7 @@ FLOATING_VALUE {DECIMAL_PART}{EXPONENT_PART}*/
         int tokELin;       // line number at end of token
         string tokTxt;     // lazily constructed text of token
 #if STACK          
-        private Stack<int> scStack = new Stack<int>();
+        private Stack<int> scStack = new();
 #endif // STACK
 
 #region ScannerTables
@@ -2149,13 +2149,13 @@ return ((int) Tokens.DIVIDE);
   
     try {
       ulong unsignedValue = Convert.ToUInt64(text, fromBase);
-      BigInteger bigValue = new BigInteger(unsignedValue);
+      BigInteger bigValue = new(unsignedValue);
 
       if (minus) {
         bigValue = -bigValue;
       }
 
-      yylval.symbol = new Symbol(type, bigValue);
+      yylval.symbol = new(type, bigValue);
       /*yylval.symbol.StaticSymbol =
         ConstantExpression.Value(yylval.symbol.UniqueName, type, bigValue);
       SymbolTable.StaticSet.Add(yylval.symbol.StaticSymbol);*/
@@ -2391,7 +2391,7 @@ return ((int) Tokens.LEFT_SHIFT_ASSIGN);
 
     try {
       decimal value = decimal.Parse(text, NumberStyles.Float);
-      yylval.symbol = new Symbol(type, value);
+      yylval.symbol = new(type, value);
       /*yylval.symbol.StaticSymbol =
         ConstantExpression.Value(yylval.symbol.UniqueName, type, value);
       SymbolTable.StaticSet.Add(yylval.symbol.StaticSymbol);*/
@@ -2432,7 +2432,7 @@ return ((int) Tokens.MULTIPLY_ASSIGN);
 { CCompiler.Type type = new CCompiler.Type (Sort.SignedChar);
     string text = Slash.SlashToChar(yytext);
     Error.Check(text.Length == 3, yytext, Message.Invalid_char_sequence);
-    yylval.symbol = new Symbol(type, (BigInteger) ((int) text[1]));
+    yylval.symbol = new(type, (BigInteger) ((int) text[1]));
     return ((int) Tokens.VALUE);
   }
             break;
@@ -2448,7 +2448,7 @@ return ((int) Tokens.MODULO_ASSIGN);
         case 247:
 { string text = yytext.Substring(1, yyleng - 2);
     int index = text.IndexOf(',');
-    Path = new FileInfo(text.Substring(0, index).Replace("+", " "));
+    Path = new(text.Substring(0, index).Replace("+", " "));
     Line = int.Parse(text.Substring(index + 1));
   }
             break;
@@ -2457,7 +2457,7 @@ return ((int) Tokens.MODULO_ASSIGN);
 { CCompiler.Type type = new CCompiler.Type (Sort.String);
     string text = Slash.SlashToChar(yytext);
     object value = text.Substring(1, text.Length - 2);
-    yylval.symbol = new Symbol(type, value);
+    yylval.symbol = new(type, value);
     SymbolTable.StaticSet.Add(ConstantExpression.Value(yylval.symbol));
     return ((int) Tokens.VALUE);
   }

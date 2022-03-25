@@ -110,12 +110,12 @@ namespace CCompiler {
         MiddleCode testCode =
           new MiddleCode(MiddleOperator.NotEqual, null,
                          sourceSymbol, zeroSymbol);
-        ISet<MiddleCode> trueSet = new HashSet<MiddleCode>();
+        HashSet<MiddleCode> trueSet = new();
         trueSet.Add(testCode);
         longList.Add(testCode);
 
         MiddleCode gotoCode = new MiddleCode(MiddleOperator.Jump);
-        ISet<MiddleCode> falseSet = new HashSet<MiddleCode>();
+        HashSet<MiddleCode> falseSet = new();
         falseSet.Add(gotoCode);
         longList.Add(gotoCode);
 

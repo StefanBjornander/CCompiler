@@ -28,7 +28,7 @@ namespace CCompiler {
                          Message.Too_many_initializers_in_array);
           }
 
-          List<object> list = new List<object>();
+          List<object> list = new();
 
           foreach (char c in text) {
             Symbol charSymbol =
@@ -54,7 +54,7 @@ namespace CCompiler {
               }
 
               for (int index = 0; index < fromList.Count; ++index) {
-                Symbol indexSymbol = new Symbol(toType.ArrayType);
+                Symbol indexSymbol = new(toType.ArrayType);
                 indexSymbol.Storage = toSymbol.Storage;
                 indexSymbol.Offset = toSymbol.Offset +
                                     (index * toType.ArrayType.Size());
@@ -80,7 +80,7 @@ namespace CCompiler {
               int initSize = 0;
               for (int index = 0; index < fromList.Count; ++index) {
                 Symbol memberSymbol = memberList[index];
-                Symbol subSymbol = new Symbol(memberList[index].Type);
+                Symbol subSymbol = new(memberList[index].Type);
                 subSymbol.Storage = toSymbol.Storage;
                 subSymbol.Name = $"{toSymbol.Name}.{memberSymbol.Name}";
                 subSymbol.Offset = toSymbol.Offset + memberSymbol.Offset;
@@ -102,7 +102,7 @@ namespace CCompiler {
               Error.Check(fromList.Count == 1, toType,
                           Message.Only_one_Initlizer_allowed_in_unions);
               Symbol memberSymbol = memberList[0];
-              Symbol subSymbol = new Symbol(memberSymbol.Type);
+              Symbol subSymbol = new(memberSymbol.Type);
               subSymbol.Storage = toSymbol.Storage;
               subSymbol.Name = $"{toSymbol.Name}.{memberSymbol.Name}";
               subSymbol.Offset = toSymbol.Offset;

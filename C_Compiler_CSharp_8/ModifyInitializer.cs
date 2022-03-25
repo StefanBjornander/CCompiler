@@ -11,7 +11,7 @@ using System.Collections.Generic;
 namespace CCompiler {
   class ModifyInitializer {
     public static List<object> ModifyArray(Type type, List<object> list) {
-      IDictionary<int,int> dimensionToSizeMap = new Dictionary<int,int>();
+      Dictionary<int,int> dimensionToSizeMap = new();
       int maxDimension = DimensionToSizeMap(type, dimensionToSizeMap);
       IDictionary<object,int> initializerToDimensionMap =
         new Dictionary<object,int>();
@@ -19,7 +19,7 @@ namespace CCompiler {
 
       for (int dimension = 1; dimension < maxDimension; ++dimension) {
         List<object> totalList =
-          new List<object>(), currentList = new List<object>();
+          new List<object>(), currentList = new();
         int arraySize = dimensionToSizeMap[dimension];
         Error.ErrorXXX(arraySize > 0);
 
@@ -34,13 +34,13 @@ namespace CCompiler {
             }
 
             totalList.Add(member);
-            currentList = new List<object>();
+            currentList = new();
           }
 
           if (currentList.Count == arraySize) {
             initializerToDimensionMap[currentList] = dimension;
             totalList.Add(currentList);
-            currentList = new List<object>();
+            currentList = new();
           }
         }
 

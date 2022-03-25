@@ -24,7 +24,7 @@ namespace CCompiler {
     }  
 
     public object Clone() {
-      Token token = new Token(m_id, m_value);
+      Token token = new(m_id, m_value);
       token.m_newlineCount = 0;
       return token;
     }
@@ -44,7 +44,7 @@ namespace CCompiler {
     }
   
     public string ToNewlineString() {
-      StringBuilder buffer = new StringBuilder();
+      StringBuilder buffer = new();
       
       if (m_newlineCount > 0) {
         for (int count = 0; count < m_newlineCount; ++count) {

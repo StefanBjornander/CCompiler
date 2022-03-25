@@ -5,13 +5,13 @@ using System.Collections.Generic;
 
 namespace CCompiler {
   public class AssemblyCodeGenerator {
-    public IDictionary<Symbol,Track> m_trackMap =
+    public Dictionary<Symbol, Track> m_trackMap =
       new Dictionary<Symbol,Track>();
     public List<AssemblyCode> m_assemblyCodeList;
 
     private int m_floatStackSize = 0;
     public const int FloatingStackMaxSize = 7;
-    private Stack<int> m_topStack = new Stack<int>();
+    private Stack<int> m_topStack = new();
 
     //public static string MainName = "main";
     public static string InitializerName = $"{Symbol.SeparatorId}initializer";
@@ -371,7 +371,7 @@ namespace CCompiler {
     // Track Set Generation
 
     private ISet<Track> TrackSet() {
-      ISet<Track> trackSet = new HashSet<Track>();
+      HashSet<Track> trackSet = new();
 
       for (int index = 0; index < m_assemblyCodeList.Count; ++index) {
         AssemblyCode assemblyCode = m_assemblyCodeList[index];
@@ -419,11 +419,11 @@ namespace CCompiler {
     }
 
     private int m_totalExtraSize = 0;
-    private Stack<int> m_recordSizeStack = new Stack<int>();
-    private Stack<IDictionary<Symbol, Track>> m_trackMapStack =
-      new Stack<IDictionary<Symbol, Track>>();
-    private Stack<IDictionary<Track,int>> m_registerMapStack =
-      new Stack<IDictionary<Track,int>>();
+    private Stack<int> m_recordSizeStack = new();
+    private Stack<Dictionary<Symbol, Track>> m_trackMapStack =
+      new Stack<Dictionary<Symbol, Track>>();
+    private Stack<Dictionary<Track, int>> m_registerMapStack =
+      new Stack<Dictionary<Track, int>>();
 
     public void FunctionPreCall(MiddleCode middleCode) {
       Register baseRegister = BaseRegister(null);
@@ -436,7 +436,7 @@ namespace CCompiler {
       }
       extraSize += totalSize * doubleTypeSize;
 
-      IDictionary<Track,int> registerMap = new Dictionary<Track,int>();
+      Dictionary<Track,int> registerMap = new();
       foreach (KeyValuePair<Symbol, Track> pair in m_trackMap) {
         Track track = pair.Value;
         AddAssemblyCode(AssemblyOperator.mov, baseRegister,
@@ -459,7 +459,7 @@ namespace CCompiler {
       m_totalExtraSize += extraSize;
       m_trackMapStack.Push(m_trackMap);
       m_registerMapStack.Push(registerMap);
-      m_trackMap = new Dictionary<Symbol, Track>();
+      m_trackMap = new();
     }
 
     private Type m_returnType = null;
@@ -543,7 +543,7 @@ namespace CCompiler {
           Track track = pair.Key;
 
           if (AssemblyCode.RegisterOverlap(track.Register, AssemblyCode.ReturnValueRegister)) {
-            m_returnTrack = new Track(m_returnType);
+            m_returnTrack = new(m_returnType);
             Register returnRegister = AssemblyCode.RegisterToSize(AssemblyCode.ReturnValueRegister, m_returnType.ReturnSize());
             AddAssemblyCode(AssemblyOperator.comment, "XXX");
             AddAssemblyCode(AssemblyOperator.mov, m_returnTrack, returnRegister);
@@ -560,7 +560,7 @@ namespace CCompiler {
           Track track = pair.Key;
 
           if (AssemblyCode.RegisterOverlap(track.Register, AssemblyCode.ReturnValueRegister)) {
-            m_returnTrack = new Track(m_returnType);
+            m_returnTrack = new(m_returnType);
             Register returnRegister = AssemblyCode.RegisterToSize(AssemblyCode.ReturnValueRegister, m_returnType.ReturnSize());
             AddAssemblyCode(AssemblyOperator.mov, m_returnTrack, returnRegister);
           }
@@ -570,7 +570,7 @@ namespace CCompiler {
         }
 
         if (m_returnTrack == null) {
-          m_returnTrack = new Track(m_returnType);
+          m_returnTrack = new(m_returnType);
           m_returnTrack.Register = AssemblyCode.RegisterToSize(AssemblyCode.ReturnValueRegister, m_returnType.ReturnSize());
         }
       }
@@ -628,7 +628,7 @@ namespace CCompiler {
 
         if ((register != null) && (track.Register != null) &&
             !AssemblyCode.RegisterOverlap(register, track.Register)) {
-          Track newTrack = new Track(symbol, register.Value);
+          Track newTrack = new(symbol, register.Value);
           AddAssemblyCode(AssemblyOperator.set_track_size,
                           newTrack, track);
           AddAssemblyCode(AssemblyOperator.mov, newTrack, track);
@@ -643,7 +643,7 @@ namespace CCompiler {
         }
       }
       else {
-        track = new Track(symbol, register);
+        track = new(symbol, register);
         //Error.ErrorXXX(!(symbol.Type.IsFunction()));
 
         if (symbol.Value is BigInteger)  {
@@ -676,7 +676,7 @@ namespace CCompiler {
 
         if (!oldSymbol.Equals(symbol) &&
             AssemblyCode.RegisterOverlap(register, oldTrack.Register)) {
-          Track newTrack = new Track(oldSymbol);
+          Track newTrack = new(oldSymbol);
           m_trackMap[oldSymbol] = newTrack;
 
           int lastLine;
@@ -709,8 +709,8 @@ namespace CCompiler {
         return addressTrack;
       }
       else {
-        Symbol addressSymbol = new Symbol(new Type(symbol.Type));
-        Track addressTrack = new Track(addressSymbol, register);
+        Symbol addressSymbol = new(new Type(symbol.Type));
+        Track addressTrack = new(addressSymbol, register);
         Error.ErrorXXX((addressTrack.Register == null) ||
                         RegisterAllocator.VariadicFunctionPointerRegisterSet.
                         Contains(addressTrack.Register.Value));
@@ -768,7 +768,7 @@ namespace CCompiler {
     }
 
     private void Return() {
-      Track track = new Track(Type.VoidPointerType);
+      Track track = new(Type.VoidPointerType);
       AddAssemblyCode(AssemblyOperator.mov, track,
                   AssemblyCode.RegularFrameRegister,
                   SymbolTable.ReturnAddressOffset);
@@ -797,7 +797,7 @@ namespace CCompiler {
           AssemblyCode.RegisterToSize(AssemblyCode.ReturnValueRegister,
                                       returnSymbol.Type.Size());
 //        CheckRegister(returnSymbol, returnRegister);
-        Track returnTrack = new Track(returnSymbol, returnRegister);
+        Track returnTrack = new(returnSymbol, returnRegister);
         m_trackMap.Add(returnSymbol, returnTrack);
         AddAssemblyCode(AssemblyOperator.empty, returnTrack);
       }*/
@@ -846,7 +846,7 @@ namespace CCompiler {
 
     private void StackTop(MiddleCode middleCode) {
       Symbol symbol = (Symbol) middleCode[0];
-      Track track = new Track(symbol);
+      Track track = new(symbol);
       m_trackMap.Add(symbol, track);
       AddAssemblyCode(AssemblyOperator.mov, track, Linker.StackStart);
     }
@@ -858,7 +858,7 @@ namespace CCompiler {
     
     // Load and Inspect Registers --------------------------------------------------------------------------
     
-    private ISet<Track> m_syscallSet = new HashSet<Track>();
+    private HashSet<Track> m_syscallSet = new();
 
     public void LoadToRegister(MiddleCode middleCode) {
       Register register = (Register) middleCode[0];
@@ -870,7 +870,7 @@ namespace CCompiler {
     public void InspectRegister(MiddleCode middleCode) {
       Symbol symbol = (Symbol) middleCode[0];
       Register register = (Register) middleCode[1];
-      Track track = new Track(symbol, register);
+      Track track = new(symbol, register);
       m_trackMap.Add(symbol, track);
     }
   
@@ -980,7 +980,7 @@ namespace CCompiler {
 
     public void IntegralParameter(MiddleCode middleCode) {
       Type toType = (Type) middleCode[1];
-      Symbol toSymbol = new Symbol(null, false, Storage.Auto, toType);
+      Symbol toSymbol = new(null, false, Storage.Auto, toType);
       Symbol fromSymbol = (Symbol) middleCode[2];
       int parameterOffset = (int) middleCode[0];
       toSymbol.Offset = m_totalExtraSize + parameterOffset;
@@ -1002,7 +1002,7 @@ namespace CCompiler {
         }*/
 
         if (resultTrack == null) {
-          resultTrack = new Track(resultSymbol);
+          resultTrack = new(resultSymbol);
           m_trackMap.Add(resultSymbol, resultTrack);
         }
 
@@ -1039,7 +1039,7 @@ namespace CCompiler {
         }
         else {
           if (resultTrack == null) {
-            resultTrack = new Track(resultSymbol);
+            resultTrack = new(resultSymbol);
             m_trackMap.Add(resultSymbol, resultTrack);
           }
           
@@ -1077,7 +1077,7 @@ namespace CCompiler {
         else if (assignSymbol.Value is BigInteger bigValue) {
           if (Start.Linux &&
               !((-2147483648 <= bigValue) && (bigValue <= 2147483647))) {
-            assignTrack = new Track(assignSymbol);
+            assignTrack = new(assignSymbol);
             AddAssemblyCode(AssemblyOperator.mov, assignTrack, assignSymbol.Value);
             AddAssemblyCode(AssemblyOperator.mov, Base(resultSymbol),
                             Offset(resultSymbol), assignTrack);
@@ -1128,7 +1128,7 @@ namespace CCompiler {
         /*else if (assignSymbol.AddressSymbol != null) {
           Track addressTrack = LoadValueToRegister(assignSymbol.AddressSymbol);
           addressTrack.Pointer = true;
-          assignTrack = new Track(assignSymbol);
+          assignTrack = new(assignSymbol);
           AddAssemblyCode(AssemblyOperator.mov, assignTrack,
                           addressTrack, assignSymbol.AddressOffset);
           AddAssemblyCode(AssemblyOperator.mov, Base(resultSymbol),
@@ -1264,7 +1264,7 @@ namespace CCompiler {
       Track leftTrack = LoadValueToRegister(leftSymbol, leftRegister);
 
       Register zeroRegister = m_zeroRegisterMap[typeSize];
-      Track zeroTrack = new Track(leftSymbol, zeroRegister);
+      Track zeroTrack = new(leftSymbol, zeroRegister);
       AddAssemblyCode(AssemblyOperator.xor, zeroTrack, zeroTrack);
 
       Symbol rightSymbol = (Symbol) middleCode[2];
@@ -1281,7 +1281,7 @@ namespace CCompiler {
       }
 
       Symbol resultSymbol = (Symbol) middleCode[0];
-      Track resultTrack = new Track(resultSymbol, resultRegister);
+      Track resultTrack = new(resultSymbol, resultRegister);
 
       if (resultSymbol.IsTemporary()) {        
         Error.ErrorXXX(resultSymbol.AddressSymbol == null);
@@ -1293,7 +1293,7 @@ namespace CCompiler {
                         Offset(resultSymbol), resultTrack);
       }
 
-      Track discaredTrack = new Track(resultSymbol, discardRegister);
+      Track discaredTrack = new(resultSymbol, discardRegister);
       AddAssemblyCode(AssemblyOperator.empty, discaredTrack);
     }
 
@@ -1427,7 +1427,7 @@ namespace CCompiler {
         }
         else {
           if (middleOperator == MiddleOperator.Assign) {
-            leftTrack = new Track(resultSymbol);
+            leftTrack = new(resultSymbol);
           }
 
           AddAssemblyCode(objectOperator, leftTrack,
@@ -1534,7 +1534,7 @@ namespace CCompiler {
 
     public static IDictionary<MiddleOperator, AssemblyOperator>
       m_middleToFloatingMap =
-        new Dictionary<MiddleOperator, AssemblyOperator>() {
+        new Dictionary<MiddleOperator,AssemblyOperator>() {
           {MiddleOperator.Minus, AssemblyOperator.fchs},
           {MiddleOperator.Add, AssemblyOperator.fadd},
           {MiddleOperator.Subtract, AssemblyOperator.fsub},
@@ -1560,7 +1560,7 @@ namespace CCompiler {
 
     public void FloatingParameter(MiddleCode middleCode) {
       Type paramType = (Type) middleCode[1];
-      Symbol paramSymbol = new Symbol(paramType);
+      Symbol paramSymbol = new(paramType);
       int paramOffset = (int) middleCode[0];
       paramSymbol.Offset = m_totalExtraSize + paramOffset;
       TopPopSymbol(paramSymbol, TopOrPop.Pop);
@@ -1583,7 +1583,7 @@ namespace CCompiler {
     // Floating Push and Pop
 
     /*public static IDictionary<(bool, int), AssemblyOperator>
-      m_floatPushMapX = new Dictionary<(bool, int), AssemblyOperator>() {
+      m_floatPushMapX = new(bool, int), AssemblyOperator>() {
         {(false, 2), AssemblyOperator.fild_word},
         {(false, 4), AssemblyOperator.fild_dword},
         {(false, 8), AssemblyOperator.fild_qword},
@@ -1721,7 +1721,7 @@ namespace CCompiler {
       if (symbol.Type.IsIntegralPointerOrArray() && symbol.IsTemporary()) {        
         string containerName = AddStaticContainer(symbol.Type);
         AddAssemblyCode(objectOperator, containerName, 0);
-        Track track = new Track(symbol);
+        Track track = new(symbol);
         AddAssemblyCode(AssemblyOperator.mov, track, containerName, 0);
         m_trackMap.Add(symbol, track);
       }
@@ -1746,7 +1746,7 @@ namespace CCompiler {
       if (fromSize != toSize) {
         if (fromSize < toSize) {
           if (toSize == 8) {
-            Track toTrack = new Track(toSymbol);
+            Track toTrack = new(toSymbol);
             AddAssemblyCode(AssemblyOperator.mov, toTrack,
                             TypeSize.GetMask(fromType.Sort));
             AddAssemblyCode(AssemblyOperator.and, fromTrack, toTrack);
@@ -1796,7 +1796,7 @@ namespace CCompiler {
     public void StructUnionParameterInit(MiddleCode middleCode) {
       int paramOffset = (int) middleCode[0];
       Symbol sourceSymbol = (Symbol) middleCode[2];
-      Symbol targetSymbol = new Symbol(Type.IntegerPointerType);
+      Symbol targetSymbol = new(Type.IntegerPointerType);
       targetSymbol.Offset = m_totalExtraSize + paramOffset;
       MemoryCopyInit(targetSymbol, sourceSymbol);
     }
@@ -1828,12 +1828,12 @@ namespace CCompiler {
       int size = sourceSymbol.Type.Size();
       Type countType = (size < 256) ? Type.UnsignedCharType
                                     : Type.UnsignedIntegerType;
-      m_countTrack = new Track(countType);
+      m_countTrack = new(countType);
       AddAssemblyCode(AssemblyOperator.mov, m_countTrack, (BigInteger) size);
     }
 
     private void MemoryCopyLoop(int middleIndex) {
-      Track valueTrack = new Track(Type.UnsignedCharType);
+      Track valueTrack = new(Type.UnsignedCharType);
       AddAssemblyCode(AssemblyOperator.mov, valueTrack,
                       m_sourceAddressTrack, 0);
       AddAssemblyCode(AssemblyOperator.mov, m_targetAddressTrack,
@@ -1848,7 +1848,7 @@ namespace CCompiler {
     // Initialization Code
 
     public static void InitializationCodeList() {
-      List<AssemblyCode> assemblyCodeList = new List<AssemblyCode>();
+      List<AssemblyCode> assemblyCodeList = new();
       AddAssemblyCode(assemblyCodeList, AssemblyOperator.label, "_start");
       AddAssemblyCode(assemblyCodeList, AssemblyOperator.comment,
                       "Initializerialize Stack Pointer");
@@ -1879,9 +1879,9 @@ namespace CCompiler {
                         Linker.StackStart, 0, BigInteger.Zero,
                         TypeSize.PointerSize);
 
-        List<string> textList = new List<string>();
+        List<string> textList = new();
         textList.Add("section .text");
-        ISet<string> externSet = new HashSet<string>();
+        HashSet<string> externSet = new();
         AssemblyCodeGenerator.LinuxTextList(assemblyCodeList, textList,
                                             externSet);
         SymbolTable.InitSymbol =
@@ -1903,10 +1903,10 @@ namespace CCompiler {
                         Linker.StackStart, 0, BigInteger.Zero,
                         TypeSize.PointerSize);
 
-        List<byte> byteList = new List<byte>();
-        IDictionary<int, string> accessMap = new Dictionary<int, string>();
-        IDictionary<int, string> callMap = new Dictionary<int, string>();
-        ISet<int> returnSet = new HashSet<int>();
+        List<byte> byteList = new();
+        Dictionary<int,string> accessMap = new();
+        Dictionary<int,string> callMap = new();
+        HashSet<int> returnSet = new();
         AssemblyCodeGenerator.GenerateTargetWindows(assemblyCodeList,
                               byteList, accessMap, callMap, returnSet);
         StaticSymbol staticSymbol =
@@ -1919,7 +1919,7 @@ namespace CCompiler {
     // Command Line Arguments
 
     public static void ArgumentCodeList() {
-      List<AssemblyCode> assemblyCodeList = new List<AssemblyCode>();
+      List<AssemblyCode> assemblyCodeList = new();
 
       if (Start.Linux) {
         /*  pop rbx
@@ -1976,8 +1976,8 @@ namespace CCompiler {
              mov qword [rbp], 0
              add rbp, 8 */
 
-        List<string> textList = new List<string>();
-        ISet<string> externSet = new HashSet<string>();
+        List<string> textList = new();
+        HashSet<string> externSet = new();
         AssemblyCodeGenerator.LinuxTextList(assemblyCodeList, textList,
                                             externSet);
         SymbolTable.ArgsSymbol =
@@ -2086,10 +2086,10 @@ namespace CCompiler {
         AddAssemblyCode(assemblyCodeList, AssemblyOperator.mov,
                         Register.bp, 8, Register.si);
 
-        List<byte> byteList = new List<byte>();
-        IDictionary<int, string> accessMap = new Dictionary<int, string>();
-        IDictionary<int, string> callMap = new Dictionary<int, string>();
-        ISet<int> returnSet = new HashSet<int>();
+        List<byte> byteList = new();
+        Dictionary<int,string> accessMap = new();
+        Dictionary<int,string> callMap = new();
+        HashSet<int> returnSet = new();
         AssemblyCodeGenerator.
           GenerateTargetWindows(assemblyCodeList, byteList,
                                 accessMap, callMap, returnSet);
@@ -2160,7 +2160,7 @@ namespace CCompiler {
 // Jump Info
 
         /*private void WindowsJumpInfo() {
-          IDictionary<int,int> middleToAssemblyMap = new Dictionary<int,int>();
+          Dictionary<int,int> middleToAssemblyMap = new();
 
           for (int assemblyIndex = 0;
                assemblyIndex < m_assemblyCodeList.Count; ++assemblyIndex) {
@@ -2185,7 +2185,7 @@ namespace CCompiler {
             }
           }
 
-          IDictionary<int,int> assemblyToByteMap = new Dictionary<int,int>();
+          Dictionary<int,int> assemblyToByteMap = new();
 
           { int byteSize = 0, line = 0;
             foreach (AssemblyCode assemblyCode in m_assemblyCodeList) {
@@ -2230,7 +2230,7 @@ namespace CCompiler {
         }*/
 
     private void WindowsJumpInfo() {
-      IDictionary<int,int> middleToAssemblyMap = new Dictionary<int,int>();
+      Dictionary<int,int> middleToAssemblyMap = new();
 
       for (int assemblyIndex = 0;
            assemblyIndex < m_assemblyCodeList.Count; ++assemblyIndex) {
@@ -2254,7 +2254,7 @@ namespace CCompiler {
         }
       }
 
-      IDictionary<int,int> assemblyToByteMap = new Dictionary<int,int>();
+      Dictionary<int,int> assemblyToByteMap = new();
 
       { int byteSize = 0, line = 0;
         foreach (AssemblyCode assemblyCode in m_assemblyCodeList) {

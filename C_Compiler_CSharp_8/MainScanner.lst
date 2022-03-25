@@ -4,16 +4,14 @@
 // ==========================================================================
 //  Version:  1.2.2
 //  Machine:  LAPTOP-7Q575VHS
-//  DateTime: 23/03/2022 12:13:33
+//  DateTime: 25/03/2022 12:47:38
 //  UserName: stefa
 // ==========================================================================
 
 
 %namespace CCompiler_Main
 
-%//using CCompiler;
-// Error: Illegal character in this context
-// ----------------------------------------
+%using CCompiler;
 %using System.Numerics;
 
 %{
@@ -244,19 +242,22 @@ WHITE_SPACE [ \t\r\n\f]
   
     try {
       ulong unsignedValue = Convert.ToUInt64(text, fromBase);
-      BigInteger bigValue = new BigInteger(unsignedValue);
+      BigInteger bigValue = new(unsignedValue);
 
       if (minus) {
         bigValue = -bigValue;
       }
 
-      yylval.symbol = new Symbol(type, bigValue);
+      yylval.symbol = new(type, bigValue);
       /*yylval.symbol.StaticSymbol =
         ConstantExpression.Value(yylval.symbol.UniqueName, type, bigValue);
       SymbolTable.StaticSet.Add(yylval.symbol.StaticSymbol);*/
     }
     catch (OverflowException) {
-      Error.Report(type + ": " + text, Message.Value_overflow);
+      Error.Report($"{type}: {text}", Message.Value_overflow);
+//-----------------^
+// Error: Illegal character in this context
+// ----------------------------------------
     }
 
     return ((int) Tokens.VALUE);
@@ -281,13 +282,16 @@ WHITE_SPACE [ \t\r\n\f]
 
     try {
       decimal value = decimal.Parse(text, NumberStyles.Float);
-      yylval.symbol = new Symbol(type, value);
+      yylval.symbol = new(type, value);
       /*yylval.symbol.StaticSymbol =
         ConstantExpression.Value(yylval.symbol.UniqueName, type, value);
       SymbolTable.StaticSet.Add(yylval.symbol.StaticSymbol);*/
     }
     catch (OverflowException) {
-      Error.Report(type + ": " + text, Message.Value_overflow);
+      Error.Report($"{type}: {text}", Message.Value_overflow);
+//-----------------^
+// Error: Illegal character in this context
+// ----------------------------------------
     }
 
     return ((int) Tokens.VALUE);
@@ -295,19 +299,19 @@ WHITE_SPACE [ \t\r\n\f]
 }
 
 {CHAR_VALUE} {
-  { CCompiler.Type type = new CCompiler.Type(Sort.SignedChar);
+  { CCompiler.Type type = new CCompiler.Type (Sort.SignedChar);
     string text = Slash.SlashToChar(yytext);
     Error.Check(text.Length == 3, yytext, Message.Invalid_char_sequence);
-    yylval.symbol = new Symbol(type, (BigInteger) ((int) text[1]));
+    yylval.symbol = new(type, (BigInteger) ((int) text[1]));
     return ((int) Tokens.VALUE);
   }
 }
 
 {STRING_VALUE} {
-  { CCompiler.Type type = new CCompiler.Type(Sort.String);
+  { CCompiler.Type type = new CCompiler.Type (Sort.String);
     string text = Slash.SlashToChar(yytext);
     object value = text.Substring(1, text.Length - 2);
-    yylval.symbol = new Symbol(type, value);
+    yylval.symbol = new(type, value);
     SymbolTable.StaticSet.Add(ConstantExpression.Value(yylval.symbol));
     return ((int) Tokens.VALUE);
   }
@@ -316,7 +320,7 @@ WHITE_SPACE [ \t\r\n\f]
 {PATH_LINE} {
   { string text = yytext.Substring(1, yyleng - 2);
     int index = text.IndexOf(',');
-    Path = new FileInfo(text.Substring(0, index).Replace("+", " "));
+    Path = new(text.Substring(0, index).Replace("+", " "));
     Line = int.Parse(text.Substring(index + 1));
   }
 }

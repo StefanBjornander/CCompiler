@@ -43,8 +43,8 @@ namespace CCompiler {
         m_totalSize += argsInfo.ByteList.Count;
         m_addressMap.Add(AssemblyCodeGenerator.ArgsName, 0);
 
-        List<byte> byteList = new List<byte>();
-        IDictionary<int, string> accessMap = new Dictionary<int, string>();
+        List<byte> byteList = new();
+        Dictionary<int, string> accessMap = new();
         pathNameSymbol = (StaticSymbolWindows)
           ConstantExpression.Value(AssemblyCodeGenerator.PathName,
                                    Type.StringType, @"C:\D\Main.com");
@@ -157,7 +157,7 @@ namespace CCompiler {
       }
     }
 
-    /*private void GenerateCallX(int startAddress, IDictionary<int, string> callMap,
+    /*private void GenerateCallX(int startAddress, IDictionary<int,string> callMap,
                               List<byte> byteList) {
       const byte NopOperator = -112 + 256;
       const byte ShortJumpOperator = -21 + 256;
@@ -186,7 +186,7 @@ namespace CCompiler {
     }*/
 
     private void GenerateCall(int startAddress,
-                              IDictionary<int, string> callMap,
+                              IDictionary<int,string> callMap,
                               List<byte> byteList) {
       const byte NopOperator = -112 + 256;
       const byte ShortJumpOperator = -21 + 256;

@@ -5,7 +5,7 @@ namespace CCompiler {
   public class RegisterAllocator {
     public RegisterAllocator(ISet<Track> totalTrackSet,
                              List<AssemblyCode> assemblyCodeList) {
-      Graph<Track> totalTrackGraph = new Graph<Track>(totalTrackSet);
+      Graph<Track> totalTrackGraph = new(totalTrackSet);
 
       foreach (Track track1 in totalTrackSet) {
         foreach (Track track2 in totalTrackSet) {
@@ -17,7 +17,7 @@ namespace CCompiler {
 
       ISet<Graph<Track>> split = totalTrackGraph.Split();
       foreach (Graph<Track> trackGraph in split) {
-        List<Track> trackList = new List<Track>(trackGraph.VertexSet);
+        List<Track> trackList = new(trackGraph.VertexSet);
         Error.Check(DeepFirstSearch(trackList, 0, trackGraph),
                     Message.Out_of_registers);
       }

@@ -10,7 +10,7 @@ namespace CCompiler {
     public static MiddleCode AddMiddleCode(List<MiddleCode> codeList,
                                MiddleOperator op, object operand0 = null,
                                object operand1 = null, object operand2 = null) {
-      MiddleCode middleCode = new MiddleCode(op, operand0, operand1, operand2);
+      MiddleCode middleCode = new(op, operand0, operand1, operand2);
       codeList.Add(middleCode);
       return middleCode;
     }
@@ -18,7 +18,7 @@ namespace CCompiler {
     public static MiddleCode InsertMiddleCode(int index, List<MiddleCode> codeList,
                                MiddleOperator op, object operand0 = null,
                                object operand1 = null, object operand2 = null) {
-      MiddleCode middleCode = new MiddleCode(op, operand0, operand1, operand2);
+      MiddleCode middleCode = new(op, operand0, operand1, operand2);
       codeList.Insert(index, middleCode);
       return middleCode;
     }
@@ -158,7 +158,7 @@ namespace CCompiler {
           SymbolTable.CurrentFunction.Name.Equals("printLongDoubleFraction")) {
         string name = @"C:\Users\Stefa\Documents\vagrant\homestead\code\code\" +
                       SymbolTable.CurrentFunction.Name + ".middlebefore";
-        StreamWriter streamWriter = new StreamWriter(name);
+        StreamWriter streamWriter = new(name);
 
         for (int index = 0; index < statement.CodeList.Count; ++index) {
           MiddleCode middleCode = statement.CodeList[index];
@@ -180,7 +180,7 @@ namespace CCompiler {
           SymbolTable.CurrentFunction.Name.Equals("printLongDoubleFraction")) {
         string nameX = @"C:\Users\Stefa\Documents\vagrant\homestead\code\code\" +
                       SymbolTable.CurrentFunction.Name + ".middleafter";
-        StreamWriter streamWriterX = new StreamWriter(nameX);
+        StreamWriter streamWriterX = new(nameX);
 
         for (int index = 0; index < statement.CodeList.Count; ++index) {
           MiddleCode middleCode = statement.CodeList[index];
@@ -190,12 +190,12 @@ namespace CCompiler {
         streamWriterX.Close();
       }
 
-      List<AssemblyCode> assemblyCodeList = new List<AssemblyCode>();
+      List<AssemblyCode> assemblyCodeList = new();
       AssemblyCodeGenerator.GenerateAssembly(statement.CodeList,
                                              assemblyCodeList);
 
       if (Start.Linux) {
-        List<string> textList = new List<string>();
+        List<string> textList = new();
 
         if (SymbolTable.CurrentFunction.UniqueName.Equals("main")) {
           textList.AddRange(SymbolTable.InitSymbol.TextList);
@@ -208,7 +208,7 @@ namespace CCompiler {
           textList.Add("section .text");
         }
 
-        ISet<string> externSet = new HashSet<string>();
+        HashSet<string> externSet = new();
         AssemblyCodeGenerator.LinuxTextList(assemblyCodeList, textList,
                                             externSet);
         StaticSymbol staticSymbol =
@@ -218,10 +218,10 @@ namespace CCompiler {
       }
 
       if (Start.Windows) {
-        List<byte> byteList = new List<byte>();
-        IDictionary<int,string> accessMap = new Dictionary<int,string>();
-        IDictionary<int,string> callMap = new Dictionary<int,string>();
-        ISet<int> returnSet = new HashSet<int>();
+        List<byte> byteList = new();
+        Dictionary<int,string> accessMap = new();
+        Dictionary<int,string> callMap = new();
+        HashSet<int> returnSet = new();
         AssemblyCodeGenerator.GenerateTargetWindows
           (assemblyCodeList, byteList, accessMap, callMap, returnSet);
         StaticSymbol staticSymbol =
@@ -234,10 +234,10 @@ namespace CCompiler {
       SymbolTable.CurrentFunction = null;
     }
 
-    private static Stack<Type> m_structOrUnionTypeStack = new Stack<Type>();
+    private static Stack<Type> m_structOrUnionTypeStack = new();
 
     public static void StructUnionHeader(Sort sort, string optionalName) {
-      Type type = new Type(sort, null, null);
+      Type type = new(sort, null, null);
 
       if (optionalName != null) {
         type = SymbolTable.CurrentTable.AddTag(optionalName, type);
@@ -261,7 +261,7 @@ namespace CCompiler {
       Type type = SymbolTable.CurrentTable.LookupTag(name, sort);
 
       if (type == null) {
-        type = new Type(sort, null, null);
+        type = new(sort, null, null);
         SymbolTable.CurrentTable.AddTag(name, type);
       }
 
@@ -279,7 +279,7 @@ namespace CCompiler {
 
     public static Type EnumumerationSpecifier(string optionalName,
                                               ISet<Symbol> enumerationItemSet)
-    { Type enumerationType = new Type(enumerationItemSet);
+    { Type enumerationType = new(enumerationItemSet);
 
       if (optionalName != null) {
         SymbolTable.CurrentTable.AddTag(optionalName, enumerationType);
@@ -297,7 +297,7 @@ namespace CCompiler {
 
     public static Symbol EnumerationItem(string itemName,
                                          Symbol optionalInitSymbol) {
-      Type itemType = new Type(Sort.SignedInt);      
+      Type itemType = new(Sort.SignedInt);      
       itemType.Constant = true;
 
       BigInteger value;
@@ -372,20 +372,20 @@ namespace CCompiler {
                     declarator.Name, Message.Invalid_initialization);
       }
 
-      Symbol symbol = new Symbol(declarator.Name, specifier.ExternalLinkage,
+      Symbol symbol = new(declarator.Name, specifier.ExternalLinkage,
                                  storage, type);
       if (initializer != null) {
         SymbolTable.CurrentTable.AddSymbol(symbol, false);
 
         if (storage == Storage.Static) {
-          List<MiddleCode> codeList = new List<MiddleCode>();
+          List<MiddleCode> codeList = new();
           Initializer.Generate(symbol, initializer, codeList);
           StaticSymbol staticSymbol =
             ConstantExpression.Value(symbol.UniqueName, type, codeList);
           SymbolTable.StaticSet.Add(staticSymbol);
         }
         else {
-          List<MiddleCode> codeList = new List<MiddleCode>();
+          List<MiddleCode> codeList = new();
           Initializer.Generate(symbol, initializer, codeList);
           SymbolTable.CurrentTable.CurrentOffset += symbol.Type.Size();
           return codeList;
@@ -419,11 +419,11 @@ namespace CCompiler {
     public static Declarator PointerDeclarator(List<Type> typeList,
                                                Declarator declarator) {
       if (declarator == null) {
-        declarator = new Declarator(null);
+        declarator = new(null);
       }
 
       foreach (Type type in typeList) {
-        Type pointerType = new Type((Type) null);
+        Type pointerType = new((Type) null);
         pointerType.Constant = type.Constant;
         pointerType.Volatile = type.Volatile;
         declarator.Add(pointerType);
@@ -437,7 +437,7 @@ namespace CCompiler {
     public static Declarator ArrayType(Declarator declarator,
                                         Expression optionalSizeExpression) {
         if (declarator == null) {
-        declarator = new Declarator(null);
+        declarator = new(null);
       }
 
       int arraySize;
@@ -450,7 +450,7 @@ namespace CCompiler {
         arraySize = 0;
       }
 
-      Type arrayType = new Type(arraySize, null);
+      Type arrayType = new(arraySize, null);
       declarator.Add(arrayType);
       return declarator;
     }
@@ -504,13 +504,13 @@ namespace CCompiler {
       }
 
       if (type.IsArray()) {
-        type = new Type(type.ArrayType);
+        type = new(type.ArrayType);
       }
       else if (type.IsFunction()) {
-        type = new Type(type);
+        type = new(type);
       }
 
-      Symbol symbol = new Symbol(name, false, specifier.Storage, type);
+      Symbol symbol = new(name, false, specifier.Storage, type);
       symbol.Parameter = true;
       return symbol;
     }
@@ -520,11 +520,11 @@ namespace CCompiler {
     public static Statement IfElseStatement(Expression testExpression,
                                             Statement trueStatement,
                                             Statement falseStatement) {
-      ISet<MiddleCode> nextSet = new HashSet<MiddleCode>();
+      HashSet<MiddleCode> nextSet = new();
       nextSet.UnionWith(trueStatement.NextSet);
       nextSet.UnionWith(falseStatement.NextSet);
 
-      Symbol voidSymbol = new Symbol(new Type(Sort.Void));
+      Symbol voidSymbol = new(new Type(Sort.Void));
       Expression trueExpression =
         new Expression(voidSymbol, trueStatement.CodeList),
                  falseExpression =
@@ -537,7 +537,7 @@ namespace CCompiler {
 
     private static Stack<IDictionary<BigInteger, MiddleCode>> m_caseMapStack =
       new Stack<IDictionary<BigInteger, MiddleCode>>();
-    private static Stack<MiddleCode> m_defaultStack = new Stack<MiddleCode>();
+    private static Stack<MiddleCode> m_defaultStack = new();
     private static Stack<ISet<MiddleCode>> m_breakSetStack =
       new Stack<ISet<MiddleCode>>();
 
@@ -557,14 +557,14 @@ namespace CCompiler {
                in m_caseMapStack.Pop()) {
         BigInteger caseValue = pair.Key;
         MiddleCode caseTarget = pair.Value;
-        Symbol caseSymbol = new Symbol(switchType, caseValue);
+        Symbol caseSymbol = new(switchType, caseValue);
         AddMiddleCode(codeList, MiddleOperator.Case, caseTarget,
                       switchExpression.Symbol, caseSymbol);
       }
       AddMiddleCode(codeList, MiddleOperator.CaseEnd,
                     switchExpression.Symbol);
     
-      ISet<MiddleCode> nextSet = new HashSet<MiddleCode>();
+      HashSet<MiddleCode> nextSet = new();
       MiddleCode defaultCode = m_defaultStack.Pop();
 
       if (defaultCode != null) {
@@ -606,7 +606,7 @@ namespace CCompiler {
     public static Statement BreakStatement() {
       Error.Check(m_breakSetStack.Count > 0,
                    Message.Break_without_switch____while____do____or____for);
-      List<MiddleCode> codeList = new List<MiddleCode>();
+      List<MiddleCode> codeList = new();
       MiddleCode breakCode = AddMiddleCode(codeList, MiddleOperator.Jump);
       m_breakSetStack.Peek().Add(breakCode);
       return (new Statement(codeList));
@@ -635,7 +635,7 @@ namespace CCompiler {
       Backpatch(expression.Symbol.TrueSet, statement.CodeList);
       Backpatch(m_continueSetStack.Pop(), statement.CodeList);
 
-      ISet<MiddleCode> nextSet = new HashSet<MiddleCode>();
+      HashSet<MiddleCode> nextSet = new();
       nextSet.UnionWith(expression.Symbol.FalseSet);
       nextSet.UnionWith(m_breakSetStack.Pop());
       return (new Statement(codeList, nextSet));
@@ -643,8 +643,8 @@ namespace CCompiler {
 
     public static Statement ForStatement(Expression initializerExpression, Expression testExpression,
                                          Expression nextExpression, Statement innerStatement) {
-      List<MiddleCode> codeList = new List<MiddleCode>();
-      ISet<MiddleCode> nextSet = new HashSet<MiddleCode>();
+      List<MiddleCode> codeList = new();
+      HashSet<MiddleCode> nextSet = new();
     
       if (initializerExpression != null) {
         codeList.AddRange(initializerExpression.ShortList);
@@ -682,7 +682,7 @@ namespace CCompiler {
     public static Statement ContinueStatement() {
       Error.Check(m_continueSetStack.Count > 0,
                    Message.Continue_without_while____do____or____for);
-      List<MiddleCode> codeList = new List<MiddleCode>();
+      List<MiddleCode> codeList = new();
       MiddleCode continueCode = AddMiddleCode(codeList, MiddleOperator.Jump);
       m_continueSetStack.Peek().Add(continueCode);
       return (new Statement(codeList));
@@ -702,7 +702,7 @@ namespace CCompiler {
     }
 
     public static Statement GotoStatement(string labelName) {
-      List<MiddleCode> gotoList = new List<MiddleCode>();
+      List<MiddleCode> gotoList = new();
       MiddleCode gotoCode = AddMiddleCode(gotoList, MiddleOperator.Jump);
 
       if (m_gotoSetMap.ContainsKey(labelName)) {
@@ -710,7 +710,7 @@ namespace CCompiler {
         gotoSet.Add(gotoCode);
       }
       else {
-        ISet<MiddleCode> gotoSet = new HashSet<MiddleCode>();
+        HashSet<MiddleCode> gotoSet = new();
         gotoSet.Add(gotoCode);
         m_gotoSetMap.Add(labelName, gotoSet);
       }
@@ -746,7 +746,7 @@ namespace CCompiler {
       else {
         Error.Check(SymbolTable.CurrentFunction.Type.ReturnType.IsVoid(),
                      Message.Void_returned_from_non__void_function);
-        codeList = new List<MiddleCode>();
+        codeList = new();
         AddMiddleCode(codeList, MiddleOperator.Return);
       }
 
@@ -762,20 +762,20 @@ namespace CCompiler {
     }
 
     public static Statement JumpRegisterStatement(Register register) {
-      List<MiddleCode> codeList = new List<MiddleCode>();
+      List<MiddleCode> codeList = new();
       //Register register = (Register) Enum.Parse(typeof(Register), registerName);
       AddMiddleCode(codeList, MiddleOperator.JumpRegister, register);
       return (new Statement(codeList));
     }
 
     public static Statement InterruptStatement(Expression expression) {
-      List<MiddleCode> codeList = new List<MiddleCode>();
+      List<MiddleCode> codeList = new();
       AddMiddleCode(codeList, MiddleOperator.Interrupt, expression.Symbol.Value);
       return (new Statement(codeList));
     }
 
     public static Statement SyscallStatement() {
-      List<MiddleCode> codeList = new List<MiddleCode>();
+      List<MiddleCode> codeList = new();
       AddMiddleCode(codeList, MiddleOperator.SysCall);
       return (new Statement(codeList));
     }
@@ -784,11 +784,11 @@ namespace CCompiler {
 
     public static Expression CommaExpression(Expression leftExpression,
                                              Expression rightExpression) {
-      List<MiddleCode> shortList = new List<MiddleCode>();
+      List<MiddleCode> shortList = new();
       shortList.AddRange(leftExpression.ShortList);
       shortList.AddRange(rightExpression.ShortList);
     
-      List<MiddleCode> longList = new List<MiddleCode>();
+      List<MiddleCode> longList = new();
       longList.AddRange(leftExpression.ShortList); // Obs: shortList
       longList.AddRange(rightExpression.LongList);
         
@@ -819,7 +819,7 @@ namespace CCompiler {
         Symbol rightSymbol = rightExpression.Symbol;
         Error.ErrorXXX(AssemblyCode.SizeOfRegister(register.Value) ==
                        rightExpression.Symbol.Type.Size());
-        List<MiddleCode> longList = new List<MiddleCode>();
+        List<MiddleCode> longList = new();
         longList.AddRange(rightExpression.LongList);
         AddMiddleCode(longList, MiddleOperator.AssignRegister,
                       register.Value, rightExpression.Symbol);
@@ -828,7 +828,7 @@ namespace CCompiler {
       else {
         Error.Check(leftExpression.Symbol.IsAssignable(),
                     leftExpression, Message.Not_assignable);
-        List<MiddleCode> longList = new List<MiddleCode>();
+        List<MiddleCode> longList = new();
 
         if (simpleAssignment) {
           longList.AddRange(leftExpression.LongList);
@@ -841,7 +841,7 @@ namespace CCompiler {
         longList.AddRange(rightExpression.LongList);
 
         if (leftExpression.Symbol.Type.IsFloating()) {
-          List<MiddleCode> shortList = new List<MiddleCode>();
+          List<MiddleCode> shortList = new();
           shortList.AddRange(longList);
 
           AddMiddleCode(longList, MiddleOperator.TopFloat,
@@ -860,7 +860,7 @@ namespace CCompiler {
                         leftExpression.Symbol, rightExpression.Symbol);
 
           if (leftExpression.Symbol.Type.IsBitfield()) {
-            Symbol maskSymbol = new Symbol(leftExpression.Symbol.Type,
+            Symbol maskSymbol = new(leftExpression.Symbol.Type,
                                     leftExpression.Symbol.Type.BitfieldMask);
             AddMiddleCode(longList, MiddleOperator.BitwiseAnd,
                           leftExpression.Symbol, leftExpression.Symbol,
@@ -881,17 +881,17 @@ namespace CCompiler {
       trueExpression = TypeCast.ImplicitCast(trueExpression, maxType);
       falseExpression = TypeCast.ImplicitCast(falseExpression, maxType);
 
-      MiddleCode emptyTrueCode = new MiddleCode(MiddleOperator.Empty);
+      MiddleCode emptyTrueCode = new(MiddleOperator.Empty);
       trueExpression.ShortList.Insert(0, emptyTrueCode);
       trueExpression.LongList.Insert(0, emptyTrueCode);
       Backpatch(testExpression.Symbol.TrueSet, emptyTrueCode);
 
-      MiddleCode emptyFalseCode = new MiddleCode(MiddleOperator.Empty);
+      MiddleCode emptyFalseCode = new(MiddleOperator.Empty);
       falseExpression.ShortList.Insert(0, emptyFalseCode);
       falseExpression.LongList.Insert(0, emptyFalseCode);
       Backpatch(testExpression.Symbol.FalseSet, emptyFalseCode);
 
-      Symbol resultSymbol = new Symbol(maxType);
+      Symbol resultSymbol = new(maxType);
       if (maxType.IsFloating()) {
         AddMiddleCode(trueExpression.LongList,
                       MiddleOperator.DecreaseStack);
@@ -903,17 +903,17 @@ namespace CCompiler {
                       resultSymbol, falseExpression.Symbol);
       }
 
-      MiddleCode targetCode = new MiddleCode(MiddleOperator.Empty);
-      MiddleCode jumpCode = new MiddleCode(MiddleOperator.Jump, targetCode);
+      MiddleCode targetCode = new(MiddleOperator.Empty);
+      MiddleCode jumpCode = new(MiddleOperator.Jump, targetCode);
 
-      List<MiddleCode> shortList = new List<MiddleCode>();
+      List<MiddleCode> shortList = new();
       shortList.AddRange(testExpression.LongList); // Obs: LongList
       shortList.AddRange(trueExpression.ShortList);
       shortList.Add(jumpCode);
       shortList.AddRange(falseExpression.ShortList);
       shortList.Add(targetCode);
 
-      List<MiddleCode> longList = new List<MiddleCode>();
+      List<MiddleCode> longList = new();
       longList.AddRange(testExpression.LongList);
       longList.AddRange(trueExpression.LongList);
       longList.Add(jumpCode);
@@ -953,22 +953,22 @@ namespace CCompiler {
         trueSet.UnionWith(rightExpression.Symbol.TrueSet);
 
         Backpatch(leftExpression.Symbol.FalseSet, rightExpression.LongList);
-        resultSymbol = new Symbol(trueSet, rightExpression.Symbol.FalseSet);
+        resultSymbol = new(trueSet, rightExpression.Symbol.FalseSet);
       }
       else {
-        ISet<MiddleCode> falseSet = new HashSet<MiddleCode>();
+        HashSet<MiddleCode> falseSet = new();
         falseSet.UnionWith(leftExpression.Symbol.FalseSet);
         falseSet.UnionWith(rightExpression.Symbol.FalseSet);
 
         Backpatch(leftExpression.Symbol.TrueSet, rightExpression.LongList);
-        resultSymbol = new Symbol(rightExpression.Symbol.TrueSet, falseSet);
+        resultSymbol = new(rightExpression.Symbol.TrueSet, falseSet);
       }
 
-      List<MiddleCode> shortList = new List<MiddleCode>();
+      List<MiddleCode> shortList = new();
       shortList.AddRange(leftExpression.ShortList);
       shortList.AddRange(rightExpression.ShortList);
 
-      List<MiddleCode> longList = new List<MiddleCode>();
+      List<MiddleCode> longList = new();
       longList.AddRange(leftExpression.LongList);
       longList.AddRange(rightExpression.LongList);
 
@@ -998,11 +998,11 @@ namespace CCompiler {
       leftExpression = TypeCast.ImplicitCast(leftExpression, maxType);
       rightExpression = TypeCast.ImplicitCast(rightExpression, maxType);
 
-      List<MiddleCode> shortList = new List<MiddleCode>();
+      List<MiddleCode> shortList = new();
       shortList.AddRange(leftExpression.ShortList);
       shortList.AddRange(rightExpression.ShortList);
 
-      List<MiddleCode> longList = new List<MiddleCode>();
+      List<MiddleCode> longList = new();
       longList.AddRange(leftExpression.LongList);
       longList.AddRange(rightExpression.LongList);
 
@@ -1011,7 +1011,7 @@ namespace CCompiler {
                                 leftExpression.Symbol, rightExpression.Symbol));
       falseSet.Add(AddMiddleCode(longList, MiddleOperator.Jump));
 
-      Symbol symbol = new Symbol(trueSet, falseSet);
+      Symbol symbol = new(trueSet, falseSet);
       return (new Expression(symbol, shortList, longList));
     }
     
@@ -1085,15 +1085,15 @@ namespace CCompiler {
 
       if (leftType.IsPointerArrayOrString() &&
           rightType.IsPointerArrayOrString()) {
-        List<MiddleCode> shortList = new List<MiddleCode>();
+        List<MiddleCode> shortList = new();
         shortList.AddRange(leftExpression.ShortList);
         shortList.AddRange(rightExpression.ShortList);
 
-        List<MiddleCode> longList = new List<MiddleCode>();
+        List<MiddleCode> longList = new();
         longList.AddRange(leftExpression.LongList);
         longList.AddRange(rightExpression.LongList);
 
-        Symbol subtractSymbol = new Symbol(leftType);
+        Symbol subtractSymbol = new(leftType);
         AddMiddleCode(longList, MiddleOperator.Subtract, subtractSymbol,
                       leftExpression.Symbol, rightExpression.Symbol);
         Expression subtractExpression =
@@ -1102,7 +1102,7 @@ namespace CCompiler {
           TypeCast.ExplicitCast(subtractExpression, Type.SignedIntegerType);
 
         int typeSize = leftType.PointerArrayOrStringType.Size();
-        Symbol sizeSymbol = new Symbol(Type.SignedIntegerType,
+        Symbol sizeSymbol = new(Type.SignedIntegerType,
                                        new BigInteger(typeSize));
 
         return ArithmeticExpression(MiddleOperator.Divide,
@@ -1128,25 +1128,25 @@ namespace CCompiler {
                                  new Expression(sizeSymbol));
 
           rightExpression = TypeCast.ImplicitCast(rightExpression, leftType);
-          resultSymbol = new Symbol(leftType);
+          resultSymbol = new(leftType);
         }
         else if (MiddleCode.IsShift(middleOp)) {
           rightExpression =
             TypeCast.ImplicitCast(rightExpression, Type.UnsignedCharType);
-          resultSymbol = new Symbol(leftType);
+          resultSymbol = new(leftType);
         }
         else {
           Type maxType = TypeCast.MaxType(leftType, rightType);
-          resultSymbol = new Symbol(maxType);
+          resultSymbol = new(maxType);
           leftExpression = TypeCast.ImplicitCast(leftExpression, maxType);
           rightExpression = TypeCast.ImplicitCast(rightExpression, maxType);
         }
 
-        List<MiddleCode> shortList = new List<MiddleCode>();
+        List<MiddleCode> shortList = new();
         shortList.AddRange(leftExpression.ShortList);
         shortList.AddRange(rightExpression.ShortList);
 
-        List<MiddleCode> longList = new List<MiddleCode>();
+        List<MiddleCode> longList = new();
         longList.AddRange(leftExpression.LongList);
         longList.AddRange(rightExpression.LongList);
 
@@ -1189,7 +1189,7 @@ namespace CCompiler {
         return constantExpression;
       }
 
-      Symbol resultSymbol = new Symbol(expression.Symbol.Type);
+      Symbol resultSymbol = new(expression.Symbol.Type);
       AddMiddleCode(expression.LongList, middleOp,
                     resultSymbol, expression.Symbol);
       return (new Expression(resultSymbol, expression.ShortList,
@@ -1242,7 +1242,7 @@ namespace CCompiler {
         AddMiddleCode(expression.LongList, MiddleOperator.PopEmpty);
       }
 
-      Symbol resultSymbol = new Symbol(new Type(expression.Symbol.Type));
+      Symbol resultSymbol = new(new Type(expression.Symbol.Type));
       AddMiddleCode(expression.LongList, MiddleOperator.Address,
                     resultSymbol, expression.Symbol);
       return (new Expression(resultSymbol, expression.ShortList,
@@ -1313,15 +1313,15 @@ namespace CCompiler {
                   memberName, Message.Unknown_member_in_dot_expression);
 
       string name = parentSymbol.Name + Symbol.SeparatorDot + memberSymbol.Name;
-      Symbol resultSymbol = new Symbol(name, parentSymbol.ExternalLinkage,
+      Symbol resultSymbol = new(name, parentSymbol.ExternalLinkage,
                                        parentSymbol.Storage, memberSymbol.Type);
 
       /*if (parentSymbol.AddressSymbol != null) {
-        resultSymbol = new Symbol(name, parentSymbol.ExternalLinkage,
+        resultSymbol = new(name, parentSymbol.ExternalLinkage,
                                   parentSymbol.Storage, memberSymbol.Type);
       }
       else {
-        resultSymbol = new Symbol(memberSymbol.Type);
+        resultSymbol = new(memberSymbol.Type);
         resultSymbol.Name = parentSymbol.Name + Symbol.SeparatorDot + memberName;
         resultSymbol.Storage = parentSymbol.Storage;
       }*/
@@ -1357,10 +1357,10 @@ namespace CCompiler {
     public static Expression PrefixIncrementExpression
                              (MiddleOperator middleOp, Expression expression){
       if (expression.Symbol.Type.IsFloating()) {
-        Symbol oneSymbol = new Symbol(expression.Symbol.Type);
-        List<MiddleCode> longList = new List<MiddleCode>();
+        Symbol oneSymbol = new(expression.Symbol.Type);
+        List<MiddleCode> longList = new();
         AddMiddleCode(longList, MiddleOperator.PushOne);
-        Expression oneExpression = new Expression(oneSymbol, null, longList);
+        Expression oneExpression = new(oneSymbol, null, longList);
         return AssignmentExpression(middleOp, expression, oneExpression);
       }
       else {
@@ -1383,9 +1383,9 @@ namespace CCompiler {
         return prefixExpression;
       }
       else {
-        List<MiddleCode> longList = new List<MiddleCode>();
-        Symbol resultSymbol = new Symbol(expression.Symbol.Type);
-        Expression resultExpression = new Expression(resultSymbol, longList, longList);
+        List<MiddleCode> longList = new();
+        Symbol resultSymbol = new(expression.Symbol.Type);
+        Expression resultExpression = new(resultSymbol, longList, longList);
         longList.AddRange(Assignment(resultExpression, expression, false).ShortList);
         longList.AddRange(PrefixIncrementExpression(middleOp, expression).ShortList);
         return resultExpression;
@@ -1394,9 +1394,9 @@ namespace CCompiler {
 
     // ---------------------------------------------------------------------------------------------------------------------
 
-    public static Stack<Type> m_functionTypeStack = new Stack<Type>();
-    public static Stack<int> m_parameterOffsetStack = new Stack<int>(),
-                             m_parameterExtraStack = new Stack<int>();
+    public static Stack<Type> m_functionTypeStack = new();
+    public static Stack<int> m_parameterOffsetStack = new(),
+                             m_parameterExtraStack = new();
     public static int m_totalOffset = 0;
 
     public static void CallHeader(Expression expression) {
@@ -1427,7 +1427,7 @@ namespace CCompiler {
                    functionExpression,
                    Message.Too_many_parameters_in_function_call);
     
-      List<MiddleCode> longList = new List<MiddleCode>();
+      List<MiddleCode> longList = new();
       longList.AddRange(functionExpression.LongList);
 
       foreach (Expression argumentExpression in argumentList) {
@@ -1445,16 +1445,16 @@ namespace CCompiler {
       AddMiddleCode(longList, MiddleOperator.PostCall,
                     SymbolTable.CurrentTable.CurrentOffset + m_totalOffset);
 
-      List<MiddleCode> shortList = new List<MiddleCode>();
+      List<MiddleCode> shortList = new();
       shortList.AddRange(longList);
 
       Type returnType = functionType.ReturnType;
-      Symbol returnSymbol = new Symbol(returnType);
+      Symbol returnSymbol = new(returnType);
 
       if (!returnType.IsVoid()) {
         if (returnType.IsStructOrUnion()) {
-          Type pointerType = new Type(returnType);
-          Symbol addressSymbol = new Symbol(pointerType);
+          Type pointerType = new(returnType);
+          Symbol addressSymbol = new(pointerType);
           returnSymbol.AddressSymbol = addressSymbol;
         }
       
@@ -1528,7 +1528,7 @@ namespace CCompiler {
     // ---------------------------------------------------------------------------------------------------------------------
 
     public static Expression ValueExpression(Symbol symbol) {
-      List<MiddleCode> longList = new List<MiddleCode>();
+      List<MiddleCode> longList = new();
 
       if (symbol.Type.IsFloating()) {
         AddMiddleCode(longList, MiddleOperator.PushFloat, symbol);
@@ -1546,14 +1546,14 @@ namespace CCompiler {
       Error.Check(symbol != null, name, Message.Unknown_name);
 
       /*if (symbol == null) {
-        Type type = new Type(Type.SignedIntegerType, null, false);
-        symbol = new Symbol(name, true, Storage.Extern, type);
+        Type type = new(Type.SignedIntegerType, null, false);
+        symbol = new(name, true, Storage.Extern, type);
         SymbolTable.CurrentTable.AddSymbol(symbol);
       }*/
 
       //symbol.Used = true;
-      List<MiddleCode> shortList = new List<MiddleCode>(),
-                       longList = new List<MiddleCode>(); 
+      List<MiddleCode> shortList = new(),
+                       longList = new(); 
 
       if (symbol.Type.IsFloating()) {
         //AddMiddleCode(shortList, MiddleOperator.PushFloat, symbol);
@@ -1564,26 +1564,26 @@ namespace CCompiler {
     }
 
     public static Expression RegisterExpression(Register register) {
-      List<MiddleCode> longList = new List<MiddleCode>();
+      List<MiddleCode> longList = new();
       int size = AssemblyCode.SizeOfRegister(register);
       Type type = TypeSize.SizeToUnsignedType(size); 
-      Symbol symbol = new Symbol(type);
+      Symbol symbol = new(type);
       AddMiddleCode(longList, MiddleOperator.InspectRegister, symbol, register);
       return (new Expression(symbol, new List<MiddleCode>(), longList, register));
     }
 
     public static Expression CarryFlagExpression() {
       HashSet<MiddleCode> trueSet = new(), falseSet = new();
-      List<MiddleCode> longList = new List<MiddleCode>();
+      List<MiddleCode> longList = new();
       trueSet.Add(AddMiddleCode(longList, MiddleOperator.Carry));
       falseSet.Add(AddMiddleCode(longList, MiddleOperator.Jump));
-      Symbol symbol = new Symbol(trueSet, falseSet);
+      Symbol symbol = new(trueSet, falseSet);
       return (new Expression(symbol, new List<MiddleCode>(), longList));
     }
 
     public static Expression StackTopExpression() {
-      List<MiddleCode> longList = new List<MiddleCode>();
-      Symbol symbol = new Symbol(new Type(Type.UnsignedCharType));
+      List<MiddleCode> longList = new();
+      Symbol symbol = new(new Type(Type.UnsignedCharType));
       AddMiddleCode(longList, MiddleOperator.StackTop, symbol);
       return (new Expression(symbol, new List<MiddleCode>(), longList));
     }

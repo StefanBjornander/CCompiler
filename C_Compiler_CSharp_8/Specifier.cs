@@ -159,7 +159,7 @@ namespace CCompiler {
 
         if ((isConstant || isVolatile) && (compoundType != null) &&
              compoundType.IsStructOrUnion() /*&& compoundType.HasTag()*/) {
-          compoundType = new Type(compoundType.Sort, compoundType.MemberMap,
+          compoundType = new(compoundType.Sort, compoundType.MemberMap,
                                   compoundType.MemberList);
         }
 
@@ -182,12 +182,12 @@ namespace CCompiler {
           type = compoundType;
         }
         else if ((compoundType == null) && (sort != null)) {
-          type = new Type(sort.Value);
+          type = new(sort.Value);
           type.Constant = isConstant;
           type.Volatile = isVolatile;
         }
         else if ((compoundType == null) && (sort == null)) {
-          type = new Type(Sort.SignedInt);
+          type = new(Sort.SignedInt);
           type.Constant = isConstant;
           type.Volatile = isVolatile;
         }
@@ -225,7 +225,7 @@ namespace CCompiler {
     }
  
     private static string MaskToString(int totalMaskValue) {
-      StringBuilder maskBuffer = new StringBuilder();
+      StringBuilder maskBuffer = new();
 
       for (int maskValue = 1; maskValue != 0; maskValue <<= 1) {
         if ((maskValue & totalMaskValue) != 0) {

@@ -4,7 +4,7 @@ namespace CCompiler {
 /*  public class GenerateStaticInitializer {
     public static void GenerateStaticx(Type toType, object fromInitializer,
                                       List<MiddleCode> codeList) {
-//      List<MiddleCode> codeList = new List<MiddleCode>();
+//      List<MiddleCode> codeList = new();
       fromInitializer =
       GenerateInitializer.StringToCharacterArray(toType, fromInitializer);
 

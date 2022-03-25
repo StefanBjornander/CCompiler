@@ -15,13 +15,13 @@ namespace CCompiler {
 
     private readonly IDictionary<string, Symbol> m_entryMap =
       new Dictionary<string, Symbol>();
-    private readonly List<Symbol> m_entryList = new List<Symbol>();
+    private readonly List<Symbol> m_entryList = new();
     private readonly IDictionary<string, Type> m_tagMap =
      new Dictionary<string, Type>();
 
     public static SymbolTable CurrentTable = null;
     public static Symbol CurrentFunction = null;
-    public static ISet<StaticSymbol> StaticSet;
+    public static HashSet<StaticSymbol> StaticSet;
     public static StaticSymbolLinux InitSymbol, ArgsSymbol;
 
     public SymbolTable(SymbolTable parentTable, Scope scope) {
@@ -29,7 +29,7 @@ namespace CCompiler {
     
       switch (m_scope = scope) {
         case Scope.Global:
-          StaticSet = new HashSet<StaticSymbol>();
+          StaticSet = new();
           InitSymbol = ArgsSymbol = null; 
           break;
 

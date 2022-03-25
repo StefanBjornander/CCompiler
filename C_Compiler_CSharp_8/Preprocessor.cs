@@ -8,9 +8,9 @@ namespace CCompiler {
   public class Preprocessor {
     private IDictionary<string,Macro> m_macroMap =
               new Dictionary<string,Macro>();
-    private Stack<FileInfo> m_includeStack = new Stack<FileInfo>();
-    private ISet<FileInfo> m_includeSet = new HashSet<FileInfo>();
-    private Stack<IfElseChain> m_ifElseChainStack = new Stack<IfElseChain>();
+    private Stack<FileInfo> m_includeStack = new();
+    private HashSet<FileInfo> m_includeSet = new();
+    private Stack<IfElseChain> m_ifElseChainStack = new();
     private StringBuilder m_outputBuffer = new StringBuilder();
     public static IDictionary<string,Macro> MacroMap;
 
@@ -178,8 +178,8 @@ namespace CCompiler {
     }
 
     private List<string> GenerateLineList(string text) {
-      List<string> lineList = new List<string>(text.Split('\n'));
-      List<string> mergeList = new List<string>();
+      List<string> lineList = new(text.Split('\n'));
+      List<string> mergeList = new();
 
       foreach (string line in lineList) {
         int returnCount = line.Split('\r').Length - 1;
@@ -191,7 +191,7 @@ namespace CCompiler {
       }
 
       { int index = 0;
-        List<string> resultList = new List<string>();
+        List<string> resultList = new();
 
         while (index < mergeList.Count) {
           if (mergeList[index].StartsWith("#")) {
@@ -216,13 +216,13 @@ namespace CCompiler {
     }
 
     /*private List<string> GenerateLineListX(string text) {
-      List<string> trimList = new List<string>();
+      List<string> trimList = new();
       foreach (string line in text.Split('\n')) {
         trimList.Add(line.Trim());
       }
 
       int index = 0;
-      List<string> resultList = new List<string>();
+      List<string> resultList = new();
 
       while (index < trimList.Count) {
         if (trimList[index].StartsWith("#")) {
@@ -259,7 +259,7 @@ namespace CCompiler {
       byte[] byteArray = Encoding.ASCII.GetBytes(text);
       MemoryStream memoryStream = new MemoryStream(byteArray);
       CCompiler_Pre.Scanner scanner = new CCompiler_Pre.Scanner(memoryStream);
-      List<Token> tokenList = new List<Token>();
+      List<Token> tokenList = new();
 
       while (true) {
         CCompiler_Pre.Tokens tokenId = (CCompiler_Pre.Tokens) scanner.yylex();
@@ -287,7 +287,7 @@ namespace CCompiler {
     }
 
     private List<Token> CloneList(List<Token> tokenList) {
-      List<Token> resultList = new List<Token>();
+      List<Token> resultList = new();
     
       foreach (Token token in tokenList) {
         resultList.Add((Token) token.Clone());
@@ -479,7 +479,7 @@ namespace CCompiler {
       }
       else {
         int tokenIndex = 3, paramIndex = 0;
-        IDictionary<string,int> paramMap = new Dictionary<string,int>();
+        Dictionary<string, int> paramMap = new();
 
         while (true) {
           Token nextToken = tokenList[tokenIndex++];
@@ -515,7 +515,7 @@ namespace CCompiler {
           }
         }
 
-        IDictionary<int,int> indexToParamMap = new Dictionary<int,int>();
+        Dictionary<int, int> indexToParamMap = new();
         for (int index = 0; index < macroList.Count; ++index) {
           Token macroToken = macroList[index];
 
@@ -715,7 +715,7 @@ namespace CCompiler {
 
           if (!nameStack.Contains(name) && m_macroMap.ContainsKey(name)) {
             int countIndex = index + 1, level = 1, totalNewlineCount = 0;
-            List<Token> subList = new List<Token>();
+            List<Token> subList = new();
             List<List<Token>> mainList = new List<List<Token>>();
         
             while (true) {
@@ -748,7 +748,7 @@ namespace CCompiler {
                                   Message.Empty_macro_parameter);
                     SearchForMacros(subList, nameStack); // XXX
                     mainList.Add(subList);
-                    subList = new List<Token>();
+                    subList = new();
                   }
                   else {
                     subList.Add(token);

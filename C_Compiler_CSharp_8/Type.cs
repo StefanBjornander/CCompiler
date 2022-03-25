@@ -213,7 +213,7 @@ namespace CCompiler {
       m_sort = Sort.Function;
       m_nameList = nameList;
 
-      ISet<string> nameSet = new HashSet<string>();
+      HashSet<string> nameSet = new();
       foreach (string name in nameList) {
         Error.Check(nameSet.Add(name), name, Message.Name_already_defined);
       }
@@ -230,7 +230,7 @@ namespace CCompiler {
       m_nameList = null;
 
       if (m_parameterList != null) {
-        m_typeList = new List<Type>();
+        m_typeList = new();
 
         foreach (Symbol symbol in m_parameterList) {
           m_typeList.Add(symbol.Type);

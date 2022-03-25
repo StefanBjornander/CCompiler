@@ -172,7 +172,7 @@ namespace CCompiler {
       }
 
       if (Start.Linux) {
-        ISet<string> totalExternSet = new HashSet<string>();
+        HashSet<string> totalExternSet = new();
 
         foreach (StaticSymbol staticSymbol in SymbolTable.StaticSet) {
           StaticSymbolLinux staticSymbolLinux =

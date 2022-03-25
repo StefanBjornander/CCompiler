@@ -6,13 +6,13 @@ namespace CCompiler {
     public static int PointerSize;
     public static int SignedIntegerSize;
 
-    private static IDictionary<int, BigInteger>
-      m_maskMap = new Dictionary<int, BigInteger>() {
+    private static Dictionary<int, BigInteger>
+      m_maskMap = new() {
         {1, (BigInteger) 0x000000FF},
         {2, (BigInteger) 0x0000FFFF},
         {4, (BigInteger) 0xFFFFFFFF}};
 
-    public static IDictionary<Sort,int> m_sizeMap = new Dictionary<Sort,int>();
+    public static Dictionary<Sort,int> m_sizeMap = new();
 
     public static Dictionary<int,Sort> m_signedMap = new(),
                                        m_unsignedMap = new();
@@ -21,8 +21,8 @@ namespace CCompiler {
                                                m_maxValueMap = new();
     
     /*private static IDictionary<Sort,decimal>
-      m_minValueFloatMap = new Dictionary<Sort,decimal>(),
-      m_maxValueFloatMap = new Dictionary<Sort,decimal>();*/
+      m_minValueFloatMap = new(),
+      m_maxValueFloatMap = new();*/
   
     static TypeSize() {
       if (Start.Linux) {

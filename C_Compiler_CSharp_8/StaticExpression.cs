@@ -46,7 +46,7 @@ namespace CCompiler {
             object resultValue =
               new StaticValue(leftSymbol.UniqueName,
                               rightSymbol.Offset); // s.i
-            Symbol resultSymbol = new Symbol(leftType, resultValue);
+            Symbol resultSymbol = new(leftType, resultValue);
             return (new Expression(resultSymbol, null, null));
           }
           break;
@@ -61,14 +61,14 @@ namespace CCompiler {
       StaticAddress resultValue;
 
       if (symbol.Value is StaticAddress staticAddress) {
-        resultValue = new StaticAddress(staticAddress.UniqueName,
+        resultValue = new(staticAddress.UniqueName,
                                         staticAddress.Offset + offset);
       }
       else {
-        resultValue = new StaticAddress(symbol.UniqueName, offset);
+        resultValue = new(symbol.UniqueName, offset);
       }
 
-      Symbol resultSymbol = new Symbol(symbol.Type, resultValue);
+      Symbol resultSymbol = new(symbol.Type, resultValue);
       return (new Expression(resultSymbol, null, null));
     }
 

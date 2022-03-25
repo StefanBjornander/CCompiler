@@ -30,7 +30,7 @@ namespace CCompiler {
     }
 //The <ct>neighbourSet</ct> method goes through all edges and add each found neighbor to the vertex.
     public ISet<VertexType> GetNeighbourSet(VertexType vertex) {
-      ISet<VertexType> neighbourSet = new HashSet<VertexType>();
+      HashSet<VertexType> neighbourSet = new();
     
       foreach ((VertexType, VertexType) edge in m_edgeSet) {
         if (edge.Item1.Equals(vertex)) {
@@ -77,7 +77,7 @@ namespace CCompiler {
       ISet<ISet<VertexType>> subgraphSet = new HashSet<ISet<VertexType>>();
 
       foreach (VertexType vertex in m_vertexSet) {
-        ISet<VertexType> vertexSet = new HashSet<VertexType>();
+        HashSet<VertexType> vertexSet = new();
         DeepSearch(vertex, vertexSet);
         subgraphSet.Add(vertexSet);
       }

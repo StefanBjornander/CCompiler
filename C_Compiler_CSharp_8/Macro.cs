@@ -9,7 +9,7 @@ namespace CCompiler {
   
     public Macro(int parameters, List<Token> tokenList, IDictionary<int,int> indexToParamMap) {
       m_parameters = parameters;
-      m_tokenList = new List<Token>(tokenList);
+      m_tokenList = new(tokenList);
       m_indexToParamMap = indexToParamMap;
     }
 
