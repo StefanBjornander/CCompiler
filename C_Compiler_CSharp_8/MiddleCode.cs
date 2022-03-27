@@ -44,15 +44,6 @@ namespace CCompiler {
       set { m_middleOperator = value; }
     }
 
-    public MiddleOperator getOperator() {
-      return m_middleOperator;
-    }
-
-    public void setOperator(MiddleOperator middleOperator) {
-      m_middleOperator = middleOperator;
-    }
-
-
     public object this[int index] {
       get { return m_operandArray[index]; }
       set { m_operandArray[index] = value;  }
