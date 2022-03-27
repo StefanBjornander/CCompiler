@@ -48,6 +48,8 @@ namespace CCompiler {
         RemoveTrivialAssign();
         RemoveClearedCode();
       } while (m_update);
+
+      //m_middleCodeList.RemoveAt(m_middleCodeList.Count - 1);
     }
 
     public void ObjectToIntegerAddresses() {

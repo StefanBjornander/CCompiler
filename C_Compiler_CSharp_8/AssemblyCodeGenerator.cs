@@ -5,40 +5,91 @@ using System.Collections.Generic;
 
 namespace CCompiler {
   public class AssemblyCodeGenerator {
-    public Dictionary<Symbol, Track> m_trackMap;
+    public Dictionary<Symbol,Track> m_trackMap = new();
     public List<AssemblyCode> m_assemblyCodeList;
-
-    private int m_floatStackSize;
+    private int m_floatStackSize = 0;
     public const int FloatingStackMaxSize = 7;
-    private Stack<int> m_topStack;
+    private Stack<int> m_topStack = new();
 
-    //public static string MainName = "main";
     public const string InitializerName = $"{Symbol.SeparatorId}initializer";
     public const string ArgsName = $"{Symbol.SeparatorId}args";
     public const string PathName = $"{Symbol.SeparatorId}PathName";
 
-    public void Initilize(List<AssemblyCode> assemblyCodeList) {
-      m_assemblyCodeList = assemblyCodeList;
-      m_trackMap = new();
-      m_floatStackSize = 0;
-      m_topStack = new();
+    private delegate void MiddleCodeHandler(MiddleCode middleCode, int middleIndex = 0);
+
+    private static Dictionary<MiddleOperator, MiddleCodeHandler> m_handlerMap;
+    private void Test(MiddleCode middleCode, int middleIndex = 0) {
+      // Empty.
     }
 
+    public AssemblyCodeGenerator(List<AssemblyCode> assemblyCodeList) {
+      m_assemblyCodeList = assemblyCodeList;
+
+      m_handlerMap = new() {
+        { MiddleOperator.PreCall, this.FunctionPreCall },
+        { MiddleOperator.Call, this.FunctionCall },
+        { MiddleOperator.PostCall, this.FunctionPostCall },
+        { MiddleOperator.Return, this.Return },
+        { MiddleOperator.Exit, this.Exit },
+        { MiddleOperator.Jump, this.Goto },
+
+        { MiddleOperator.AssignRegister, this.LoadToRegister },
+        { MiddleOperator.InspectRegister, this.InspectRegister },
+        { MiddleOperator.JumpRegister, this.JumpToRegister },
+        { MiddleOperator.Interrupt, this.Interrupt },
+        { MiddleOperator.SysCall, this.SystemCall },
+
+        { MiddleOperator.Initializer, this.Initializer },
+        { MiddleOperator.InitializerZero, this.InitializerZero },
+        { MiddleOperator.AssignInitSize, this.StructUnionAssignInit },
+
+        { MiddleOperator.BitwiseAnd, this.IntegralBinary },
+        { MiddleOperator.BitwiseXOr, this.IntegralBinary },
+        { MiddleOperator.ShiftLeft, this.IntegralBinary },
+        { MiddleOperator.ShiftRight, this.IntegralBinary },
+
+        { MiddleOperator.Carry, this.CarryExpression },
+        { MiddleOperator.NotCarry, this.CarryExpression },
+
+        { MiddleOperator.Case, this.Case },
+        { MiddleOperator.CaseEnd, this.CaseEnd },
+
+        { MiddleOperator.Address, this.Address },
+        { MiddleOperator.Dereference, this.Dereference },
+
+        { MiddleOperator.IntegralToIntegral, this.IntegralToIntegral },
+        { MiddleOperator.IntegralToFloating, this.IntegralToFloating },
+        { MiddleOperator.FloatingToIntegral, this.FloatingToIntegral },
+
+        { MiddleOperator.ParameterInitSize, this.StructUnionParameterInit },
+        /*{ MiddleOperator.DecreaseStack, this.DecreaseStack },
+
+        { MiddleOperator.PushZero, this.PushZero },
+        { MiddleOperator.PushOne, this.PushOne },
+        { MiddleOperator.PushFloat, this.PushFloat },
+        { MiddleOperator.TopFloat, this.TopFloat },*/
+        { MiddleOperator.PopEmpty, this.PopEmpty },
+        //{ MiddleOperator.PopFloat, this.PopFloat },
+        { MiddleOperator.StackTop, this.StackTop },
+        { MiddleOperator.FunctionEnd, this.FunctionEnd }
+      };
+    }
+    private void RegisterAllocation(ISet<Track> trackSet) {
+      RegisterAllocator.AllocateRegisters(trackSet, m_assemblyCodeList);
+    }
     public static void GenerateAssembly(List<MiddleCode> middleCodeList,
                                         List<AssemblyCode> assemblyCodeList) {
-      AssemblyCodeGenerator objectCodeGenerator = new();
-      objectCodeGenerator.Initilize(assemblyCodeList);
+      AssemblyCodeGenerator objectCodeGenerator = new(assemblyCodeList);
       objectCodeGenerator.AssemblyCodeList(middleCodeList);
       ISet<Track> trackSet = objectCodeGenerator.TrackSet();
-      RegisterAllocator.AllocateRegisters(trackSet, objectCodeGenerator.m_assemblyCodeList);
+      objectCodeGenerator.RegisterAllocation(trackSet);
     }
 
     public static void GenerateTargetWindows
       (List<AssemblyCode> assemblyCodeList, List<byte> byteList,
        IDictionary<int, string> accessMap, IDictionary<int, string> callMap,
        ISet<int> returnSet) {
-      AssemblyCodeGenerator objectCodeGenerator = new();
-      objectCodeGenerator.Initilize(assemblyCodeList);
+      AssemblyCodeGenerator objectCodeGenerator = new(assemblyCodeList);
       objectCodeGenerator.WindowsJumpInfo();
       objectCodeGenerator.WindowsByteList
                           (byteList, accessMap, callMap, returnSet);
@@ -253,8 +304,7 @@ namespace CCompiler {
             break;
 
           case MiddleOperator.DecreaseStack:
-            --m_floatStackSize;
-            Error.ErrorXXX(m_floatStackSize >= 0);
+            DecreaseStack(middleCode, middleIndex);
             break;
 
           /*case MiddleOperator.CheckTrackMapFloatStack:
@@ -263,27 +313,27 @@ namespace CCompiler {
             break;*/
 
           case MiddleOperator.PushZero:
-            PushSymbol(new Symbol(Type.DoubleType, (decimal) 0));
+            PushZero(middleCode, middleIndex);
             break;
 
           case MiddleOperator.PushOne:
-            PushSymbol(new Symbol(Type.DoubleType, (decimal) 1));
+            PushOne(middleCode, middleIndex);
             break;
 
           case MiddleOperator.PushFloat:
-            PushSymbol((Symbol) middleCode[0]);
+            PushFloat(middleCode, middleIndex);
             break;
 
           case MiddleOperator.TopFloat:
-            TopPopSymbol((Symbol) middleCode[0], TopOrPop.Top);
+            TopFloat(middleCode, middleIndex);
             break;
           
           case MiddleOperator.PopFloat:
-            TopPopSymbol((Symbol) middleCode[0], TopOrPop.Pop);
+            PopFloat(middleCode, middleIndex);
             break;
 
           case MiddleOperator.PopEmpty:
-            PopEmpty();
+            PopEmpty(middleCode, middleIndex);
             break;
 
           case MiddleOperator.IntegralToIntegral:
@@ -352,15 +402,16 @@ namespace CCompiler {
             StackTop(middleCode);
             break;
 
-          case MiddleOperator.FunctionEnd:
           case MiddleOperator.Dot:
-          //case MiddleOperator.Index:
-          //case MiddleOperator.SetReturnValue:
+            Error.ErrorXXX(false);
+            break;
+
           case MiddleOperator.Empty:
+            Error.ErrorXXX(false);
             break;
 
           default:
-            Error.ErrorXXX(false);
+            m_handlerMap[middleCode.Operator](middleCode, middleIndex);
             break;
         }
       }
@@ -421,7 +472,7 @@ namespace CCompiler {
     private Stack<Dictionary<Symbol,Track>> m_trackMapStack = new();
     private Stack<Dictionary<Track,int>> m_registerMapStack = new();
 
-    public void FunctionPreCall(MiddleCode middleCode) {
+    public void FunctionPreCall(MiddleCode middleCode, int middleIndex = 0) {
       Register baseRegister = BaseRegister(null);
       int recordSize = (int) middleCode[0], extraSize = 0;
 
@@ -453,6 +504,7 @@ namespace CCompiler {
 
       m_recordSizeStack.Push(extraSize);
       m_totalExtraSize += extraSize;
+      //Console.Out.WriteLine("Push");
       m_trackMapStack.Push(m_trackMap);
       m_registerMapStack.Push(registerMap);
       m_trackMap = new();
@@ -528,8 +580,9 @@ namespace CCompiler {
       }
     }
   
-    public void FunctionPostCall(MiddleCode middleCode) {
+    public void FunctionPostCall(MiddleCode middleCode, int middleIndex = 0) {
       Register baseRegister = BaseRegister(null);
+      //Console.Out.WriteLine("Pop");
       m_trackMap = m_trackMapStack.Pop();
       Dictionary<Track,int> postMap = m_registerMapStack.Pop();
 
@@ -609,8 +662,11 @@ namespace CCompiler {
         m_totalExtraSize -= m_recordSizeStack.Pop();
       }
     }
-	
-    // -----------------------------------------------------------------------
+
+    public void FunctionEnd(MiddleCode middleCode, int middleIndex = 0) {
+      // Empty.
+    }
+      // -----------------------------------------------------------------------
 
     public Track LoadValueToRegister(Symbol symbol,
                                      Register? register = null) {
@@ -744,7 +800,7 @@ namespace CCompiler {
       }
     }
 
-    private void SetReturnValue(MiddleCode middleCode) {
+    private void SetReturnValue(MiddleCode middleCode, int middleIndex = 0) {
       if (middleCode[1] != null) {
         Symbol returnSymbol = (Symbol) middleCode[1];
 
@@ -776,7 +832,7 @@ namespace CCompiler {
       AddAssemblyCode(AssemblyOperator.jmp, track);
     }
 
-    public void IntegralGetReturnValue(MiddleCode middleCode) {
+    public void IntegralGetReturnValue(MiddleCode middleCode, int middleIndex = 0) {
       Symbol returnSymbol = (Symbol) middleCode[0];
       Error.ErrorXXX(m_returnTrack != null);
       m_trackMap.Add(returnSymbol, m_returnTrack);
@@ -797,7 +853,7 @@ namespace CCompiler {
       }*/
     }
 
-    public void IntegralSetReturnValue(MiddleCode middleCode) {
+    public void IntegralSetReturnValue(MiddleCode middleCode, int middleIndex = 0) {
       Symbol returnSymbol = (Symbol)middleCode[1];
       Register returnRegister =
         AssemblyCode.RegisterToSize(AssemblyCode.ReturnValueRegister,
@@ -806,7 +862,7 @@ namespace CCompiler {
       m_trackMap.Remove(returnSymbol);
     }
 
-    public void Exit(MiddleCode middleCode) {
+    public void Exit(MiddleCode middleCode, int middleIndex = 0) {
       Symbol exitSymbol = (Symbol) middleCode[1];
 
       if (Start.Linux) {
@@ -838,14 +894,14 @@ namespace CCompiler {
       }
     }
 
-    private void StackTop(MiddleCode middleCode) {
+    private void StackTop(MiddleCode middleCode, int middleIndex = 0) {
       Symbol symbol = (Symbol) middleCode[0];
       Track track = new(symbol);
       m_trackMap.Add(symbol, track);
       AddAssemblyCode(AssemblyOperator.mov, track, Linker.StackStart);
     }
 
-    public void Goto(MiddleCode middleCode) {
+    public void Goto(MiddleCode middleCode, int middleIndex = 0) {
       int jumpTarget = (int) middleCode[0];
       AddAssemblyCode(AssemblyOperator.jmp, null, null, jumpTarget);
     }
@@ -854,33 +910,33 @@ namespace CCompiler {
     
     private HashSet<Track> m_syscallSet = new();
 
-    public void LoadToRegister(MiddleCode middleCode) {
+    public void LoadToRegister(MiddleCode middleCode, int middleIndex = 0) {
       Register register = (Register) middleCode[0];
       Symbol symbol = (Symbol) middleCode[1];
       Track track = LoadValueToRegister(symbol, register);
       m_syscallSet.Add(track);
     }
 
-    public void InspectRegister(MiddleCode middleCode) {
+    public void InspectRegister(MiddleCode middleCode, int middleIndex = 0) {
       Symbol symbol = (Symbol) middleCode[0];
       Register register = (Register) middleCode[1];
       Track track = new(symbol, register);
       m_trackMap.Add(symbol, track);
     }
   
-    public void CarryExpression(MiddleCode middleCode) {
+    public void CarryExpression(MiddleCode middleCode, int middleIndex = 0) {
       AssemblyOperator objectOperator =
         m_middleToIntegralMap[middleCode.Operator];
       int jumpTarget = (int) middleCode[0];
       AddAssemblyCode(objectOperator, null, null, jumpTarget);
     }
 
-    public void JumpToRegister(MiddleCode middleCode) {
+    public void JumpToRegister(MiddleCode middleCode, int middleIndex = 0) {
       Register jumpRegister = (Register) middleCode[0];
       AddAssemblyCode(AssemblyOperator.jmp, jumpRegister);
     }
 
-    public void Interrupt(MiddleCode middleCode) {
+    public void Interrupt(MiddleCode middleCode, int middleIndex = 0) {
       foreach (Track track in m_syscallSet) {        
         AddAssemblyCode(AssemblyOperator.empty, track);
       }
@@ -890,7 +946,7 @@ namespace CCompiler {
       m_trackMap.Clear();
     }
 
-    public void SystemCall(MiddleCode middleCode) {
+    public void SystemCall(MiddleCode middleCode, int middleIndex = 0) {
       foreach (Track track in m_syscallSet) {        
         AddAssemblyCode(AssemblyOperator.empty, track);
       }
@@ -901,7 +957,7 @@ namespace CCompiler {
 
     // Initialization
 
-    private void Initializer(MiddleCode middleCode) {
+    private void Initializer(MiddleCode middleCode, int middleIndex = 0) {
       Sort sort = (Sort) middleCode[0];
       object value = middleCode[1];
 
@@ -916,7 +972,7 @@ namespace CCompiler {
       }
     }
 
-    private void InitializerZero(MiddleCode middleCode) {
+    private void InitializerZero(MiddleCode middleCode, int middleIndex = 0) {
       int size = (int) middleCode[0];
       Error.ErrorXXX(size >= 0);
 
@@ -966,13 +1022,13 @@ namespace CCompiler {
 
     // Integral Assignment and Parameters -----------------------------------------------------------------------
 
-    public void IntegralAssign(MiddleCode middleCode) {
+    public void IntegralAssign(MiddleCode middleCode, int middleIndex = 0) {
       Symbol resultSymbol = (Symbol) middleCode[0],
              assignSymbol = (Symbol) middleCode[1];
       IntegralAssign(resultSymbol, assignSymbol);
     }
 
-    public void IntegralParameter(MiddleCode middleCode) {
+    public void IntegralParameter(MiddleCode middleCode, int middleIndex = 0) {
       Type toType = (Type) middleCode[1];
       Symbol toSymbol = new(null, false, Storage.Auto, toType);
       Symbol fromSymbol = (Symbol) middleCode[2];
@@ -1173,7 +1229,7 @@ namespace CCompiler {
         {MiddleOperator.LessThanEqual,AssemblyOperator.jbe},
         {MiddleOperator.GreaterThan, AssemblyOperator.ja},
         {MiddleOperator.GreaterThanEqual, AssemblyOperator.jae}};
-    public void IntegralUnary(MiddleCode middleCode) {
+    public void IntegralUnary(MiddleCode middleCode, int middleIndex = 0) {
       Symbol resultSymbol = (Symbol)middleCode[0],
              unarySymbol = (Symbol)middleCode[1];
       IntegralUnary(middleCode.Operator, resultSymbol, unarySymbol);
@@ -1248,7 +1304,7 @@ namespace CCompiler {
       new() {{1, Register.ah}, {2, Register.dx},
              {4, Register.edx}, {8, Register.rdx}};
 
-    public void IntegralMultiply(MiddleCode middleCode) {
+    public void IntegralMultiply(MiddleCode middleCode, int middleIndex = 0) {
       Symbol leftSymbol = (Symbol) middleCode[1];
       int typeSize = leftSymbol.Type.SizeAddress();
       Register leftRegister = m_leftRegisterMap[typeSize];
@@ -1290,7 +1346,7 @@ namespace CCompiler {
 
     // Case
 
-    public void Case(MiddleCode middleCode) {
+    public void Case(MiddleCode middleCode, int middleIndex = 0) {
       Symbol switchSymbol = (Symbol) middleCode[1];
       Track switchTrack = LoadValueToRegister(switchSymbol);
       Symbol caseSymbol = (Symbol) middleCode[2];
@@ -1301,14 +1357,14 @@ namespace CCompiler {
       m_trackMap.Add(switchSymbol, switchTrack);
     }
     
-    public void CaseEnd(MiddleCode middleCode) {
+    public void CaseEnd(MiddleCode middleCode, int middleIndex = 0) {
       Symbol symbol = (Symbol) middleCode[0];
       m_trackMap.Remove(symbol);
     }
 
     // Integral Relation
 
-    public void IntegralBinary(MiddleCode middleCode) {
+    public void IntegralBinary(MiddleCode middleCode, int middleIndex = 0) {
       Symbol resultSymbol = (Symbol)middleCode[0],
              leftSymbol = (Symbol)middleCode[1],
              rightSymbol = (Symbol)middleCode[2];
@@ -1316,7 +1372,7 @@ namespace CCompiler {
                      leftSymbol, rightSymbol);
     }
 
-    public void IntegralRelation(MiddleCode middleCode) {
+    public void IntegralRelation(MiddleCode middleCode, int middleIndex = 0) {
       Symbol leftSymbol = (Symbol) middleCode[1],
              rightSymbol = (Symbol) middleCode[2];
       IntegralBinary(MiddleOperator.Compare, null, leftSymbol, rightSymbol);
@@ -1506,7 +1562,7 @@ namespace CCompiler {
 
     // Address
 
-    public void Address(MiddleCode middleCode) {
+    public void Address(MiddleCode middleCode, int middleIndex = 0) {
       Symbol resultSymbol = (Symbol) middleCode[0],
              addressSymbol = (Symbol) middleCode[1];
       Track track = LoadAddressToRegister(addressSymbol);
@@ -1514,7 +1570,7 @@ namespace CCompiler {
       m_trackMap.Remove(addressSymbol);
     }
 
-    public void Dereference(MiddleCode middleCode) {
+    public void Dereference(MiddleCode middleCode, int middleIndex = 0) {
       Symbol resultSymbol = (Symbol) middleCode[0];
       Error.ErrorXXX(resultSymbol.AddressSymbol != null);
       Track addressTrack = LoadValueToRegister(resultSymbol.AddressSymbol);
@@ -1538,17 +1594,17 @@ namespace CCompiler {
           {MiddleOperator.GreaterThanEqual, AssemblyOperator.jbe}
         };
 
-    public void FloatingBinary(MiddleCode middleCode) {
+    public void FloatingBinary(MiddleCode middleCode, int middleIndex = 0) {
       --m_floatStackSize;
       Error.ErrorXXX(m_floatStackSize >= 0);
       AddAssemblyCode(m_middleToFloatingMap[middleCode.Operator]);
     }
 
-    public void FloatingUnary(MiddleCode middleCode) {
+    public void FloatingUnary(MiddleCode middleCode, int middleIndex = 0) {
       AddAssemblyCode(m_middleToFloatingMap[middleCode.Operator]);
     }
 
-    public void FloatingParameter(MiddleCode middleCode) {
+    public void FloatingParameter(MiddleCode middleCode, int middleIndex = 0) {
       Type paramType = (Type) middleCode[1];
       Symbol paramSymbol = new(paramType);
       int paramOffset = (int) middleCode[0];
@@ -1558,7 +1614,7 @@ namespace CCompiler {
 
     // Floating Relation
 
-    public void FloatingRelation(MiddleCode middleCode) {
+    public void FloatingRelation(MiddleCode middleCode, int middleIndex = 0) {
       m_floatStackSize -= 2;
       Error.ErrorXXX(m_floatStackSize >= 0);
       int target = (int) middleCode[0];
@@ -1648,7 +1704,32 @@ namespace CCompiler {
 
     public enum TopOrPop {Top, Pop};
 
-    public void PopEmpty() {
+    public void DecreaseStack(MiddleCode middleCode, int middleIndex) {
+      --m_floatStackSize;
+      Error.ErrorXXX(m_floatStackSize >= 0);
+    }
+
+    public void PushZero(MiddleCode middleCode, int middleIndex) {
+      PushSymbol(new Symbol(Type.DoubleType, (decimal) 0));
+    }
+
+    public void PushOne(MiddleCode middleCode, int middleIndex) {
+      PushSymbol(new Symbol(Type.DoubleType, (decimal) 1));
+    }
+
+    public void PushFloat(MiddleCode middleCode, int middleIndex) {
+      PushSymbol((Symbol) middleCode[0]);
+    }
+
+    public void TopFloat(MiddleCode middleCode, int middleIndex) {
+      TopPopSymbol((Symbol) middleCode[0], TopOrPop.Top);
+    }
+
+    public void PopFloat(MiddleCode middleCode, int middleIndex) {
+      TopPopSymbol((Symbol) middleCode[0], TopOrPop.Pop);
+    }
+
+    public void PopEmpty(MiddleCode middleCode, int middleIndex) {
       string containerName = AddStaticContainer(Type.LongDoubleType);
       AddAssemblyCode(AssemblyOperator.fistp_word, containerName, 0);
     }
@@ -1738,19 +1819,19 @@ namespace CCompiler {
       m_trackMap.Add(toSymbol, fromTrack);
     }
 
-    public void IntegralToFloating(MiddleCode middleCode) {
+    public void IntegralToFloating(MiddleCode middleCode, int middleIndex = 0) {
       Symbol fromSymbol = (Symbol) middleCode[1];
       PushSymbol(fromSymbol);
     }
   
-    public void FloatingToIntegral(MiddleCode middleCode) {
+    public void FloatingToIntegral(MiddleCode middleCode, int middleIndex = 0) {
       Symbol toSymbol = (Symbol) middleCode[0];
       TopPopSymbol(toSymbol, TopOrPop.Pop);
     }
 
     // Struct and Union
 
-    public void StructUnionAssignInit(MiddleCode middleCode) {
+    public void StructUnionAssignInit(MiddleCode middleCode, int middleIndex = 0) {
       Symbol targetSymbol = (Symbol)middleCode[0],
              sourceSymbol = (Symbol)middleCode[1];
       MemoryCopyInit(targetSymbol, sourceSymbol);
@@ -1760,7 +1841,7 @@ namespace CCompiler {
       MemoryCopyLoop(middleIndex);
     }
 
-    public void StructUnionParameterInit(MiddleCode middleCode) {
+    public void StructUnionParameterInit(MiddleCode middleCode, int middleIndex = 0) {
       int paramOffset = (int) middleCode[0];
       Symbol sourceSymbol = (Symbol) middleCode[2];
       Symbol targetSymbol = new(Type.IntegerPointerType);
@@ -1772,7 +1853,7 @@ namespace CCompiler {
       MemoryCopyLoop(middleIndex);
     }
 
-    public void StructUnionGetReturnValue(MiddleCode middleCode) {
+    public void StructUnionGetReturnValue(MiddleCode middleCode, int middleIndex = 0) {
       Symbol targetSymbol = (Symbol) middleCode[0];
       CheckRegister(targetSymbol, AssemblyCode.ReturnAddressRegister);
       Track targetAddressTrack = new(targetSymbol.AddressSymbol,
@@ -1780,7 +1861,7 @@ namespace CCompiler {
       m_trackMap.Add(targetSymbol.AddressSymbol, targetAddressTrack);
     }
 
-    public void StructUnionSetReturnValue(MiddleCode middleCode) {
+    public void StructUnionSetReturnValue(MiddleCode middleCode, int middleIndex = 0) {
       Symbol returnSymbol = (Symbol) middleCode[1];
       LoadAddressToRegister(returnSymbol, AssemblyCode.ReturnAddressRegister);
     }
