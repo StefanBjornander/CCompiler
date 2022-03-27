@@ -22,7 +22,7 @@ namespace CCompiler {
     }
 
     private void RegisterAllocation(ISet<Track> trackSet) {
-      new RegisterAllocator(trackSet, m_assemblyCodeList);
+      RegisterAllocator.AllocateRegisters(trackSet, m_assemblyCodeList);
     }
 
     public static void GenerateAssembly(List<MiddleCode> middleCodeList,
@@ -32,10 +32,10 @@ namespace CCompiler {
       ISet<Track> trackSet = objectCodeGenerator.TrackSet();
       objectCodeGenerator.RegisterAllocation(trackSet);
     }
-  
+
     public static void GenerateTargetWindows
       (List<AssemblyCode> assemblyCodeList, List<byte> byteList,
-       IDictionary<int,string> accessMap, IDictionary<int,string> callMap,
+       IDictionary<int, string> accessMap, IDictionary<int, string> callMap,
        ISet<int> returnSet) {
       AssemblyCodeGenerator objectCodeGenerator = new(assemblyCodeList);
       objectCodeGenerator.WindowsJumpInfo();
@@ -60,6 +60,17 @@ namespace CCompiler {
         new(objectOp, operand0, operand1, operand2, size);
       list.Add(assemblyCode);
       return assemblyCode;
+    }
+
+    private delegate void MiddleCodeInstructioinHandler(MiddleCode middleCode, int middleIndex);
+
+    private  Dictionary<MiddleOperator, MiddleCodeInstructioinHandler> m_registerSizeMap = new() {
+      //{ MiddleOperator.PreCall, new MiddleCodeInstructioinHandler(Test) }
+    };
+
+    private void Test(MiddleCode middleCode, int middleIndex)
+    {
+
     }
 
     public void AssemblyCodeList(List<MiddleCode> middleCodeList){

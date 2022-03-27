@@ -3,8 +3,8 @@ using System.Collections.Generic;
 
 namespace CCompiler {
   public class RegisterAllocator {
-    public RegisterAllocator(ISet<Track> totalTrackSet,
-                             List<AssemblyCode> assemblyCodeList) {
+    public static void AllocateRegisters(ISet<Track> totalTrackSet,
+                                         List<AssemblyCode> assemblyCodeList){
       Graph<Track> totalTrackGraph = new(totalTrackSet);
 
       foreach (Track track1 in totalTrackSet) {
@@ -57,8 +57,8 @@ namespace CCompiler {
       }
     }
 
-    private bool DeepFirstSearch(List<Track> trackList, int listIndex,
-                                 Graph<Track> trackGraph) {
+    private static bool DeepFirstSearch(List<Track> trackList, int listIndex,
+                                        Graph<Track> trackGraph) {
       if (listIndex == trackList.Count) {
         return true;
       }
@@ -87,8 +87,8 @@ namespace CCompiler {
       return false;
     }
 
-    private bool OverlapNeighbourSet(Register register,
-                                     ISet<Track> neighbourSet) {
+    private static bool OverlapNeighbourSet(Register register,
+                                            ISet<Track> neighbourSet) {
       foreach (Track neighbourTrack in neighbourSet) {
         if (AssemblyCode.RegisterOverlap(register, neighbourTrack.Register)) {
           return true;
