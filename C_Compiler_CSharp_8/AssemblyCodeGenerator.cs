@@ -959,7 +959,7 @@ namespace CCompiler {
 
     // Initialization
 
-    private void Initializer(MiddleCode middleCode, int middleIndex = 0) {
+    private void Initializer(MiddleCode middleCode) {
       Sort sort = (Sort) middleCode[0];
       object value = middleCode[1];
 
