@@ -62,14 +62,14 @@ namespace CCompiler {
         { MiddleOperator.FloatingToIntegral, this.FloatingToIntegral },
 
         { MiddleOperator.ParameterInitSize, this.StructUnionParameterInit },
-        /*{ MiddleOperator.DecreaseStack, this.DecreaseStack },
+        { MiddleOperator.DecreaseStack, this.DecreaseStack },
 
         { MiddleOperator.PushZero, this.PushZero },
         { MiddleOperator.PushOne, this.PushOne },
         { MiddleOperator.PushFloat, this.PushFloat },
-        { MiddleOperator.TopFloat, this.TopFloat },*/
+        { MiddleOperator.TopFloat, this.TopFloat },
         { MiddleOperator.PopEmpty, this.PopEmpty },
-        //{ MiddleOperator.PopFloat, this.PopFloat },
+        { MiddleOperator.PopFloat, this.PopFloat },
         { MiddleOperator.StackTop, this.StackTop },
         { MiddleOperator.FunctionEnd, this.FunctionEnd }
       };
@@ -908,13 +908,13 @@ namespace CCompiler {
     
     // Load and Inspect Registers --------------------------------------------------------------------------
     
-    private HashSet<Track> m_syscallSet = new();
+    private HashSet<Track> m_interruptSet = new();
 
     public void LoadToRegister(MiddleCode middleCode, int middleIndex = 0) {
       Register register = (Register) middleCode[0];
       Symbol symbol = (Symbol) middleCode[1];
       Track track = LoadValueToRegister(symbol, register);
-      m_syscallSet.Add(track);
+      m_interruptSet.Add(track);
     }
 
     public void InspectRegister(MiddleCode middleCode, int middleIndex = 0) {
@@ -937,21 +937,23 @@ namespace CCompiler {
     }
 
     public void Interrupt(MiddleCode middleCode, int middleIndex = 0) {
-      foreach (Track track in m_syscallSet) {        
+      foreach (Track track in m_interruptSet) {        
         AddAssemblyCode(AssemblyOperator.empty, track);
       }
 
       AddAssemblyCode(AssemblyOperator.interrupt,
                       (BigInteger) middleCode[0]);
+      m_interruptSet.Clear();
       m_trackMap.Clear();
     }
 
     public void SystemCall(MiddleCode middleCode, int middleIndex = 0) {
-      foreach (Track track in m_syscallSet) {        
+      foreach (Track track in m_interruptSet) {        
         AddAssemblyCode(AssemblyOperator.empty, track);
       }
-
+                                                                                                                                   
       AddAssemblyCode(AssemblyOperator.syscall);
+      m_interruptSet.Clear();
       m_trackMap.Clear();
     }
 
