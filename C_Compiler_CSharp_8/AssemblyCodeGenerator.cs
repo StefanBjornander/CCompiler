@@ -959,7 +959,7 @@ namespace CCompiler {
 
     // Initialization
 
-    private void Initializer(MiddleCode middleCode) {
+    private void Initializer(MiddleCode middleCode, int middleIndex = 0) {
       Sort sort = (Sort) middleCode[0];
       object value = middleCode[1];
 
@@ -1256,24 +1256,17 @@ namespace CCompiler {
                         0, null, typeSize);
       }
       else if (m_trackMap.TryGetValue(unarySymbol, out unaryTrack)) {
-        if (middleOperator != MiddleOperator.Plus) {
-          AddAssemblyCode(objectOperator, unaryTrack);
-        }
+        AddAssemblyCode(objectOperator, unaryTrack);
         m_trackMap.Remove(unarySymbol);
       }
       else if (resultSymbol == unarySymbol) {
         Error.ErrorXXX(unaryTrack == null);
-        if (middleOperator != MiddleOperator.Plus) {
-          AddAssemblyCode(objectOperator, Base(unarySymbol),
-                          Offset(unarySymbol), null, typeSize);
-        }
+        AddAssemblyCode(objectOperator, Base(unarySymbol),
+                        Offset(unarySymbol), null, typeSize);
       }
       else {
         unaryTrack = LoadValueToRegister(unarySymbol);
-
-        if (middleOperator != MiddleOperator.Plus) {
-          AddAssemblyCode(objectOperator, unaryTrack);
-        }
+        AddAssemblyCode(objectOperator, unaryTrack);
 
         if (resultSymbol.IsTemporary()) {          
           Error.ErrorXXX(resultSymbol.AddressSymbol == null);
