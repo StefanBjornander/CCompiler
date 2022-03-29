@@ -11,4 +11,8 @@
 @"C:\gppg-distro-1_5_2\binaries\Gppg" /gplex ExpressionParser.gppg > ExpressionParser.cs
 @"C:\gppg-distro-1_5_2\binaries\Gplex" ExpressionScanner.gplex
 
+@cd "C:\Users\stefa\Documents\A A C_Compiler_CSharp_10\Calculator_CS_8"
+@"C:\gppg-distro-1_5_2\binaries\Gppg" /gplex Parser.gppg > Parser.cs
+@"C:\gppg-distro-1_5_2\binaries\Gplex" Scanner.gplex
+
 @pause

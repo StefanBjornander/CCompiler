@@ -1,10 +1,10 @@
-using System;
-using System.IO;
-using System.Text;
-using System.Numerics;
-using System.Diagnostics;
-using System.Globalization;
-using System.Collections.Generic;
+//using System;
+//using System.IO;
+//using System.Text;
+//using System.Numerics;
+//using System.Diagnostics;
+//using System.Globalization;
+//using System.Collections.Generic;
 
 namespace CCompiler {
   public class Symbol {

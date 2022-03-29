@@ -1,4 +1,15 @@
-﻿%namespace Calculator
+
+// ==========================================================================
+//  GPPG error listing for yacc source file <Parser.gppg - 2022-03-23 20:12:37>
+// ==========================================================================
+//  Version:  1.5.2
+//  Machine:  LAPTOP-7Q575VHS
+//  DateTime: 2022-03-29 12:05:52
+//  UserName: stefa
+// ==========================================================================
+
+
+%namespace Calculator
 %partial
 
 %{
@@ -52,7 +63,14 @@ statement:
         }
       }
       catch (Exception exception) {
-        Console.Error.WriteLine("Invalid input: " + exception.ToString());
+        Console.Error.WriteLine($"Invalid input: {exception.ToString()}");
+//-----------------------------^^^---------------------------------------^^
+// Error: Unknown special marker in semantic action
+// Error: Literal string terminated by end of line
+// Error: Literal string terminated by end of line
+// Error: Literal string terminated by end of line
+// Error: Literal string terminated by end of line
+// ------------------------------------------------
         Environment.Exit(-1);
       }
     }
@@ -192,3 +210,5 @@ primary_expression:
     };
 
 %%
+// ==========================================================================
+

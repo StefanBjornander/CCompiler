@@ -1,8 +1,8 @@
-using System;
-using System.IO;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
+//using System;
+//using System.IO;
+//using System.Numerics;
+//using System.Diagnostics;
+//using System.Collections.Generic;
 
 namespace CCompiler {
   public class MiddleCodeOptimizer {

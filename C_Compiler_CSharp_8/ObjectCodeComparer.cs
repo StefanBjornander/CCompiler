@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿//using System.Collections.Generic;
 
 namespace CCompiler {
   class ObjectCodeComparer : IComparer<ObjectCodeInfo> {

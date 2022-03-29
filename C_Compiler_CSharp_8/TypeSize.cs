@@ -1,5 +1,5 @@
-﻿using System.Numerics;
-using System.Collections.Generic;
+﻿//using System.Numerics;
+//using System.Collections.Generic;
 
 namespace CCompiler {
   class TypeSize {

@@ -1,8 +1,8 @@
 //345678901234567890123456789012345678901234567890123456789012345678
-using System;
-using System.IO;
-using System.Text;
-using System.Collections.Generic;
+//using System;
+//using System.IO;
+//using System.Text;
+//using System.Collections.Generic;
 
 namespace CCompiler {
   public class Preprocessor {
