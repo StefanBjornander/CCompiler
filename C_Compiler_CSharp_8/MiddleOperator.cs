@@ -1,7 +1,7 @@
 namespace CCompiler {
   public enum MiddleOperator
    {AssignRegister, InspectRegister, StackTop,
-    JumpRegister, SysCall, Interrupt,
+    JumpRegister, SystemCall, Interrupt,
 
     PushZero, PushOne, PushFloat, PopFloat, TopFloat, PopEmpty,
 

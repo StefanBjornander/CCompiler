@@ -15,102 +15,76 @@ namespace CCompiler {
     public const string ArgsName = $"{Symbol.SeparatorId}args";
     public const string PathName = $"{Symbol.SeparatorId}PathName";
 
-/*    enum  CallSort{Integral, Floating, StructOrUnion};
+    enum  CallSort{Integral, Floating, StructOrUnion};
 
     private static Dictionary<(MiddleOperator, CallSort), String> m_handlerSortMap = new() {
-      { (MiddleOperator.Assign, CallSort.Integral), "AssignIntegral" },
-      { (MiddleOperator.Assign, CallSort.Floating), "AssignFloating" },
-      { (MiddleOperator.Assign, CallSort.StructOrUnion), "AssignStructUnion" },
+      { (MiddleOperator.Assign, CallSort.Integral), "IntegralAssign" },
+      { (MiddleOperator.Assign, CallSort.Floating), "FloatingAssign" },
+      { (MiddleOperator.Assign, CallSort.StructOrUnion), "StructUnionAssign" },
 
-      { (MiddleOperator.Add, CallSort.Floating), "BinaryFloating" },
-      { (MiddleOperator.Add, CallSort.Integral), "BinaryIntegral" },
-      { (MiddleOperator.Subtract, CallSort.Floating), "BinaryFloating" },
-      { (MiddleOperator.Subtract, CallSort.Integral), "BinaryIntegral" },
+      { (MiddleOperator.Add, CallSort.Floating), "FloatingBinary" },
+      { (MiddleOperator.Add, CallSort.Integral), "IntegralBinary" },
+      { (MiddleOperator.Subtract, CallSort.Floating), "FloatingBinary" },
+      { (MiddleOperator.Subtract, CallSort.Integral), "IntegralBinary" },
 
-      { (MiddleOperator.Multiply, CallSort.Floating), "BinaryFloating" },
-      { (MiddleOperator.Multiply, CallSort.Integral), "MultiplyIntegral" },
-      { (MiddleOperator.Divide, CallSort.Floating), "BinaryFloating" },
-      { (MiddleOperator.Divide, CallSort.Integral), "MultiplyIntegral" },
-      { (MiddleOperator.Modulo, CallSort.Integral), "MultiplyIntegral" },
+      { (MiddleOperator.Multiply, CallSort.Floating), "FloatingBinary" },
+      { (MiddleOperator.Multiply, CallSort.Integral), "IntegralMultiply" },
+      { (MiddleOperator.Divide, CallSort.Floating), "FloatingBinary" },
+      { (MiddleOperator.Divide, CallSort.Integral), "IntegralMultiply" },
+      { (MiddleOperator.Modulo, CallSort.Integral), "IntegralMultiply" },
 
-      { (MiddleOperator.Equal, CallSort.Floating), "RelationFloating" },
-      { (MiddleOperator.Equal, CallSort.Integral), "RelationIntegral" },
-      { (MiddleOperator.NotEqual, CallSort.Floating), "RelationFloating" },
-      { (MiddleOperator.NotEqual, CallSort.Integral), "RelationIntegral" },
-      { (MiddleOperator.LessThan, CallSort.Floating), "RelationFloating" },
-      { (MiddleOperator.LessThan, CallSort.Integral), "RelationIntegral" },
-      { (MiddleOperator.LessThanEqual, CallSort.Floating), "RelationFloating" },
-      { (MiddleOperator.LessThanEqual, CallSort.Integral), "RelationIntegral" },
-      { (MiddleOperator.GreaterThan, CallSort.Floating), "RelationFloating" },
-      { (MiddleOperator.GreaterThan, CallSort.Integral), "RelationIntegral" },
-      { (MiddleOperator.GreaterThanEqual, CallSort.Floating), "RelationFloating" },
-      { (MiddleOperator.GreaterThanEqual, CallSort.Integral), "RelationIntegral" },
+      { (MiddleOperator.Equal, CallSort.Floating), "FloatingRelation" },
+      { (MiddleOperator.Equal, CallSort.Integral), "IntegralRelation" },
+      { (MiddleOperator.NotEqual, CallSort.Floating), "FloatingRelation" },
+      { (MiddleOperator.NotEqual, CallSort.Integral), "IntegralRelation" },
+      { (MiddleOperator.LessThan, CallSort.Floating), "FloatingRelation" },
+      { (MiddleOperator.LessThan, CallSort.Integral), "IntegralRelation" },
+      { (MiddleOperator.LessThanEqual, CallSort.Floating), "FloatingRelation" },
+      { (MiddleOperator.LessThanEqual, CallSort.Integral), "IntegralRelation" },
+      { (MiddleOperator.GreaterThan, CallSort.Floating), "FloatingRelation" },
+      { (MiddleOperator.GreaterThan, CallSort.Integral), "IntegralRelation" },
+      { (MiddleOperator.GreaterThanEqual, CallSort.Floating), "FloatingRelation" },
+      { (MiddleOperator.GreaterThanEqual, CallSort.Integral), "IntegralRelation" },
 
-      { (MiddleOperator.Minus, CallSort.Floating), "UnaryFloating" },
-      { (MiddleOperator.Minus, CallSort.Integral), "UnaryIntegral" },
-      { (MiddleOperator.BitwiseNot, CallSort.Floating), "UnaryFloating" },
-      { (MiddleOperator.BitwiseNot, CallSort.Integral), "UnaryIntegral" },
+      { (MiddleOperator.Minus, CallSort.Floating), "FloatingUnary" },
+      { (MiddleOperator.Minus, CallSort.Integral), "IntegralUnary" },
+      { (MiddleOperator.BitwiseNot, CallSort.Floating), "FloatingUnary" },
+      { (MiddleOperator.BitwiseNot, CallSort.Integral), "IntegralUnary" },
 
-      { (MiddleOperator.Parameter, CallSort.Floating), "ParameterFloating" },
-      { (MiddleOperator.Parameter, CallSort.StructOrUnion), "ParameterStructUnion" },
-      { (MiddleOperator.Parameter, CallSort.Integral), "ParameterIntegral" },
+      { (MiddleOperator.Parameter, CallSort.Floating), "FloatingParameter" },
+      { (MiddleOperator.Parameter, CallSort.StructOrUnion), "StructUnionParameter" },
+      { (MiddleOperator.Parameter, CallSort.Integral), "IntegralParameter" },
 
-      { (MiddleOperator.GetReturnValue, CallSort.Floating), "GetReturnValueFloating" },
-      { (MiddleOperator.GetReturnValue, CallSort.StructOrUnion), "GetReturnValueStructUnion" },
-      { (MiddleOperator.GetReturnValue, CallSort.Integral), "GetReturnValueIntegral" },
-    };*/
-
-    private static Dictionary<MiddleOperator, String> m_nameMap = new() {
-      { MiddleOperator.Minus, "Unary" },
-      { MiddleOperator.BitwiseNot, "Unary" },
-
-      { MiddleOperator.Add, "Binary" },
-      { MiddleOperator.Subtract, "Binary" },
-      { MiddleOperator.Carry, "Carry" },
-      { MiddleOperator.NotCarry, "Carry" },
-
-      { MiddleOperator.BitwiseAnd, "Binary" },
-      { MiddleOperator.BitwiseXOr, "Binary" },
-      { MiddleOperator.ShiftLeft, "Binary" },
-      { MiddleOperator.ShiftRight, "Binary" },
-
-      { MiddleOperator.Multiply, "Multiply" },
-      { MiddleOperator.Divide, "Multiply" },
-      { MiddleOperator.Modulo, "Multiply" },
-
-      { MiddleOperator.Equal, "Relation" },
-      { MiddleOperator.NotEqual, "Relation" },
-      { MiddleOperator.LessThan, "Relation" },
-      { MiddleOperator.LessThanEqual, "Relation" },
-      { MiddleOperator.GreaterThan, "Relation" },
-      { MiddleOperator.GreaterThanEqual, "Relation" },
+      { (MiddleOperator.GetReturnValue, CallSort.Floating), "FloatingGetReturnValue" },
+      { (MiddleOperator.GetReturnValue, CallSort.StructOrUnion), "StructUnionGetReturnValue" },
+      { (MiddleOperator.GetReturnValue, CallSort.Integral), "IntegralGetReturnValue" },
     };
 
-    /*private static Dictionary<MiddleOperator, String> m_handlerMap = new() {
-      { MiddleOperator.PreCall, "PreCall" },
-      { MiddleOperator.Call, "Call" },
-      { MiddleOperator.PostCall, "PostCall" },
+    private static Dictionary<MiddleOperator, String> m_handlerMap = new() {
+      { MiddleOperator.PreCall, "FunctionPreCall" },
+      { MiddleOperator.Call, "FunctionCall" },
+      { MiddleOperator.PostCall, "FunctionPostCall" },
       { MiddleOperator.Return, "Return" },
       { MiddleOperator.Exit, "Exit" },
-      { MiddleOperator.Jump, "Jump" },
+      { MiddleOperator.Jump, "Goto" },
 
-      { MiddleOperator.AssignRegister, "AssignRegister>" },
+      { MiddleOperator.AssignRegister, "LoadToRegister" },
       { MiddleOperator.InspectRegister, "InspectRegister" },
-      { MiddleOperator.JumpRegister, "JumpRegister" },
+      { MiddleOperator.JumpRegister, "JumpToRegister" },
       { MiddleOperator.Interrupt, "Interrupt" },
-      { MiddleOperator.SystemCall, "SystemCall" },
+      { MiddleOperator.SysCall, "SystemCall" },
 
-      { MiddleOperator.Initializer, "Initializer" },
-      { MiddleOperator.InitializerZero, "InitializerZero" },
-      { MiddleOperator.AssignInitSize, "AssignInitSize" },
+      { MiddleOperator.Initializer, "InitializerX" },
+      { MiddleOperator.InitializerZero, "InitializerZeroX" },
+      { MiddleOperator.AssignInitSize, "StructUnionAssignInit" },
 
-      { MiddleOperator.BitwiseAnd, "BinaryIntegral" },
-      { MiddleOperator.BitwiseXOr, "BinaryIntegral" },
-      { MiddleOperator.ShiftLeft, "BinaryIntegral" },
-      { MiddleOperator.ShiftRight, "BinaryIntegral" },
+      { MiddleOperator.BitwiseAnd, "IntegralBinary" },
+      { MiddleOperator.BitwiseXOr, "IntegralBinary" },
+      { MiddleOperator.ShiftLeft, "IntegralBinary" },
+      { MiddleOperator.ShiftRight, "IntegralBinary" },
 
-      { MiddleOperator.Carry, "Carry" },
-      { MiddleOperator.NotCarry, "Carry" },
+      { MiddleOperator.Carry, "CarryExpression" },
+      { MiddleOperator.NotCarry, "CarryExpression" },
 
       { MiddleOperator.Case, "Case" },
       { MiddleOperator.CaseEnd, "CaseEnd" },
@@ -122,7 +96,7 @@ namespace CCompiler {
       { MiddleOperator.IntegralToFloating, "IntegralToFloating" },
       { MiddleOperator.FloatingToIntegral, "FloatingToIntegral" },
 
-      { MiddleOperator.ParameterInitSize, "ParameterInitSize" },
+      { MiddleOperator.ParameterInitSize, "StructUnionParameterInit" },
       { MiddleOperator.DecreaseStack, "DecreaseStack" },
 
       { MiddleOperator.PushZero, "PushZero" },
@@ -133,7 +107,7 @@ namespace CCompiler {
       { MiddleOperator.PopFloat, "PopFloat" },
       { MiddleOperator.StackTop, "StackTop" },
       { MiddleOperator.FunctionEnd, "FunctionEnd" }
-    };*/
+    };
 
     public AssemblyCodeGenerator(List<AssemblyCode> assemblyCodeList) {
       m_assemblyCodeList = assemblyCodeList;
@@ -198,33 +172,30 @@ namespace CCompiler {
         }
 
         AddAssemblyCode(AssemblyOperator.comment, middleCode.ToString());
-        MethodInfo methodInfo = null;
 
-        String operatorName;
-        if (!m_nameMap.TryGetValue(middleCode.Operator, out operatorName)) {
-          operatorName =
+        /*{ MethodInfo methodInfo = null;
+          String operatorName =
             Enum.GetName(typeof(MiddleOperator), middleCode.Operator);
-        }
+          Symbol symbol =
+            (middleCode[0] is Symbol) ? ((Symbol) middleCode[0]) :
+            (middleCode[1] is Symbol) ? ((Symbol) middleCode[1]) :
+            (middleCode[2] is Symbol) ? ((Symbol) middleCode[2]) : null;
 
-        Symbol symbol =
-          (middleCode[0] is Symbol) ? ((Symbol) middleCode[0]) :
-          (middleCode[1] is Symbol) ? ((Symbol) middleCode[1]) :
-          (middleCode[2] is Symbol) ? ((Symbol) middleCode[2]) : null;
+          if (symbol != null) {
+            String typeName =
+                symbol.Type.IsStructOrUnion() ? "StructOrUnion" :
+                (symbol.Type.IsFloating() ? "Floating" : "Integral");
+            methodInfo = GetType().GetMethod(operatorName + typeName);
+          }
 
-        String typeName = null;
-        if (symbol != null) {
-          typeName = symbol.Type.IsStructOrUnion() ? "StructUnion" :
-                     (symbol.Type.IsFloating() ? "Floating" : "Integral");
-          methodInfo = GetType().GetMethod(operatorName + typeName);
-        }
+          if (methodInfo == null) {
+            methodInfo = GetType().GetMethod(operatorName);
+          }
 
-        if (methodInfo == null) {
-          methodInfo = GetType().GetMethod(operatorName);
-        }
+          methodInfo.Invoke(this, new object[] { middleCode, middleIndex });
+        }*/
 
-        methodInfo.Invoke(this, new object[] { middleCode, middleIndex });
-
-        /*{ String methodName = null;
+        { String methodName = null;
           Symbol symbol =
             (middleCode[0] is Symbol) ? ((Symbol) middleCode[0]) :
             (middleCode[1] is Symbol) ? ((Symbol) middleCode[1]) :
@@ -243,7 +214,7 @@ namespace CCompiler {
 
           MethodInfo methodInfo = GetType().GetMethod(methodName);
           methodInfo.Invoke(this, new object[] { middleCode, middleIndex });
-        }*/
+        }
       }
     }
 
@@ -302,7 +273,7 @@ namespace CCompiler {
     private Stack<Dictionary<Symbol,Track>> m_trackMapStack = new();
     private Stack<Dictionary<Track,int>> m_registerMapStack = new();
 
-    public void PreCall(MiddleCode middleCode, int middleIndex) {
+    public void FunctionPreCall(MiddleCode middleCode, int middleIndex) {
       Register baseRegister = BaseRegister(null);
       int recordSize = (int) middleCode[0], extraSize = 0;
 
@@ -344,7 +315,7 @@ namespace CCompiler {
     private Track m_returnTrack = null;
     //private bool m_returnFloating = false;
 
-    public void Call(MiddleCode middleCode, int middleIndex) {
+    public void FunctionCall(MiddleCode middleCode, int middleIndex) {
       int recordSize = ((int)middleCode[0]) + m_totalExtraSize; 
       Symbol calleeSymbol = (Symbol)middleCode[1];
       int extraSize = (int) middleCode[2];
@@ -410,7 +381,7 @@ namespace CCompiler {
       }
     }
   
-    public void PostCall(MiddleCode middleCode, int middleIndex) {
+    public void FunctionPostCall(MiddleCode middleCode, int middleIndex) {
       Register baseRegister = BaseRegister(null);
       //Console.Out.WriteLine("Pop");
       m_trackMap = m_trackMapStack.Pop();
@@ -609,7 +580,7 @@ namespace CCompiler {
       }
     }
 
-    // Return, Exit, and Jump --------------------------------------------------------------------------
+    // Return, Exit, and Goto --------------------------------------------------------------------------
 
     public void Return(MiddleCode middleCode, int middleIndex) {
       if (SymbolTable.CurrentFunction.UniqueName.Equals("main")) {
@@ -662,7 +633,7 @@ namespace CCompiler {
       AddAssemblyCode(AssemblyOperator.jmp, track);
     }
 
-    public void GetReturnValueIntegral(MiddleCode middleCode, int middleIndex) {
+    public void IntegralGetReturnValue(MiddleCode middleCode, int middleIndex) {
       Symbol returnSymbol = (Symbol) middleCode[0];
       Error.ErrorXXX(m_returnTrack != null);
       m_trackMap.Add(returnSymbol, m_returnTrack);
@@ -731,7 +702,7 @@ namespace CCompiler {
       AddAssemblyCode(AssemblyOperator.mov, track, Linker.StackStart);
     }
 
-    public void Jump(MiddleCode middleCode, int middleIndex) {
+    public void Goto(MiddleCode middleCode, int middleIndex) {
       int jumpTarget = (int) middleCode[0];
       AddAssemblyCode(AssemblyOperator.jmp, null, null, jumpTarget);
     }
@@ -740,7 +711,7 @@ namespace CCompiler {
     
     private HashSet<Track> m_interruptSet = new();
 
-    public void AssignRegister(MiddleCode middleCode, int middleIndex) {
+    public void LoadToRegister(MiddleCode middleCode, int middleIndex) {
       Register register = (Register) middleCode[0];
       Symbol symbol = (Symbol) middleCode[1];
       Track track = LoadValueToRegister(symbol, register);
@@ -754,14 +725,14 @@ namespace CCompiler {
       m_trackMap.Add(symbol, track);
     }
   
-    public void Carry(MiddleCode middleCode, int middleIndex) {
+    public void CarryExpression(MiddleCode middleCode, int middleIndex) {
       AssemblyOperator objectOperator =
         m_middleToIntegralMap[middleCode.Operator];
       int jumpTarget = (int) middleCode[0];
       AddAssemblyCode(objectOperator, null, null, jumpTarget);
     }
 
-    public void JumpRegister(MiddleCode middleCode, int middleIndex) {
+    public void JumpToRegister(MiddleCode middleCode, int middleIndex) {
       Register jumpRegister = (Register) middleCode[0];
       AddAssemblyCode(AssemblyOperator.jmp, jumpRegister);
     }
@@ -789,7 +760,7 @@ namespace CCompiler {
 
     // Initialization
 
-    public void Initializer(MiddleCode middleCode, int middleIndex) {
+    public void InitializerX(MiddleCode middleCode, int middleIndex) {
       Sort sort = (Sort) middleCode[0];
       object value = middleCode[1];
 
@@ -804,7 +775,7 @@ namespace CCompiler {
       }
     }
 
-    public void InitializerZero(MiddleCode middleCode, int middleIndex) {
+    public void InitializerZeroX(MiddleCode middleCode, int middleIndex) {
       int size = (int) middleCode[0];
       Error.ErrorXXX(size >= 0);
 
@@ -854,22 +825,22 @@ namespace CCompiler {
 
     // Integral Assignment and Parameters -----------------------------------------------------------------------
 
-    public void AssignIntegral(MiddleCode middleCode, int middleIndex) {
+    public void IntegralAssign(MiddleCode middleCode, int middleIndex) {
       Symbol resultSymbol = (Symbol) middleCode[0],
              assignSymbol = (Symbol) middleCode[1];
-      AssignIntegralSymbol(resultSymbol, assignSymbol);
+      IntegralAssignSymbol(resultSymbol, assignSymbol);
     }
 
-    public void ParameterIntegral(MiddleCode middleCode, int middleIndex) {
+    public void IntegralParameter(MiddleCode middleCode, int middleIndex) {
       Type toType = (Type) middleCode[1];
       Symbol toSymbol = new(null, false, Storage.Auto, toType);
       Symbol fromSymbol = (Symbol) middleCode[2];
       int parameterOffset = (int) middleCode[0];
       toSymbol.Offset = m_totalExtraSize + parameterOffset;
-      AssignIntegralSymbol(toSymbol, fromSymbol);
+      IntegralAssignSymbol(toSymbol, fromSymbol);
     }
 
-    public void AssignIntegralSymbol(Symbol resultSymbol, Symbol assignSymbol) {
+    public void IntegralAssignSymbol(Symbol resultSymbol, Symbol assignSymbol) {
       Track resultTrack = null, assignTrack = null;
       m_trackMap.TryGetValue(resultSymbol, out resultTrack);
       m_trackMap.TryGetValue(assignSymbol, out assignTrack);
@@ -947,7 +918,7 @@ namespace CCompiler {
         }
       }
       else {
-        BinaryIntegral(MiddleOperator.Assign, resultSymbol,
+        IntegralBinary(MiddleOperator.Assign, resultSymbol,
                        resultSymbol, assignSymbol);
       }*/
       else {
@@ -1061,13 +1032,13 @@ namespace CCompiler {
         {MiddleOperator.LessThanEqual,AssemblyOperator.jbe},
         {MiddleOperator.GreaterThan, AssemblyOperator.ja},
         {MiddleOperator.GreaterThanEqual, AssemblyOperator.jae}};
-    public void UnaryIntegral(MiddleCode middleCode, int middleIndex) {
+    public void IntegralUnary(MiddleCode middleCode, int middleIndex) {
       Symbol resultSymbol = (Symbol)middleCode[0],
              unarySymbol = (Symbol)middleCode[1];
-      UnaryIntegralSymbol(middleCode.Operator, resultSymbol, unarySymbol);
+      IntegralUnarySymbol(middleCode.Operator, resultSymbol, unarySymbol);
     }
 
-    public void UnaryIntegralSymbol(MiddleOperator middleOperator,
+    public void IntegralUnarySymbol(MiddleOperator middleOperator,
                                     Symbol resultSymbol, Symbol unarySymbol) {
       AssemblyOperator objectOperator;
       if (MiddleCode.IsMultiply(middleOperator) &&
@@ -1129,7 +1100,7 @@ namespace CCompiler {
       new() {{1, Register.ah}, {2, Register.dx},
              {4, Register.edx}, {8, Register.rdx}};
 
-    public void MultiplyIntegral(MiddleCode middleCode, int middleIndex) {
+    public void IntegralMultiply(MiddleCode middleCode, int middleIndex) {
       Symbol leftSymbol = (Symbol) middleCode[1];
       int typeSize = leftSymbol.Type.SizeAddress();
       Register leftRegister = m_leftRegisterMap[typeSize];
@@ -1140,7 +1111,7 @@ namespace CCompiler {
       AddAssemblyCode(AssemblyOperator.xor, zeroTrack, zeroTrack);
 
       Symbol rightSymbol = (Symbol) middleCode[2];
-      UnaryIntegralSymbol(middleCode.Operator, rightSymbol, rightSymbol);
+      IntegralUnarySymbol(middleCode.Operator, rightSymbol, rightSymbol);
       Register resultRegister, discardRegister;
 
       if (middleCode.Operator == MiddleOperator.Modulo) {
@@ -1189,7 +1160,7 @@ namespace CCompiler {
 
     // Integral Relation
 
-    public void BinaryIntegral(MiddleCode middleCode, int middleIndex) {
+    public void IntegralBinary(MiddleCode middleCode, int middleIndex) {
       Symbol resultSymbol = (Symbol)middleCode[0],
              leftSymbol = (Symbol)middleCode[1],
              rightSymbol = (Symbol)middleCode[2];
@@ -1197,7 +1168,7 @@ namespace CCompiler {
                      leftSymbol, rightSymbol);
     }
 
-    public void RelationIntegral(MiddleCode middleCode, int middleIndex) {
+    public void IntegralRelation(MiddleCode middleCode, int middleIndex) {
       Symbol leftSymbol = (Symbol) middleCode[1],
              rightSymbol = (Symbol) middleCode[2];
       IntegralBinarySymbol(MiddleOperator.Compare, null, leftSymbol, rightSymbol);
@@ -1419,21 +1390,17 @@ namespace CCompiler {
           {MiddleOperator.GreaterThanEqual, AssemblyOperator.jbe}
         };
 
-    public void BinaryFloating(MiddleCode middleCode, int middleIndex) {
+    public void FloatingBinary(MiddleCode middleCode, int middleIndex) {
       --m_floatStackSize;
       Error.ErrorXXX(m_floatStackSize >= 0);
       AddAssemblyCode(m_middleToFloatingMap[middleCode.Operator]);
     }
 
-    public void MultiplyFloating(MiddleCode middleCode, int middleIndex) {
-      BinaryFloating(middleCode, middleIndex);
-    }
-
-    public void UnaryFloating(MiddleCode middleCode, int middleIndex) {
+    public void FloatingUnary(MiddleCode middleCode, int middleIndex) {
       AddAssemblyCode(m_middleToFloatingMap[middleCode.Operator]);
     }
 
-    public void ParameterFloating(MiddleCode middleCode, int middleIndex) {
+    public void FloatingParameter(MiddleCode middleCode, int middleIndex) {
       Type paramType = (Type) middleCode[1];
       Symbol paramSymbol = new(paramType);
       int paramOffset = (int) middleCode[0];
@@ -1441,14 +1408,14 @@ namespace CCompiler {
       TopPopSymbol(paramSymbol, TopOrPop.Pop);
     }
 
-    public void GetReturnValueFloating(MiddleCode middleCode, int middleIndex) {
+    public void FloatingGetReturnValue(MiddleCode middleCode, int middleIndex) {
       Error.Check((++m_floatStackSize) <= FloatingStackMaxSize,
                   null, Message.Floating_stack_overflow);
     }
 
     // Floating Relation
 
-    public void RelationFloating(MiddleCode middleCode, int middleIndex) {
+    public void FloatingRelation(MiddleCode middleCode, int middleIndex) {
       m_floatStackSize -= 2;
       Error.ErrorXXX(m_floatStackSize >= 0);
       int target = (int) middleCode[0];
@@ -1665,17 +1632,17 @@ namespace CCompiler {
 
     // Struct and Union
 
-    public void AssignInitSize(MiddleCode middleCode, int middleIndex) {
+    public void StructUnionAssignInit(MiddleCode middleCode, int middleIndex) {
       Symbol targetSymbol = (Symbol)middleCode[0],
              sourceSymbol = (Symbol)middleCode[1];
       MemoryCopyInit(targetSymbol, sourceSymbol);
     }
 
-    public void AssignStructUnion(MiddleCode middleCode, int middleIndex) {
+    public void StructUnionAssign(MiddleCode middleCode, int middleIndex) {
       MemoryCopyLoop(middleIndex);
     }
 
-    public void ParameterInitSize(MiddleCode middleCode, int middleIndex) {
+    public void StructUnionParameterInit(MiddleCode middleCode, int middleIndex) {
       int paramOffset = (int) middleCode[0];
       Symbol sourceSymbol = (Symbol) middleCode[2];
       Symbol targetSymbol = new(Type.IntegerPointerType);
@@ -1683,11 +1650,11 @@ namespace CCompiler {
       MemoryCopyInit(targetSymbol, sourceSymbol);
     }
 
-    public void ParameterStructUnion(MiddleCode middleCode, int middleIndex) {
+    public void StructUnionParameter(MiddleCode middleCode, int middleIndex) {
       MemoryCopyLoop(middleIndex);
     }
 
-    public void GetReturnValueStructUnion(MiddleCode middleCode, int middleIndex) {
+    public void StructUnionGetReturnValue(MiddleCode middleCode, int middleIndex) {
       Symbol targetSymbol = (Symbol) middleCode[0];
       CheckRegister(targetSymbol, AssemblyCode.ReturnAddressRegister);
       Track targetAddressTrack = new(targetSymbol.AddressSymbol,

@@ -30,17 +30,17 @@
       { (MiddleOperator.GreaterThanEqual, CallSort.Integral), "IntegralRelation" },
 
       { (MiddleOperator.Minus, CallSort.Floating), "FloatingUnary" },
-      { (MiddleOperator.Minus, CallSort.Integral), "FloatingUnary" },
-      { (MiddleOperator.BitwiseNot, CallSort.Floating), "IntegralUnary" },
+      { (MiddleOperator.Minus, CallSort.Integral), "IntegralUnary" },
+      { (MiddleOperator.BitwiseNot, CallSort.Floating), "FloatingUnary" },
       { (MiddleOperator.BitwiseNot, CallSort.Integral), "IntegralUnary" },
 
       { (MiddleOperator.Parameter, CallSort.Floating), "FloatingParameter" },
       { (MiddleOperator.Parameter, CallSort.StructOrUnion), "StructUnionParameter" },
       { (MiddleOperator.Parameter, CallSort.Integral), "IntegralParameter" },
 
-      { (MiddleOperator.GetReturnValue, CallSort.Floating), "FloatingParameter" },
-      { (MiddleOperator.GetReturnValue, CallSort.StructOrUnion), "StructUnionParameter" },
-      { (MiddleOperator.GetReturnValue, CallSort.Integral), "IntegralParameter" },
+      { (MiddleOperator.GetReturnValue, CallSort.Floating), "FloatingGetReturnValue" },
+      { (MiddleOperator.GetReturnValue, CallSort.StructOrUnion), "StructUnionGetReturnValue" },
+      { (MiddleOperator.GetReturnValue, CallSort.Integral), "IntegralGetReturnValue" },
     };
 
     private static Dictionary<MiddleOperator, String> m_handlerMap = new() {

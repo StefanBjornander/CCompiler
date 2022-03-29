@@ -765,7 +765,7 @@ namespace CCompiler {
 
     public static Statement SyscallStatement() {
       List<MiddleCode> codeList = new();
-      AddMiddleCode(codeList, MiddleOperator.SysCall);
+      AddMiddleCode(codeList, MiddleOperator.SystemCall);
       return (new Statement(codeList));
     }
 
