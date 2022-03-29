@@ -197,6 +197,7 @@ namespace CCompiler {
           methodName = m_handlerMap[middleCode.Operator];
         }
 
+        String operatorName = Enum.GetName(typeof(MiddleOperator), middleCode.Operator);
         MethodInfo methodInfo = GetType().GetMethod(methodName);
         methodInfo.Invoke(this, new object[] { middleCode, middleIndex });
       }
