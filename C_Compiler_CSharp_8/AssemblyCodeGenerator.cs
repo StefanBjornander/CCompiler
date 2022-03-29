@@ -15,64 +15,57 @@ namespace CCompiler {
     public const string ArgsName = $"{Symbol.SeparatorId}args";
     public const string PathName = $"{Symbol.SeparatorId}PathName";
 
-    private delegate void MiddleCodeHandler(MiddleCode middleCode, int middleIndex = 0);
+    private static Dictionary<MiddleOperator, String> m_handlerMap = new() {
+      { MiddleOperator.PreCall, "FunctionPreCall" },
+      { MiddleOperator.Call, "FunctionCall" },
+      { MiddleOperator.PostCall, "FunctionPostCall" },
+      { MiddleOperator.Return, "Return" },
+      { MiddleOperator.Exit, "Exit" },
+      { MiddleOperator.Jump, "Goto" },
 
-    private static Dictionary<MiddleOperator, MiddleCodeHandler> m_handlerMap;
-    private void Test(MiddleCode middleCode, int middleIndex = 0) {
-      // Empty.
-    }
+      { MiddleOperator.AssignRegister, "LoadToRegister" },
+      { MiddleOperator.InspectRegister, "InspectRegister" },
+      { MiddleOperator.JumpRegister, "JumpToRegister" },
+      { MiddleOperator.Interrupt, "Interrupt" },
+      { MiddleOperator.SysCall, "SystemCall" },
 
-    public AssemblyCodeGenerator(List<AssemblyCode> assemblyCodeList) {
+      { MiddleOperator.Initializer, "Initializer" },
+      { MiddleOperator.InitializerZero, "InitializerZero" },
+      { MiddleOperator.AssignInitSize, "StructUnionAssignInit" },
+
+      { MiddleOperator.BitwiseAnd, "IntegralBinary" },
+      { MiddleOperator.BitwiseXOr, "IntegralBinary" },
+      { MiddleOperator.ShiftLeft, "IntegralBinary" },
+      { MiddleOperator.ShiftRight, "IntegralBinary" },
+
+      { MiddleOperator.Carry, "CarryExpression" },
+      { MiddleOperator.NotCarry, "CarryExpression" },
+
+      { MiddleOperator.Case, "Case" },
+      { MiddleOperator.CaseEnd, "CaseEnd" },
+
+      { MiddleOperator.Address, "Address" },
+      { MiddleOperator.Dereference, "Dereference" },
+
+      { MiddleOperator.IntegralToIntegral, "IntegralToIntegral" },
+      { MiddleOperator.IntegralToFloating, "IntegralToFloating" },
+      { MiddleOperator.FloatingToIntegral, "FloatingToIntegral" },
+
+      { MiddleOperator.ParameterInitSize, "StructUnionParameterInit" },
+      { MiddleOperator.DecreaseStack, "DecreaseStack" },
+
+      { MiddleOperator.PushZero, "PushZero" },
+      { MiddleOperator.PushOne, "PushOne" },
+      { MiddleOperator.PushFloat, "PushFloat" },
+      { MiddleOperator.TopFloat, "TopFloat" },
+      { MiddleOperator.PopEmpty, "PopEmpty" },
+      { MiddleOperator.PopFloat, "PopFloat" },
+      { MiddleOperator.StackTop, "StackTop" },
+      { MiddleOperator.FunctionEnd, "FunctionEnd" }
+    };
+
+  public AssemblyCodeGenerator(List<AssemblyCode> assemblyCodeList) {
       m_assemblyCodeList = assemblyCodeList;
-
-      m_handlerMap = new() {
-        { MiddleOperator.PreCall, this.FunctionPreCall },
-        { MiddleOperator.Call, this.FunctionCall },
-        { MiddleOperator.PostCall, this.FunctionPostCall },
-        { MiddleOperator.Return, this.Return },
-        { MiddleOperator.Exit, this.Exit },
-        { MiddleOperator.Jump, this.Goto },
-
-        { MiddleOperator.AssignRegister, this.LoadToRegister },
-        { MiddleOperator.InspectRegister, this.InspectRegister },
-        { MiddleOperator.JumpRegister, this.JumpToRegister },
-        { MiddleOperator.Interrupt, this.Interrupt },
-        { MiddleOperator.SysCall, this.SystemCall },
-
-        { MiddleOperator.Initializer, this.Initializer },
-        { MiddleOperator.InitializerZero, this.InitializerZero },
-        { MiddleOperator.AssignInitSize, this.StructUnionAssignInit },
-
-        { MiddleOperator.BitwiseAnd, this.IntegralBinary },
-        { MiddleOperator.BitwiseXOr, this.IntegralBinary },
-        { MiddleOperator.ShiftLeft, this.IntegralBinary },
-        { MiddleOperator.ShiftRight, this.IntegralBinary },
-
-        { MiddleOperator.Carry, this.CarryExpression },
-        { MiddleOperator.NotCarry, this.CarryExpression },
-
-        { MiddleOperator.Case, this.Case },
-        { MiddleOperator.CaseEnd, this.CaseEnd },
-
-        { MiddleOperator.Address, this.Address },
-        { MiddleOperator.Dereference, this.Dereference },
-
-        { MiddleOperator.IntegralToIntegral, this.IntegralToIntegral },
-        { MiddleOperator.IntegralToFloating, this.IntegralToFloating },
-        { MiddleOperator.FloatingToIntegral, this.FloatingToIntegral },
-
-        { MiddleOperator.ParameterInitSize, this.StructUnionParameterInit },
-        { MiddleOperator.DecreaseStack, this.DecreaseStack },
-
-        { MiddleOperator.PushZero, this.PushZero },
-        { MiddleOperator.PushOne, this.PushOne },
-        { MiddleOperator.PushFloat, this.PushFloat },
-        { MiddleOperator.TopFloat, this.TopFloat },
-        { MiddleOperator.PopEmpty, this.PopEmpty },
-        { MiddleOperator.PopFloat, this.PopFloat },
-        { MiddleOperator.StackTop, this.StackTop },
-        { MiddleOperator.FunctionEnd, this.FunctionEnd }
-      };
     }
     private void RegisterAllocation(ISet<Track> trackSet) {
       RegisterAllocator.AllocateRegisters(trackSet, m_assemblyCodeList);
@@ -148,9 +141,9 @@ namespace CCompiler {
         }*/
 
         switch (middleCode.Operator) {
-          case MiddleOperator.PreCall:
+/*          case MiddleOperator.PreCall:
             FunctionPreCall(middleCode);
-            break;
+            break;*/
 
           case MiddleOperator.Call:
             FunctionCall(middleCode, middleIndex);
@@ -199,13 +192,13 @@ namespace CCompiler {
           case MiddleOperator.InitializerZero:
             InitializerZero(middleCode);
             break;
-          
+
           case MiddleOperator.AssignInitSize:
             StructUnionAssignInit(middleCode);
             break;
 
           case MiddleOperator.Assign: {
-              Symbol symbol = (Symbol) middleCode[0];
+              Symbol symbol = (Symbol)middleCode[0];
 
               if (symbol.Type.IsStructOrUnion()) {
                 StructUnionAssign(middleCode, middleIndex);
@@ -215,7 +208,7 @@ namespace CCompiler {
               }
             }
             break;
-        
+
           case MiddleOperator.BitwiseAnd:
           case MiddleOperator.BitwiseOr:
           case MiddleOperator.BitwiseXOr:
@@ -223,10 +216,10 @@ namespace CCompiler {
           case MiddleOperator.ShiftRight:
             IntegralRelation(middleCode);
             break;
-          
+
           case MiddleOperator.Add:
           case MiddleOperator.Subtract: {
-              Symbol resultSymbol = (Symbol) middleCode[1];
+              Symbol resultSymbol = (Symbol)middleCode[1];
 
               if (resultSymbol.Type.IsFloating()) {
                 FloatingBinary(middleCode);
@@ -240,7 +233,7 @@ namespace CCompiler {
           case MiddleOperator.Multiply:
           case MiddleOperator.Divide:
           case MiddleOperator.Modulo: {
-              Symbol resultSymbol = (Symbol) middleCode[0];
+              Symbol resultSymbol = (Symbol)middleCode[0];
 
               if (resultSymbol.Type.IsFloating()) {
                 FloatingBinary(middleCode);
@@ -262,7 +255,7 @@ namespace CCompiler {
           case MiddleOperator.LessThanEqual:
           case MiddleOperator.GreaterThan:
           case MiddleOperator.GreaterThanEqual: {
-              Symbol leftSymbol = (Symbol) middleCode[1];
+              Symbol leftSymbol = (Symbol)middleCode[1];
 
               if (leftSymbol.Type.IsFloating()) {
                 FloatingRelation(middleCode);
@@ -272,11 +265,11 @@ namespace CCompiler {
               }
             }
             break;
-        
+
           case MiddleOperator.Plus:
           case MiddleOperator.Minus:
           case MiddleOperator.BitwiseNot: {
-              Symbol resultSymbol = (Symbol) middleCode[0];
+              Symbol resultSymbol = (Symbol)middleCode[0];
 
               if (resultSymbol.Type.IsFloating()) {
                 FloatingUnary(middleCode);
@@ -327,7 +320,7 @@ namespace CCompiler {
           case MiddleOperator.TopFloat:
             TopFloat(middleCode, middleIndex);
             break;
-          
+
           case MiddleOperator.PopFloat:
             PopFloat(middleCode, middleIndex);
             break;
@@ -366,9 +359,9 @@ namespace CCompiler {
               }
             }
             break;
-          
+
           case MiddleOperator.GetReturnValue: {
-              Symbol returnSymbol = (Symbol) middleCode[0];
+              Symbol returnSymbol = (Symbol)middleCode[0];
 
               if (returnSymbol.Type.IsStructOrUnion()) {
                 StructUnionGetReturnValue(middleCode);
@@ -382,7 +375,7 @@ namespace CCompiler {
               }
             }
             break;
-          
+
           /*case MiddleOperator.SetReturnValue: {
               Symbol returnSymbol = (Symbol) middleCode[1];
 
@@ -411,7 +404,10 @@ namespace CCompiler {
             break;
 
           default:
-            m_handlerMap[middleCode.Operator](middleCode, middleIndex);
+            Error.ErrorXXX(m_handlerMap.ContainsKey(middleCode.Operator));
+            String methodName = m_handlerMap[middleCode.Operator];
+            MethodInfo methodInfo = GetType().GetMethod(methodName);
+            methodInfo.Invoke(this, new object[] {middleCode, middleIndex});
             break;
         }
       }
