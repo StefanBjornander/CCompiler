@@ -4,9 +4,9 @@
 
 // GPPG version 1.5.2
 // Machine:  LAPTOP-7Q575VHS
-// DateTime: 2022-03-29 12:08:25
+// DateTime: 2022-03-30 17:17:02
 // UserName: stefa
-// Input file <ExpressionParser.gppg - 2022-03-23 12:13:21>
+// Input file <ExpressionParser.gppg - 2022-03-30 17:16:24>
 
 // options: lines gplex
 
@@ -56,11 +56,11 @@ public class ScanObj {
 [GeneratedCodeAttribute( "Gardens Point Parser Generator", "1.5.2")]
 public partial class Parser: ShiftReduceParser<ValueType, LexLocation>
 {
-  // Verbatim content from ExpressionParser.gppg - 2022-03-23 12:13:21
+  // Verbatim content from ExpressionParser.gppg - 2022-03-30 17:16:24
 #line 7 "ExpressionParser.gppg"
   // Empty.
 #line default
-  // End verbatim content from ExpressionParser.gppg - 2022-03-23 12:13:21
+  // End verbatim content from ExpressionParser.gppg - 2022-03-30 17:16:24
 
 #pragma warning disable 649
   private static Dictionary<int, string> aliases;
@@ -461,7 +461,7 @@ public partial class Parser: ShiftReduceParser<ValueType, LexLocation>
       case 37: // primary_expression -> NAME
 #line 168 "ExpressionParser.gppg"
          {
-      CurrentSemanticValue.integer_value = 1;
+      CurrentSemanticValue.integer_value = 0;
     }
 #line default
         break;

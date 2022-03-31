@@ -166,7 +166,7 @@ prefix_expression:
 
 primary_expression:
     NAME {
-      $$ = 1;
+      $$ = 0;
     }
   | VALUE {
       $$ = $1;

@@ -71,7 +71,7 @@
     An_variadic_function_cannot_have_a_void_parameter,
     Invalid_void_parameter,
     Parameters_must_have_auto_or_register_storage,
-    If___ifdef____or_ifndef_directive_without_matching_endif,
+    //If___ifdef____or_ifndef_directive_without_matching_endif,
     Array_of_incomplete_type_not_allowed,
     Array_of_function_not_allowed,
     Function_cannot_return_array,

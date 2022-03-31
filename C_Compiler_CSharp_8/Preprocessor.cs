@@ -31,8 +31,6 @@ namespace CCompiler {
       }
 
       DoProcess(file);
-      Error.Check(m_ifElseChainStack.Count == 0, Message.
-                   If___ifdef____or_ifndef_directive_without_matching_endif);
     }
 
     private void DoProcess(FileInfo file) {
@@ -49,10 +47,6 @@ namespace CCompiler {
 
       CCompiler_Main.Scanner.Line = 1;
       int stackSize = m_ifElseChainStack.Count;
-      /*if (CCompiler_Main.Scanner.Path.Name.Contains("AssertTest")) {
-        Console.Out.WriteLine("5: " + CCompiler_Main.Scanner.Line);
-      }*/
-
       TraverseLineList(lineList);
       Error.Check(m_ifElseChainStack.Count ==
         stackSize, Message.Unbalanced_if_and_endif_directive_structure);
@@ -167,7 +161,7 @@ namespace CCompiler {
         mergeList.Add(line.Replace('\r', ' ').Trim());
 
         for (int count = 1; count < returnCount; ++count) {
-          mergeList.Add("");
+          mergeList.Add("\n");
         }
       }
 
@@ -663,7 +657,7 @@ namespace CCompiler {
                     string text = "\"" + CCompiler_Main.Scanner.Path
                                 .FullName.Replace("\\", "\\\\") + "\"";
                     tokenList[index] = new(CCompiler_Pre.Tokens.TOKEN, 
-                                                 text, beginNewlineCount);
+                                           text, beginNewlineCount);
                 }
                 break;
           
