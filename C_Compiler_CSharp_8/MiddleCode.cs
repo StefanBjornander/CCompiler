@@ -147,7 +147,7 @@ namespace CCompiler {
       }
     }
 
-    public override string ToString() {
+/*    public override string ToString() {
       /*if (m_middleOperator == MiddleOperator.IntegralToIntegral) {
         int toSize = ((Symbol) m_operandArray[0]).Type.Size(),
             fromSize = ((Symbol) m_operandArray[1]).Type.Size();
@@ -156,7 +156,7 @@ namespace CCompiler {
                ToString(m_operandArray[1]) + ToString(m_operandArray[2]);
             
       }
-      else*/ {
+      else* {
         if (m_operandArray[0] is MiddleCode) {
           return // ((m_index != -1) ? (m_index.ToString() + " ") : "") +
                  m_middleOperator + " <" + ToString(m_operandArray[0]) + ">" +
@@ -168,12 +168,7 @@ namespace CCompiler {
                  ToString(m_operandArray[1]) + ToString(m_operandArray[2]);
         }
       }
-    }
-
-    public MiddleCode CloneX() {
-      return (new MiddleCode(m_middleOperator, m_operandArray[0],
-                             m_operandArray[1], m_operandArray[2]));
-    }
+    }*/
 
     public override bool Equals(Object obj) {
       if (obj is MiddleCode middleCode) {
@@ -194,6 +189,10 @@ namespace CCompiler {
 
     public override int GetHashCode() {
       return base.GetHashCode();
+    }
+    public override string ToString() {
+      return m_middleOperator + ToString(m_operandArray[0]) +
+             ToString(m_operandArray[1]) + ToString(m_operandArray[2]);
     }
     private static string ToString(object value) {
       if (value != null) {

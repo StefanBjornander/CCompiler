@@ -788,18 +788,18 @@ namespace CCompiler {
                                                   Expression leftExpression,
                                                   Expression rightExpression) {
       if (middleOp == MiddleOperator.Assign) {
-        return Assignment(leftExpression, rightExpression, true);
+        return SimpleAssignment(leftExpression, rightExpression, true);
       }
       else {
         rightExpression =
           ArithmeticExpression(middleOp, leftExpression, rightExpression);
-        return Assignment(leftExpression, rightExpression, false);
+        return SimpleAssignment(leftExpression, rightExpression, false);
       }
     }
 
-   private static Expression Assignment(Expression leftExpression,
-                                        Expression rightExpression,
-                                        bool simpleAssignment) {
+    public static Expression SimpleAssignment(Expression leftExpression,
+                                              Expression rightExpression,
+                                              bool simpleAssignment = false) {
       rightExpression = TypeCast.ImplicitCast(rightExpression,
                                               leftExpression.Symbol.Type); // XXX
       Register? register = leftExpression.Register;
@@ -1374,7 +1374,7 @@ namespace CCompiler {
         List<MiddleCode> longList = new();
         Symbol resultSymbol = new(expression.Symbol.Type);
         Expression resultExpression = new(resultSymbol, longList, longList);
-        longList.AddRange(Assignment(resultExpression, expression,
+        longList.AddRange(SimpleAssignment(resultExpression, expression,
                                      false).ShortList);
         longList.AddRange(PrefixIncrementExpression(middleOp,
                                                     expression).ShortList);
@@ -1533,13 +1533,14 @@ namespace CCompiler {
 
     public static Expression NameExpression(string name) {
       Symbol symbol = SymbolTable.CurrentTable.LookupSymbol(name);
-      Error.Check(symbol != null, name, Message.Unknown_name);
 
-      /*if (symbol == null) {
-        Type type = new(Type.SignedIntegerType, null, false);
+      //Error.Check(symbol != null, name, Message.Unknown_name);
+      if (symbol == null) {
+        Type type = new((List<string>) null);
+        type.ReturnType = Type.SignedIntegerType;
         symbol = new(name, true, Storage.Extern, type);
         SymbolTable.CurrentTable.AddSymbol(symbol);
-      }*/
+      }
 
       //symbol.Used = true;
       List<MiddleCode> shortList = new(),
